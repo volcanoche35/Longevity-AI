@@ -6,6 +6,13 @@ import { getAIResponse } from '@/lib/deepseek'
 
 interface Message { role: 'user' | 'assistant'; content: string }
 
+const QUICK_QUESTIONS = [
+  'Bu iki takviye birlikte alınır mı?',
+  'Hangi saatte almalıyım?',
+  'Yan etkileri neler?',
+  'Dozaj önerisi verir misin?',
+]
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
@@ -21,9 +28,10 @@ export default function ChatPage() {
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
 
-  const send = async () => {
-    if (!input.trim()) return
-    const userMsg: Message = { role: 'user', content: input }
+  const send = async (text?: string) => {
+    const msgText = text || input
+    if (!msgText.trim()) return
+    const userMsg: Message = { role: 'user', content: msgText }
     setMessages(prev => [...prev, userMsg])
     setInput('')
     setLoading(true)
@@ -39,49 +47,78 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-7rem)]">
-      <h2 className="text-xl font-bold text-[#64FFDA] p-4 pb-2">🤖 AI Asistan</h2>
-      {supplements.length > 0 && (
-        <p className="px-4 text-[#a09880]/60 text-xs mb-2">
-          Takip edilen: {supplements.join(', ')}
-        </p>
-      )}
+      {/* Header */}
+      <div className="px-4 pt-4 pb-2">
+        <h2 className="text-xl font-bold text-[#64FFDA]">🤖 AI Asistan</h2>
+        {supplements.length > 0 && (
+          <div className="flex gap-1.5 mt-2 flex-wrap">
+            {supplements.map(s => (
+              <span key={s} className="text-[10px] px-2 py-0.5 rounded-full bg-[#64FFDA]/10 text-[#64FFDA]/70 border border-[#64FFDA]/20">
+                {s}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
 
-      <div className="flex-1 overflow-y-auto px-4 space-y-3 pb-4">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-4 space-y-4 pb-2">
         {messages.length === 0 && (
-          <div className="text-center py-16 text-[#a09880]/40">
-            <p className="text-4xl mb-4">💬</p>
-            <p>Takviyelerin hakkında soru sorabilirsin</p>
-            <p className="text-xs mt-2">Örn: "Bu iki takviye birlikte alınır mı?"</p>
+          <div className="text-center py-12">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#64FFDA]/5 border border-[#64FFDA]/10 flex items-center justify-center text-3xl animate-[breathe_3s_ease-in-out_infinite]">
+              🧬
+            </div>
+            <p className="text-[#a09880]/40 mb-4">Takviyelerin hakkında soru sor</p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {QUICK_QUESTIONS.map(q => (
+                <button key={q} onClick={() => send(q)}
+                  className="text-xs px-3 py-2 rounded-full bg-white/5 text-[#a09880] hover:text-[#64FFDA] hover:bg-white/10 border border-white/5 transition-all">
+                  {q}
+                </button>
+              ))}
+            </div>
           </div>
         )}
         {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm ${
+          <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
+            <div className={`max-w-[82%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
               m.role === 'user'
-                ? 'bg-[#64FFDA]/20 text-[#e0d8c8] rounded-br-md'
+                ? 'bg-gradient-to-br from-[#64FFDA]/20 to-[#64FFDA]/5 text-[#e0d8c8] rounded-br-md border border-[#64FFDA]/10'
                 : 'glass-card text-[#e0d8c8] rounded-bl-md'
             }`}>
               {m.content}
             </div>
           </div>
         ))}
-        {loading && <p className="text-[#64FFDA]/60 text-sm animate-pulse">Yazıyor...</p>}
+        {loading && (
+          <div className="flex justify-start animate-fade-in">
+            <div className="glass-card px-4 py-3 rounded-2xl rounded-bl-md">
+              <div className="flex gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#64FFDA]/40 animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-2 h-2 rounded-full bg-[#64FFDA]/40 animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-2 h-2 rounded-full bg-[#64FFDA]/40 animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+            </div>
+          </div>
+        )}
         <div ref={bottomRef} />
       </div>
 
-      <div className="p-4 border-t border-white/5">
+      {/* Input */}
+      <div className="p-3 border-t border-white/5 bg-[#000000]/95 backdrop-blur-xl">
         <div className="flex gap-2">
           <input value={input} onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && send()}
             placeholder="Takviyelerin hakkında sor..."
-            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[#e0d8c8] text-sm
-                       placeholder:text-[#a09880]/50 focus:outline-none focus:border-[#64FFDA]/50" />
-          <button onClick={send} disabled={loading}
-            className="px-5 py-3 bg-[#64FFDA] text-[#000000] rounded-xl font-semibold text-sm disabled:opacity-50">
-            Gönder
+            className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-[#e0d8c8] text-sm
+                       placeholder:text-[#a09880]/40 focus:outline-none focus:border-[#64FFDA]/40 transition-all" />
+          <button onClick={() => send()} disabled={loading}
+            className="px-5 py-3 bg-[#64FFDA] text-[#000000] rounded-2xl font-semibold text-sm 
+                       disabled:opacity-30 hover:bg-[#4fd1b8] transition-all flex-shrink-0">
+            ➤
           </button>
         </div>
-        <p className="text-[#a09880]/30 text-[10px] mt-2 text-center">⚠️ AI önerileri doktor tavsiyesi değildir</p>
+        <p className="text-[#a09880]/20 text-[9px] mt-1.5 text-center">⚠️ AI önerileri doktor tavsiyesi değildir</p>
       </div>
     </div>
   )
