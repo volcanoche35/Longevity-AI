@@ -1,0 +1,10 @@
+{
+  "name": "BioTrack - Longevity AI",
+  "short_name": "BioTrack",
+  "description": "AI destekli kişisel takviye asistanı",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#64FFDA",
+  "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+}
