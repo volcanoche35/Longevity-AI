@@ -26,10 +26,9 @@ export default function SupplementsPage() {
   const [notes, setNotes] = useState('')
   const [showForm, setShowForm] = useState(false); const [loading, setLoading] = useState(false)
 
-  const fetchSupplements = async () => {
-    const { data } = await supabase.from('supplements').select('*').order('created_at', { ascending: false })
-    if (data) setSupplements(data)
-  }
+  const fetchSupplements = () =>
+    supabase.from('supplements').select('*').order('created_at', { ascending: false })
+      .then(({ data }) => { if (data) setSupplements(data) })
 
   useEffect(() => { fetchSupplements() }, [])
 

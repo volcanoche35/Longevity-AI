@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'

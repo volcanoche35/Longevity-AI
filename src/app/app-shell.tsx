@@ -8,8 +8,10 @@ import { usePathname } from 'next/navigation'
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
+type SessionState = { user: { email?: string | null; id: string } } | null
+
 export default function AppShell({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<any>(DEMO_MODE ? { user: { email: 'demo@biotrack.ai', id: 'demo' } } : null)
+  const [session, setSession] = useState<SessionState>(DEMO_MODE ? { user: { email: 'demo@biotrack.ai', id: 'demo' } } : null)
   const [loading, setLoading] = useState(!DEMO_MODE)
   const pathname = usePathname()
 
@@ -18,6 +20,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setLoading(false) })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
     return () => subscription.unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
+    }
   }, [])
 
   if (loading) return <div className="min-h-screen bg-black flex items-center justify-center"><p className="text-[#64FFDA] animate-pulse">🧬</p></div>

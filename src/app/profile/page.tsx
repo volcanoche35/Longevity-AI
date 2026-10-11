@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<{ email?: string | null; id: string } | null>(null)
 
   useEffect(() => { supabase.auth.getUser().then(({ data }) => setUser(data.user)) }, [])
 

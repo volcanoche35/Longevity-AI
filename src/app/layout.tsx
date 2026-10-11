@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "BioTrack - Longevity AI",
   description: "AI destekli kişisel takviye asistanı",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/apple-touch-icon.png",
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

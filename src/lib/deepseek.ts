@@ -10,7 +10,8 @@ export async function getAIResponse(
 ⚠️ Verdiğin hiçbir bilgi doktor tavsiyesi yerine geçmez. Ciddi durumlarda mutlaka doktora danışmasını söyle.
 ${supplementContext}`
 
-  const res = await fetch('https://api.openrouter.ai/api/v1/chat/completions', {
+  const baseUrl = process.env.DEEPSEEK_BASE_URL || 'https://api.openrouter.ai/api/v1'
+  const res = await fetch(`${baseUrl}/chat/completions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
