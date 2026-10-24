@@ -120,7 +120,7 @@ export default function SupplementsPage() {
               autoFocus
             />
             {open && suggestions.length > 0 && (
-              <ul id="catalog-suggest" className="absolute left-0 right-0 top-full mt-1 z-30 glass-strong overflow-hidden">
+              <ul id="catalog-suggest" className="absolute left-0 right-0 top-full mt-2 z-30 overflow-hidden rounded-2xl border border-white/15" style={{ background: 'rgba(10, 15, 24, 0.96)', backdropFilter: 'blur(24px) saturate(120%)', WebkitBackdropFilter: 'blur(24px) saturate(120%)', boxShadow: '0 24px 60px rgba(0, 0, 0, 0.65)' }}>
                 {suggestions.map(s => (
                   <li key={s.name}>
                     <button
