@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/data'
 import AuthPage from './auth/page'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -16,7 +16,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   useEffect(() => {
-    if (DEMO_MODE) return
+    if (DEMO_MODE || !supabase) return
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setLoading(false) })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
     return () => subscription.unsubscribe()

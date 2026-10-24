@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { listSupplements, addSupplement as createSupplement, removeSupplement as deleteRow } from '@/lib/data'
 
 interface Supplement { id: string; name: string; dosage: string; frequency: string; time_of_day: string; notes: string }
 
@@ -27,8 +27,9 @@ export default function SupplementsPage() {
   const [showForm, setShowForm] = useState(false); const [loading, setLoading] = useState(false)
 
   const fetchSupplements = () =>
-    supabase.from('supplements').select('*').order('created_at', { ascending: false })
-      .then(({ data }) => { if (data) setSupplements(data) })
+    listSupplements()
+      .then(rows => setSupplements(rows))
+      .catch(() => setSupplements([]))
 
   useEffect(() => { fetchSupplements() }, [])
 
@@ -36,17 +37,14 @@ export default function SupplementsPage() {
     e.preventDefault()
     if (!name.trim()) return
     setLoading(true)
-    const user = (await supabase.auth.getUser()).data.user
-    await supabase.from('supplements').insert({
-      user_id: user?.id, name, dosage, frequency: freq, time_of_day: time, notes
-    })
+    await createSupplement({ name, dosage, frequency: freq, time_of_day: time, notes })
     setName(''); setDosage(''); setNotes(''); setShowForm(false)
     await fetchSupplements()
     setLoading(false)
   }
 
   const deleteSupplement = async (id: string) => {
-    await supabase.from('supplements').delete().eq('id', id)
+    await deleteRow(id)
     await fetchSupplements()
   }
 

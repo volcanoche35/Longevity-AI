@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { supabase, IS_DEMO } from '@/lib/data'
 
 export default function AuthPage() {
   const [email, setEmail] = useState('')
@@ -14,6 +14,12 @@ export default function AuthPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
+
+    if (IS_DEMO || !supabase) {
+      setError('Şu an demo modunda: hesap açma kapalı. Uygulama demo verisiyle çalışıyor.')
+      setLoading(false)
+      return
+    }
 
     const { error: authError } = isLogin
       ? await supabase.auth.signInWithPassword({ email, password })

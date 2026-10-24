@@ -1,14 +1,19 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { supabase, IS_DEMO } from '@/lib/data'
 
 export default function ProfilePage() {
   const [user, setUser] = useState<{ email?: string | null; id: string } | null>(null)
 
-  useEffect(() => { supabase.auth.getUser().then(({ data }) => setUser(data.user)) }, [])
+  useEffect(() => {
+    if (IS_DEMO) { setUser({ email: 'demo@biotrack.ai', id: 'demo' }); return }
+    if (!supabase) return
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+  }, [])
 
   const logout = async () => {
+    if (IS_DEMO || !supabase) { setUser(null); return }
     await supabase.auth.signOut()
     setUser(null)
   }

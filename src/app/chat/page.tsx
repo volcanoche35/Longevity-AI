@@ -1,10 +1,29 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { supabase } from '@/lib/supabase'
-import { getAIResponse } from '@/lib/deepseek'
+import { listSupplements, askAssistant } from '@/lib/data'
 
-interface Message { role: 'user' | 'assistant'; content: string }
+interface Message { role: 'user' | 'assistant'; content: string; model?: string }
+
+/** Model cevapları markdown karışımı döndürüyor; saf React text içinde ** görünmesin.
+ *  Bağımlısız, minimal satır-içi biçimlendirme (kalın + madde işareti). */
+function renderRich(text: string): React.ReactNode {
+  const lines = text.split('\n')
+  return lines.map((line, li) => {
+    const parts = line.split(/(\*\*[^*]+\*\*)/g).map((seg, si) =>
+      seg.startsWith('**') && seg.endsWith('**') && seg.length > 4
+        ? <strong key={si} className="font-semibold text-white">{seg.slice(2, -2)}</strong>
+        : <span key={si}>{seg.replace(/^#+\s*/, '')}</span>,
+    )
+    const isBullet = /^\s*[-•*]\s+/.test(line)
+    return (
+      <div key={li} className={isBullet ? 'pl-3 -ml-1' : ''}>
+        {isBullet && <span>• </span>}
+        {parts}
+      </div>
+    )
+  })
+}
 
 const QUICK_QUESTIONS = [
   'Bu iki takviye birlikte alınır mı?',
@@ -21,9 +40,9 @@ export default function ChatPage() {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    supabase.from('supplements').select('name').then(({ data }) => {
-      if (data) setSupplements(data.map(s => s.name))
-    })
+    listSupplements()
+      .then(rows => setSupplements(rows.map(s => s.name)))
+      .catch(() => setSupplements([]))
   }, [])
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
@@ -37,10 +56,11 @@ export default function ChatPage() {
     setLoading(true)
 
     try {
-      const reply = await getAIResponse([...messages, userMsg], supplements)
-      setMessages(prev => [...prev, { role: 'assistant', content: reply }])
-    } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: '⚠️ AI yanıtı alınamadı. Lütfen tekrar dene.' }])
+      const reply = await askAssistant([...messages, userMsg], supplements)
+      setMessages(prev => [...prev, { role: 'assistant', content: reply.content, model: reply.model }])
+    } catch (err) {
+      const text = err instanceof Error ? err.message : 'bilinmeyen hata'
+      setMessages(prev => [...prev, { role: 'assistant', content: `⚠️ AI yanıtı alınamadı: ${text}` }])
     }
     setLoading(false)
   }
@@ -86,7 +106,12 @@ export default function ChatPage() {
                 ? 'bg-gradient-to-br from-[#64FFDA]/20 to-[#64FFDA]/5 text-[#e0d8c8] rounded-br-md border border-[#64FFDA]/10'
                 : 'glass-card text-[#e0d8c8] rounded-bl-md'
             }`}>
-              {m.content}
+              {renderRich(m.content)}
+              {m.role === 'assistant' && m.model && (
+                <div className="mt-2 pt-2 border-t border-white/5 text-[10px] text-white/25 font-mono">
+                  {m.model.split('/').pop()}
+                </div>
+              )}
             </div>
           </div>
         ))}
