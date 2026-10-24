@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { listSupplements, addSupplement as createSupplement, removeSupplement as deleteRow } from '@/lib/data'
-import { suggest, findEntry, findConflicts, catalogSize, type CatalogEntry } from '@/lib/catalog'
+import { suggest, findEntry, catalogSize, type CatalogEntry } from '@/lib/catalog'
+import ThemeSelect from '@/components/theme-select'
+import { DOSE_UNITS, emptyPart, doseTotals, doseSummary, validateDose, type DosePart, type DoseUnit } from '@/lib/dosage'
 
 interface Supplement { id: string; name: string; dosage: string; frequency: string; time_of_day: string; notes: string }
 
@@ -24,8 +26,13 @@ const TIME_COLORS: Record<string, string> = {
 
 export default function SupplementsPage() {
   const [supplements, setSupplements] = useState<Supplement[]>([])
-  const [name, setName] = useState(''); const [dosage, setDosage] = useState('')
-  const [freq, setFreq] = useState('Günde 1'); const [time, setTime] = useState('Sabah')
+  const [name, setName] = useState('')
+  const [parts, setParts] = useState<DosePart[]>([emptyPart()])
+  const [form, setForm] = useState('Hap')
+  const [dailyCount, setDailyCount] = useState('')
+  const [error, setError] = useState('')
+  const [time, setTime] = useState('Sabah')
+  const updatePart = (index: number, change: Partial<DosePart>) => setParts(prev => prev.map((p, i) => i === index ? { ...p, ...change } : p))
   const [notes, setNotes] = useState('')
   const [showForm, setShowForm] = useState(false); const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
@@ -51,12 +58,17 @@ export default function SupplementsPage() {
 
   const addSupplement = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name.trim()) return
-    setLoading(true)
-    await createSupplement({ name, dosage, frequency: freq, time_of_day: time, notes })
-    setName(''); setDosage(''); setNotes(''); setShowForm(false)
-    await fetchSupplements()
-    setLoading(false)
+    const plan = { parts, form, dailyCount }
+    const validation = validateDose(plan)
+    if (!name.trim() || validation) { setError(validation || 'Ürün adını girin.'); return }
+    setError(''); setLoading(true)
+    try {
+      const ok = await createSupplement({ name, dosage: doseSummary(plan), frequency: 'Günlük toplam', time_of_day: time, notes, dose_plan: plan })
+      if (!ok) throw new Error('Ürün kaydedilemedi. Tekrar deneyin.')
+      setName(''); setParts([emptyPart()]); setDailyCount(''); setNotes(''); setShowForm(false)
+      await fetchSupplements()
+    } catch (e) { setError(e instanceof Error ? e.message : 'Kayıt başarısız.') }
+    finally { setLoading(false) }
   }
 
   const deleteSupplement = async (id: string) => {
@@ -72,7 +84,7 @@ export default function SupplementsPage() {
     return acc
   }, {} as Record<string, Supplement[]>)
 
-  const inputCls = 'w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-[var(--text)] focus:outline-none focus:border-[var(--primary)]/60'
+  const inputCls = 'dose-input'
 
   return (
     <div className="p-4 pb-28 min-h-screen">
@@ -104,7 +116,7 @@ export default function SupplementsPage() {
 
       {/* ── Ekleme formu ── */}
       {showForm && (
-        <form onSubmit={addSupplement} className="glass-card p-4 space-y-3 mb-6 animate-fade-in">
+        <form onSubmit={addSupplement} className="supplement-form p-4 space-y-4 mb-6 animate-fade-in">
           <div className="relative">
             <input
               value={name}
@@ -147,18 +159,28 @@ export default function SupplementsPage() {
           {/* seçilen kaydın kanıt notu — kullanıcı ne yazdığını bilsin */}
           {picked && <p className="text-xs text-[var(--text-2)]">Katalogdan seçildi. Dozu kendi ürün etiketinizden girin; katalog tıbbi doğrulama içermez.</p>}
 
-          <div className="flex gap-2">
-            <input value={dosage} onChange={e => setDosage(e.target.value)} placeholder="Doz (örn: 400mg)" className={`${inputCls} flex-1`} />
-            <select value={freq} onChange={e => setFreq(e.target.value)} className={inputCls}>
-              {['Günde 1', 'Günde 2', 'Günde 3', 'Haftada 1'].map(f => <option key={f}>{f}</option>)}
-            </select>
+          <div className="dose-section">
+            <p className="field-label">GÜNLÜK KULLANIM</p>
+            <p className="text-sm text-white mb-3">Gün içinde aldığın toplam miktarı gir.</p>
+            <ThemeSelect label="Kullanım şekli" value={form} options={['Hap', 'Kapsül', 'Damla', 'Toz', 'Sıvı', 'Diğer']} onChange={setForm} />
+            <label className="block mt-3"><span className="field-label">Günlük {form.toLocaleLowerCase('tr')} adedi (isteğe bağlı)</span>
+              <input className="dose-input" aria-label="Günlük kullanım adedi" inputMode="decimal" placeholder="Örn. 1 hap veya 12 damla" value={dailyCount} onChange={e => setDailyCount(e.target.value)} />
+            </label>
           </div>
-          <div className="flex gap-2">
-            <select value={time} onChange={e => setTime(e.target.value)} className={`${inputCls} flex-1`}>
-              {TIMES.map(t => <option key={t}>{t}</option>)}
-            </select>
-            <input value={notes} onChange={e => setNotes(e.target.value)} placeholder="Not" className={`${inputCls} flex-1`} />
+          <div className="dose-section">
+            <div className="flex justify-between items-center gap-2 mb-3"><p className="text-sm font-semibold">İçerik ve miktar</p><span className="chip">Günlük toplam</span></div>
+            {parts.map((part, index) => <div className="dose-row" key={index}>
+              <div className="flex justify-between items-center mb-2"><span className="field-label">{index + 1}. içerik</span>{parts.length > 1 && <button type="button" aria-label={`${index + 1}. içeriği kaldır`} className="text-sm text-[var(--primary)]" onClick={() => setParts(prev => prev.filter((_, i) => i !== index))}>Kaldır</button>}</div>
+              <label className="block mb-3"><span className="field-label">Form / içerik adı {parts.length === 1 ? '(isteğe bağlı)' : ''}</span><input aria-label={`${index + 1}. içerik adı`} className="dose-input" placeholder="Örn. Sitrat, Klorür veya D3" value={part.label} onChange={e => updatePart(index, { label: e.target.value })} /></label>
+              <div className="grid grid-cols-2 gap-3"><label><span className="field-label">Miktar / gün</span><input className="dose-input" aria-label={`${index + 1}. içerik miktarı`} inputMode="decimal" placeholder="Örn. 200" value={part.amount} onChange={e => updatePart(index, { amount: e.target.value })} /></label><ThemeSelect label={`${index + 1}. içerik birimi`} value={part.unit} options={DOSE_UNITS} onChange={v => updatePart(index, { unit: v as DoseUnit })} /></div>
+            </div>)}
+            <button type="button" className="dose-add" onClick={() => setParts(prev => [...prev, emptyPart()])}>+ Farklı form / içerik ekle</button>
+            {doseTotals(parts) && <div className="dose-total" role="status">Toplam: {doseTotals(parts)}</div>}
+            <p className="text-xs text-[var(--text-2)] mt-3">Sitrat ve klorürü ayrı satırlara yazabilirsin. Damla, IU ve mg birbirine otomatik çevrilmez. Mineral miktarını etiketteki elementel değerle gir.</p>
           </div>
+          <ThemeSelect label="Kullanım zamanı" value={time} options={TIMES} onChange={setTime} />
+          <label className="block"><span className="field-label">Not (isteğe bağlı)</span><input value={notes} onChange={e => setNotes(e.target.value)} placeholder="Kendi notun" className="dose-input" /></label>
+          {error && <p role="alert" className="text-sm text-[var(--primary)]">{error}</p>}
           <div className="flex gap-2">
             <button type="button" onClick={() => setShowForm(false)}
               className="flex-1 py-3 text-sm text-[var(--text-3)] hover:text-white transition-colors">İptal</button>

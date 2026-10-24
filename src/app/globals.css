@@ -145,3 +145,22 @@ input, select, textarea { font-size: 16px !important; }
 
 ::-webkit-scrollbar { width: 0; height: 0 }
 ::selection { background: rgba(255, 77, 94, 0.32); color: var(--text) }
+
+/* Product entry: no native white/blue menus. */
+.supplement-form { color-scheme: dark; background: #0A0F18; border: 1px solid #263145; border-radius: 22px; }
+.dose-section { background: #0E1522; border: 1px solid #253047; border-radius: 16px; padding: 14px; }
+.field-label { display: block; color: #AEB9CC; font-size: 11px; line-height: 1.5; margin-bottom: 6px; }
+.dose-input { display: block; min-width: 0; width: 100%; background: #111C2C; color: #F2F6FB; border: 1px solid #33415A; border-radius: 12px; padding: 12px; outline: none; color-scheme: dark; accent-color: #FF4D5E; }
+.dose-input:focus-visible { border-color: #FF4D5E; box-shadow: 0 0 0 3px #FF4D5E22; }
+.dose-input::placeholder { color: #8090AA; }
+.theme-select { position: relative; min-width: 0; }
+.theme-select:has([aria-expanded='true']) { z-index: 40; }
+.theme-select-trigger { display: flex; justify-content: space-between; align-items: center; text-align: left; font-size: 16px; min-height: 48px; cursor: pointer; }
+.theme-options { position: absolute; top: 100%; left: 0; right: 0; margin-top: 6px; max-height: 240px; overflow-y: auto; z-index: 40; padding: 5px; background: #111C2CF5; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid #44516A; border-radius: 12px; box-shadow: 0 16px 40px #0009; }
+.theme-option { display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; padding: 11px 12px; min-height: 44px; border-radius: 8px; color: #F2F6FB; background: transparent; cursor: pointer; }
+.theme-option[aria-selected='true'] { color: #FF9AA4; background: #FF4D5E24; }
+.theme-option:hover, .theme-option:focus-visible { outline: 1px solid #FF4D5E; background: #FF4D5E18; }
+.dose-row { padding: 12px; border: 1px solid #2B364B; border-radius: 12px; margin-bottom: 10px; }
+.dose-add { width: 100%; border: 1px dashed #FF4D5E70; border-radius: 12px; padding: 12px; color: #FF9AA4; background: #FF4D5E0A; font-size: 13px; }
+.dose-total { background: #39E07A12; border: 1px solid #39E07A40; color: #74EBA4; padding: 12px; margin-top: 12px; border-radius: 12px; font-size: 14px; font-weight: 600; }
+

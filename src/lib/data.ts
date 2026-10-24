@@ -3,6 +3,7 @@
  * Amaç: sayfaların "Supabase yoksa çökme" davranışı olması.
  */
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import type { DosePlan } from './dosage'
 
 export const IS_DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
@@ -25,6 +26,7 @@ export interface ClientSupplement {
   frequency: string
   time_of_day: string
   notes: string
+  dose_plan?: DosePlan
 }
 
 const SEED: ClientSupplement[] = [
@@ -62,7 +64,9 @@ export async function addSupplement(input: Omit<ClientSupplement, 'id'>): Promis
     return true
   }
   const { data: { user } } = await supabase.auth.getUser()
-  const { error } = await supabase.from('supplements').insert({ ...input, user_id: user?.id ?? null })
+  const { dose_plan, ...row } = input
+  void dose_plan // Structured plan retained in demo; live schema requires a migration.
+  const { error } = await supabase.from('supplements').insert({ ...row, user_id: user?.id ?? null })
   if (error) {
     console.warn('[data] supabase add:', error.message)
     return false
