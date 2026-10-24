@@ -28,10 +28,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  if (loading) return <div className="min-h-screen bg-black flex items-center justify-center"><p className="text-[#64FFDA] animate-pulse">🧬</p></div>
+  if (loading) return <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}><p className="text-[var(--primary)] text-2xl animate-pulse">🧬</p></div>
   if (!session && pathname !== '/auth') return <AuthPage />
 
-  const isDemo = DEMO_MODE && session?.user?.email === 'demo@biotrack.ai'
   const tabs = [
     { href: '/dashboard', icon: '🧬', label: 'Panel' },
     { href: '/supplements', icon: '💊', label: 'Takviyeler' },
@@ -42,22 +41,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <main className="max-w-lg mx-auto min-h-screen">
-        {isDemo && (
-          <div className="bg-yellow-500/10 border-b border-yellow-500/20 px-4 py-1.5 text-center">
-            <p className="text-yellow-500/70 text-[10px]">⚠️ DEMO MOD — Supabase bağlantısı yok</p>
-          </div>
-        )}
         {children}
-        <nav className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-[#000000]/95 backdrop-blur-xl border-t border-white/5 px-2 py-2 flex justify-around z-50">
-          {tabs.map(t => (
-            <Link key={t.href} href={t.href}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all min-w-[48px] ${
-                pathname.startsWith(t.href) ? 'text-[#64FFDA]' : 'text-[#a09880]/50'
-              }`}>
-              <span className="text-xl">{t.icon}</span>
-              <span className="text-[10px]">{t.label}</span>
-            </Link>
-          ))}
+        <nav className="tabbar fixed bottom-0 left-0 right-0 max-w-lg mx-auto px-2 py-2 flex justify-around z-50">
+          {tabs.map(t => {
+            const activeTab = pathname.startsWith(t.href)
+            return (
+              <Link key={t.href} href={t.href} data-active={activeTab}
+                className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors min-w-[52px] ${
+                  activeTab ? 'bg-white/8' : ''
+                }`}>
+                <span className="text-lg leading-none">{t.icon}</span>
+                <span className="text-[10px] font-medium">{t.label}</span>
+              </Link>
+            )
+          })}
         </nav>
       </main>
     </div>
