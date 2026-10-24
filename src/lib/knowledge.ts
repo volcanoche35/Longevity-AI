@@ -4,6 +4,8 @@
  * Amaç: AI'a gerçek bağlam vermek + arayüzde "kanıt rozeti" göstermek.
  */
 
+import { findEntry } from './catalog'
+
 export type EvidenceGrade = 'A' | 'B' | 'C'
 
 export interface KnowledgeEntry {
@@ -104,19 +106,33 @@ export function findKnowledge(query: string): KnowledgeEntry | undefined {
   return KNOWLEDGE.find(k => k.name.toLowerCase().includes(q) || q.includes(k.name.toLowerCase().split(' ')[0]))
 }
 
-/** AI sistem talimatına gömülen, takviyelere özel etkileşim/kanıt özeti */
+/** AI sistem talimatına gömülen, takviyelere özel etkileşim/kanıt özeti.
+ *  Kaynak: geniş katalog (data/supplements.json) + dar knowledge tabanı. */
 export function buildKnowledgeContext(supplements: string[]): string {
-  if (!supplements.length) return ''
   const lines: string[] = []
+  const seen = new Set<string>()
   for (const s of supplements) {
     const k = findKnowledge(s)
-    if (!k) continue
+    const c = findEntry(s)
+    if (!k && !c) continue
+    if (!k && c) {
+      lines.push(`- ${c.name}: yalnız isim kataloğunda kayıtlı. Doz, fayda, kanıt derecesi ve etkileşim bilgisi klinik olarak doğrulanmadı; kesin bilgi gibi sunma.`)
+      continue
+    }
+    const name = k?.name ?? c!.name
+    if (seen.has(name.toLowerCase())) continue
+    seen.add(name.toLowerCase())
+    const grade = k?.grade ?? c!.grade
+    const dose = k?.typicalDose ?? c!.typicalDose
+    const timing = k?.timing ?? c!.timing
+    const avoid = (k?.avoidWith?.length ? k.avoidWith : c?.avoidWith) ?? []
+    const note = k?.note ?? c!.note
     lines.push(
-      `- ${k.name} [kanıt ${k.grade}: ${k.gradeLabel}] — tipik doz ${k.typicalDose}, ${k.timing}` +
-        (k.withFood ? ', tok karnına' : '') +
-        (k.avoidWith.length ? `, birlikte alınmaması gerekenler: ${k.avoidWith.join(', ')}` : '') +
-        `. Not: ${k.note}`,
+      `- ${name} [kanıt ${grade}] — tipik doz ${dose || 'bilinmiyor'}, ${timing}` +
+        ((k?.withFood ?? c!.withFood) ? ', tok karnına' : '') +
+        (avoid.length ? `, birlikte alınmaması gerekenler: ${avoid.join(', ')}` : '') +
+        (note ? `. Not: ${note}` : ''),
     )
   }
-  return lines.length ? `\n\nBilgi tabanımız (kaynak olarak kullan, uymuyorsa uydurma):\n${lines.join('\n')}` : ''
+  return lines.length ? `\n\nBilgi tabanımız (yalnız bu kayıtları kesin gibi sun; dışındakiler için "kayıtta yok" de):\n${lines.join('\n')}` : ''
 }

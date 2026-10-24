@@ -1,0 +1,2013 @@
+{
+  "version": 1,
+  "updated": "2026-10-24",
+  "note": "Bu dosya veritabanının kaynağıdır. scripts/import-catalog.mjs ile Excel/CSV'den genişletilir. Kanıt derecesi: A=güçlü insan kanıtı, B=olası fayda, C=zayıf/karmaşık/üretici destekli.",
+  "entries": [
+    {
+      "name": "Vitamin D3",
+      "category": "vitamin",
+      "grade": "A",
+      "aliases": [
+        "d3",
+        "kolekalsiferol",
+        "vit d"
+      ],
+      "typicalDose": "kan değeri belirler",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "yüksek doz kalsiyum (hekim kontrolü)"
+      ],
+      "note": "Düzeyi bilmeden yüksek doz riskli. 25-OH-D ölçümü şart."
+    },
+    {
+      "name": "Vitamin D3 + K2",
+      "category": "kombinasyon",
+      "grade": "A",
+      "aliases": [
+        "d3k2",
+        "d k2"
+      ],
+      "typicalDose": "1000–4000 IU / 100 mcg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "warfarin (K vitamini etkileşir)"
+      ],
+      "note": "K2 kalsiyumun damar yerine kemiğe yönelimine yardımcı."
+    },
+    {
+      "name": "Vitamin K2 (MK-7)",
+      "category": "vitamin",
+      "grade": "B",
+      "aliases": [
+        "k2",
+        "mk-7",
+        "menaquinon"
+      ],
+      "typicalDose": "90–180 mcg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "warfarin"
+      ],
+      "note": "Kan sulandırıcı kullanan için K vitamini ciddi etkileşim."
+    },
+    {
+      "name": "Vitamin K1 (Fillokinon)",
+      "category": "vitamin",
+      "grade": "A",
+      "aliases": [
+        "k1",
+        "fillokinon"
+      ],
+      "typicalDose": "diyetten karşılanır",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "warfarin"
+      ],
+      "note": "Pıhtılaşma faktörü; takviye genelde gereksiz."
+    },
+    {
+      "name": "Vitamin A (Retinol)",
+      "category": "vitamin",
+      "grade": "B",
+      "aliases": [
+        "retinol",
+        "a vitamini"
+      ],
+      "typicalDose": "≤3000 µg RAE toplam",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        " İzotretinoin/akne ilacı ile birlikte"
+      ],
+      "note": "Yağda çözünen, birikir. Karaciğer toksisitesi ve gebelikte teratojen riski gerçek."
+    },
+    {
+      "name": "Beta-Karoten",
+      "category": "vitamin",
+      "grade": "B",
+      "aliases": [
+        "karoten",
+        "provitamin a"
+      ],
+      "typicalDose": "≤10 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "sigara içenlerde yüksek doz"
+      ],
+      "note": "Sigara içenlerde yüksek doz takviye akciğer kanseri riskini artırdığı gösterildi (ATB/CCS çalışmaları)."
+    },
+    {
+      "name": "Vitamin E",
+      "category": "vitamin",
+      "grade": "C",
+      "aliases": [
+        "tokoferol",
+        "e vitamini"
+      ],
+      "typicalDose": "diyet öncelikli",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "kan sulandırıcılar"
+      ],
+      "note": "400 IU ve üstü kronik kullanımda mortalite artış sinyali; ek olarak önerilmiyor."
+    },
+    {
+      "name": "Vitamin C",
+      "category": "vitamin",
+      "grade": "B",
+      "aliases": [
+        "askorbik asit",
+        "c vitamini",
+        "cinko karışımı"
+      ],
+      "typicalDose": "250–1000 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "yüksek dozda statin + niacin kombinasyonu"
+      ],
+      "note": "Eksiklikte A düzeyi kanıt; soğuk algınlığını önler iddiası C. Yüksek doz oksalat taşı riski."
+    },
+    {
+      "name": "B12 (Metilkobalamin)",
+      "category": "vitamin",
+      "grade": "A",
+      "aliases": [
+        "b12",
+        "kobalamin",
+        "metilkobalamin"
+      ],
+      "typicalDose": "250–1000 µg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Vegan, vejetaryen, metformin ve PPI kullananında eksiklik taraması mantıklı."
+    },
+    {
+      "name": "Folat (5-MTHF)",
+      "category": "vitamin",
+      "grade": "A",
+      "aliases": [
+        "folik asit",
+        "b9",
+        "5-mthf",
+        "metilfolat"
+      ],
+      "typicalDose": "400 µg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "B12 eksikliğini maskeleyebilir"
+      ],
+      "note": "Gebelik planında kanıt A. Yüksek doz çinko emilimini azaltabilir."
+    },
+    {
+      "name": "Vitamin B6",
+      "category": "vitamin",
+      "grade": "B",
+      "aliases": [
+        "piridoksin",
+        "b6"
+      ],
+      "typicalDose": "≤25 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "levodopa (düşük doz dopa ile)"
+      ],
+      "note": "Uzun süre yüksek doz PERİFERAL NÖROPATİ yapar — bu bir güvenlik sınırı, tavsiye değil."
+    },
+    {
+      "name": "Tiamin (B1)",
+      "category": "vitamin",
+      "grade": "A",
+      "aliases": [
+        "b1",
+        "tiamin"
+      ],
+      "typicalDose": "50–100 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Eksiklik (alkol kullanımı, yetersiz beslenme) varsa kanıt güçlü."
+    },
+    {
+      "name": "Riboflavin (B2)",
+      "category": "vitamin",
+      "grade": "B",
+      "aliases": [
+        "b2",
+        "riboflavin"
+      ],
+      "typicalDose": "400 mg (migren protokolü)",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Migren önlemede yüksek doz çalışma var. İdrarı parlak sarı yapar — normal."
+    },
+    {
+      "name": "Niasin (B3)",
+      "category": "vitamin",
+      "grade": "B",
+      "aliases": [
+        "b3",
+        "niasin",
+        "nikotinik asit"
+      ],
+      "typicalDose": "hekim belirler",
+      "timing": "Akşam",
+      "withFood": true,
+      "avoidWith": [
+        "istatin ile karaciğer yükü",
+        "alkol"
+      ],
+      "note": "Yüksek doz flushing ve karaciğer toksisitesi yapabilir; kolesterol ilacı dozu hekim işi."
+    },
+    {
+      "name": "Pantotenik Asit (B5)",
+      "category": "vitamin",
+      "grade": "C",
+      "aliases": [
+        "b5",
+        "pantotenat"
+      ],
+      "typicalDose": "5–10 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Eksiklik nadir; akne/cilt iddiaları zayıf."
+    },
+    {
+      "name": "Biotin (B7)",
+      "category": "vitamin",
+      "grade": "C",
+      "aliases": [
+        "b7",
+        "biotin"
+      ],
+      "typicalDose": "1–5 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Tırnak kanıtı zayıf. KRİTİK: yüksek doz biotin tiroid ve troponin kan testlerini BOZAR, sonucu yanlış gösterir."
+    },
+    {
+      "name": "Kolin",
+      "category": "vitamin-benzeri",
+      "grade": "B",
+      "aliases": [
+        "kolin",
+        "bitartrate"
+      ],
+      "typicalDose": "300–550 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Gebelikte önem artıyor; yüksek doz balık kokusu sendromu ve TMAO tartışması."
+    },
+    {
+      "name": "Alpha-GPC",
+      "category": "nootropik",
+      "grade": "C",
+      "aliases": [
+        "alpha gpc",
+        "alfagpc"
+      ],
+      "typicalDose": "300–600 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Kolin kaynağı; biliş iddiaları üretici destekli, büyük randomize çalışma yok."
+    },
+    {
+      "name": "CDP-Kolin (Sitedikolin)",
+      "category": "nootropik",
+      "grade": "C",
+      "aliases": [
+        "cdp kolin",
+        "sitoikolin",
+        "citikoline"
+      ],
+      "typicalDose": "500–1000 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "İnme sonrası bazı olumlu veriler; sağlıklı yaşlanma iddiası C."
+    },
+    {
+      "name": "Magnezyum Glisinat",
+      "category": "mineral",
+      "grade": "B",
+      "aliases": [
+        "magnezyum",
+        "mg glisinat",
+        "bisglisinat",
+        "glisinat"
+      ],
+      "typicalDose": "200–400 mg elementel",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [
+        "demir",
+        "kalsiyum",
+        "tetrasiklin/kinolon antibiotik",
+        "levodopa"
+      ],
+      "note": "Emilimi yüksek, laksatif etkisi düşük. Uyku/kramip kanıtı küçük ama tutarlı."
+    },
+    {
+      "name": "Magnezyum Sitrat",
+      "category": "mineral",
+      "grade": "B",
+      "aliases": [
+        "mg sitrat",
+        "sitrat magnezyum"
+      ],
+      "typicalDose": "200–400 mg elementel",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [
+        "demir",
+        "tetrasiklin"
+      ],
+      "note": "İyi emilir; yüksek dozda yumuşatıcı etki belirgin."
+    },
+    {
+      "name": "Magnezyum Oksit",
+      "category": "mineral",
+      "grade": "C",
+      "aliases": [
+        "mg oksit",
+        "magnezyum oksit"
+      ],
+      "typicalDose": "250–400 mg",
+      "timing": "Gece",
+      "withFood": true,
+      "avoidWith": [
+        "demir"
+      ],
+      "note": "Emsilim oranı düşük (~%4); reflü için magnezyum hastalığı için değil."
+    },
+    {
+      "name": "Magnezyum L-Treonat",
+      "category": "mineral",
+      "grade": "C",
+      "aliases": [
+        "treonat",
+        "threonate",
+        "magtreon"
+      ],
+      "typicalDose": "1–2 g bileşik",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Beyne geçiş iddiası hayvan verisi; insan biliş kanıtı zayıf ve fiyatı yüksek."
+    },
+    {
+      "name": "Magnezyum Malat",
+      "category": "mineral",
+      "grade": "B",
+      "aliases": [
+        "malat",
+        "malat magnezyum"
+      ],
+      "typicalDose": "300–600 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "demir"
+      ],
+      "note": "Yorgunluk/hassasiyet iddiaları fibromiyalji çalışma grubuna dayanır."
+    },
+    {
+      "name": "Kalsiyum (Sitrat)",
+      "category": "mineral",
+      "grade": "A",
+      "aliases": [
+        "kalsiyum",
+        "ca",
+        "kalsiyum sitrat"
+      ],
+      "typicalDose": "500 mg'lık porsiyonlar",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "demir",
+        "magnezyum (aynı saatte)",
+        "levotiroksin"
+      ],
+      "note": "Diyet toplamı 1000–1200 mg'ı geçmesin; fazlası böbrek taşı ve damar kireçlenme tartışması."
+    },
+    {
+      "name": "Çinko Pikolinat",
+      "category": "mineral",
+      "grade": "B",
+      "aliases": [
+        "çinko",
+        "zinc",
+        "glukon",
+        "asetil çinko",
+        "karbonil"
+      ],
+      "typicalDose": "15–30 mg",
+      "timing": "Akşam",
+      "withFood": false,
+      "avoidWith": [
+        "demir",
+        "kalsiyum",
+        "tetrasiklin",
+        "penisilamin"
+      ],
+      "note": "Aç karnına bulantı yapabilir. 40 mg üstü uzun süre BAKIR eksikliği ve bağışıklık baskılanması riski."
+    },
+    {
+      "name": "Demir (Bisglisinat)",
+      "category": "mineral",
+      "grade": "A",
+      "aliases": [
+        "demir",
+        "iron",
+        "ferroz",
+        "fe"
+      ],
+      "typicalDose": "hekim dozu belirler",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "kalsiyum",
+        "magnezyum",
+        "çinko",
+        "kahve/çay",
+        "PPI",
+        "tetrasiklin",
+        "levodopa",
+        "tiroid ilacı"
+      ],
+      "note": "Ferritin/kan değeri görmeden demir EKLEMEK gereksiz yükleme demek. Çocuk için toksisite gerçek risk."
+    },
+    {
+      "name": "Selenyum",
+      "category": "mineral",
+      "grade": "B",
+      "aliases": [
+        "selenyum",
+        "selen"
+      ],
+      "typicalDose": "55–100 µg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Güvenlik penceresi dar. Türkiye'de 100 µg üstü takviye rejimi sınırlı; fazlası saç/tırnak kaybı ve selenozis."
+    },
+    {
+      "name": "İyot (Potasyum İyodür)",
+      "category": "mineral",
+      "grade": "B",
+      "aliases": [
+        "iyot",
+        "iodine",
+        "iodür"
+      ],
+      "typicalDose": "150 µg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "tiroid hastalığında hekim onayı şart"
+      ],
+      "note": "Eksiklikte kritik; fazlası Hashimoto'yu alevlendirebilir. Tuz kullanımı hesaba katılmalı."
+    },
+    {
+      "name": "Bakır (Bisglisinat)",
+      "category": "mineral",
+      "grade": "B",
+      "aliases": [
+        "bakır",
+        "copper",
+        "cu"
+      ],
+      "typicalDose": "0,5–1 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "çinko (aynı saatte)",
+        "C vitamini (yüksek doz)"
+      ],
+      "note": "Genellikle çinkoyu uzun kullananın dengelenmesi için; Wilson hastalığında YASAK."
+    },
+    {
+      "name": "Mangan",
+      "category": "mineral",
+      "grade": "C",
+      "aliases": [
+        "mangan",
+        "mn"
+      ],
+      "typicalDose": "1–2 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Eksiklik nadir; yüksek dozda nörotoksisite (mesleki maruziyet) verisi var."
+    },
+    {
+      "name": "Krom (Pikolinat)",
+      "category": "mineral",
+      "grade": "C",
+      "aliases": [
+        "krom",
+        "chromium",
+        "picolinate"
+      ],
+      "typicalDose": "100–200 µg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Kan şekeri iddiası meta-analizlerde küçük ve heterojen; tek başına strateji kurulmaz."
+    },
+    {
+      "name": "Bor",
+      "category": "mineral",
+      "grade": "C",
+      "aliases": [
+        "bor",
+        "boron"
+      ],
+      "typicalDose": "3–6 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Hormon ve kemik iddiaları küçük örneklemli."
+    },
+    {
+      "name": "Potasyum",
+      "category": "mineral",
+      "grade": "A",
+      "aliases": [
+        "potasyum",
+        "kalium",
+        "k"
+      ],
+      "typicalDose": "≤450 mg takviye (Türkiye)",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "ACEI/sartan",
+        "potasyum tutucu diüretik",
+        "böbrek hastalığı",
+        "spironolakton"
+      ],
+      "note": "Tansiyon kanıtı güçlü AMA reçetesiz yüksek doz HİPERKALEMİ (ritim bozukluğu) riski. Diyet öncelikli."
+    },
+    {
+      "name": "Sodyum (Elektrolit)",
+      "category": "mineral",
+      "grade": "B",
+      "aliases": [
+        "sodyum",
+        "elektrolit",
+        "tuz",
+        "sodyum bikarbonat"
+      ],
+      "typicalDose": "kişiye özel",
+      "timing": "Öğle",
+      "withFood": false,
+      "avoidWith": [
+        "hipertansiyonda hekim onayı"
+      ],
+      "note": "Terleme yoğunsa mantıklı; değilse gereksiz yükleme."
+    },
+    {
+      "name": "Kreatin Monohidrat",
+      "category": "performans",
+      "grade": "A",
+      "aliases": [
+        "kreatin",
+        "creatine",
+        "monohidrat"
+      ],
+      "typicalDose": "3–5 g/gün",
+      "timing": "Her saat",
+      "withFood": false,
+      "avoidWith": [
+        "böbrek hastalığında hekim onayı"
+      ],
+      "note": "En güçlü kanıtlı spor takviyesi. Yüklemeye gerek yok. Su içmeyi artırın."
+    },
+    {
+      "name": "Kreatin HCl",
+      "category": "performans",
+      "grade": "C",
+      "aliases": [
+        "kreatin hcl",
+        "hcl"
+      ],
+      "typicalDose": "1–2 g",
+      "timing": "Her saat",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Monohidrata üstünlük gösterilmedi; monohidrat kanıt olarak daha güçlü."
+    },
+    {
+      "name": "Whey Protein",
+      "category": "protein",
+      "grade": "A",
+      "aliases": [
+        "whey",
+        "peynir altı",
+        "protein tozu"
+      ],
+      "typicalDose": "20–40 g",
+      "timing": "Öğle",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Toplam protein hedefinin parçası; süte alerji/laktoz intoleransı olan için izole form."
+    },
+    {
+      "name": "Kazein",
+      "category": "protein",
+      "grade": "B",
+      "aliases": [
+        "casein",
+        "kazein"
+      ],
+      "typicalDose": "20–40 g",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Yavaş emilim; gece protein hedefi için mantıklı."
+    },
+    {
+      "name": "Soya Proteini",
+      "category": "protein",
+      "grade": "B",
+      "aliases": [
+        "soya",
+        "soy protein"
+      ],
+      "typicalDose": "25–40 g",
+      "timing": "Öğle",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Bitkisel kaynaklarda lösin düşük; karışımla kapatılabilir."
+    },
+    {
+      "name": "Bezelye Proteini",
+      "category": "protein",
+      "grade": "B",
+      "aliases": [
+        "bezelye",
+        "pea protein"
+      ],
+      "typicalDose": "25–40 g",
+      "timing": "Öğle",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Pirinç + bezelye karışımı amino profili tamamlar."
+    },
+    {
+      "name": "L-Glutamin",
+      "category": "aminoasit",
+      "grade": "C",
+      "aliases": [
+        "glutamin",
+        "l-glutamin"
+      ],
+      "typicalDose": "5 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "karaciğer yetmezliği/ensefalopati"
+      ],
+      "note": "Bağırsak bariyer iddiası insan kanıtı sınırlı; kanser tedavisinde onkolog onayı şart."
+    },
+    {
+      "name": "L-Tirozin",
+      "category": "aminoasit",
+      "grade": "C",
+      "aliases": [
+        "tirozin",
+        "tyrosine",
+        "n-acetyl"
+      ],
+      "typicalDose": "500–2000 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "MAOI",
+        "levodopa",
+        "tiroid hastalığı"
+      ],
+      "note": "Sadece akut stres/uykusuzlukta fark; sağlıklı insanda biliş 'artırıcı' kanıtı zayıf."
+    },
+    {
+      "name": "L-Triptofan",
+      "category": "aminoasit",
+      "grade": "B",
+      "aliases": [
+        "triptofan",
+        "tryptophan"
+      ],
+      "typicalDose": "1–3 g",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [
+        "SSRI/SNRI",
+        "triptan",
+        "tramadol",
+        "5-HTP"
+      ],
+      "note": "Serotonin sendromu riski; başka serotonerjik ilaçla hekim onayı olmadan kullanılmaz."
+    },
+    {
+      "name": "5-HTP",
+      "category": "aminoasit",
+      "grade": "C",
+      "aliases": [
+        "5 htp",
+        "griffonia"
+      ],
+      "typicalDose": "50–100 mg",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [
+        "SSRI/SNRI",
+        "triptan",
+        "tramadol",
+        "MAOI",
+        "triptofan"
+      ],
+      "note": "Antidepresanla birlikte CİDDİ risk. Eozinofili-miyalji sendromu geçmiş kalite sorunları var."
+    },
+    {
+      "name": "Theanine (L-Theanine)",
+      "category": "aminoasit",
+      "grade": "B",
+      "aliases": [
+        "theanine",
+        "l-theanin",
+        "teanin"
+      ],
+      "typicalDose": "100–200 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "tansiyon ilacı (küçük düşürücü etki)"
+      ],
+      "note": "Kafeinle birlikte uyarılmayı azalttığı gösterildi; tek başına büyük etki beklenmez."
+    },
+    {
+      "name": "N-Asetil Sistein (NAC)",
+      "category": "aminoasit",
+      "grade": "C",
+      "aliases": [
+        "nac",
+        "sistein",
+        "n-asetil"
+      ],
+      "typicalDose": "600–1200 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "nitrogliserin",
+        "aktifleşmiş astımda dikkat"
+      ],
+      "note": "Mukolitik ve karaciğer koruma kanıtı A (hastane dozu); 'longevity/anti-aging' iddiası C."
+    },
+    {
+      "name": "Taurin",
+      "category": "aminoasit",
+      "grade": "B",
+      "aliases": [
+        "taurin",
+        "taurine"
+      ],
+      "typicalDose": "1–3 g",
+      "timing": "Akşam",
+      "withFood": false,
+      "avoidWith": [
+        "lityum"
+      ],
+      "note": "Enerji içeceği dozu çalışmaları karışık; saf taurin verisi daha olumlu ama sınırlı."
+    },
+    {
+      "name": "Arginin",
+      "category": "aminoasit",
+      "grade": "C",
+      "aliases": [
+        "arginin",
+        "l-arginine"
+      ],
+      "typicalDose": "3–6 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "herpes labialis öyküsü (rekürrens tartışması)",
+        "tansiyon ilacı"
+      ],
+      "note": "Emilimi kötü; aynı amaç için sitrullin daha etkili."
+    },
+    {
+      "name": "Sitrülin",
+      "category": "aminoasit",
+      "grade": "B",
+      "aliases": [
+        "sitrullin",
+        "citrulline",
+        "malat"
+      ],
+      "typicalDose": "3–6 g (malat: 6–8 g)",
+      "timing": "Öğle",
+      "withFood": false,
+      "avoidWith": [
+        "PDE5 (sildenafil) ve tansiyon ilacı"
+      ],
+      "note": "Performans ve pompa etkisi için arginin'e tercih edilir."
+    },
+    {
+      "name": "Beta-Alanin",
+      "category": "performans",
+      "grade": "B",
+      "aliases": [
+        "beta alanin",
+        "b-alanine"
+      ],
+      "typicalDose": "3–6 g/gün (bölünmüş)",
+      "timing": "Öğle",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Karıncalanma (parestezi) zararsız ama rahatsız edici — yavaş salınım çözer."
+    },
+    {
+      "name": "HMB",
+      "category": "performans",
+      "grade": "B",
+      "aliases": [
+        "hmb",
+        "beta-hidroksi"
+      ],
+      "typicalDose": "3 g",
+      "timing": "Öğle",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Yaşlı ve yeni başlayan kas kaybında en anlamlı; eğitimli sporcuda etkisi küçük."
+    },
+    {
+      "name": "Koenzim Q10 (Ubikinon)",
+      "category": "performans",
+      "grade": "B",
+      "aliases": [
+        "q10",
+        "koq10",
+        "ubiquinone",
+        "coq10"
+      ],
+      "typicalDose": "100–200 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "warfarin (INR düşebilir)"
+      ],
+      "note": "Statin kaynaklı kas ağrısında olası fayda; kalp krizi önleme iddiası kurulmaz."
+    },
+    {
+      "name": "Koenzim Q10 (Ubikinol)",
+      "category": "performans",
+      "grade": "B",
+      "aliases": [
+        "ubiquinol",
+        "q10 ubikinol"
+      ],
+      "typicalDose": "100–200 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "warfarin"
+      ],
+      "note": "Daha iyi emildiği gösterildi; doz başına fiyatı yüksek."
+    },
+    {
+      "name": "Yağ Asidi / Zeytinyağı (Ekstra Virjin)",
+      "category": "yağ",
+      "grade": "A",
+      "aliases": [
+        "zeytinyağı",
+        "olive oil",
+        "oleik"
+      ],
+      "typicalDose": "25–40 ml/gün",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "KalpOutcome kanıtı takviye değil BÜTÜNSEL diyet kalıbı düzeyinde (PREDIMED)."
+    },
+    {
+      "name": "Omega-3 (EPA/DHA)",
+      "category": "yağ asidi",
+      "grade": "B",
+      "aliases": [
+        "omega 3",
+        "balık yağı",
+        "epa",
+        "dha",
+        "omega3"
+      ],
+      "typicalDose": "1–2 g EPA+DHA",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "kan sulandırıcılar (yüksek doz)",
+        "cerrahi öncesi"
+      ],
+      "note": "Trigliserid düşüşü net; 'kalp krizini önler' iddiası kanıtla tam desteklenmiyor."
+    },
+    {
+      "name": "Balık Yağı",
+      "category": "yağ asidi",
+      "grade": "B",
+      "aliases": [
+        "fish oil",
+        "balıkyağı"
+      ],
+      "typicalDose": "etiketteki EPA+DHA toplamı esas",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "kan sulandırıcılar"
+      ],
+      "note": "Kapsüldeki '1000 mg balık yağı' ile EPA+DHA farklı şeyler — etiketi böyle oku."
+    },
+    {
+      "name": "Alg Yağı (DHA)",
+      "category": "yağ asidi",
+      "grade": "B",
+      "aliases": [
+        "alg yağı",
+        "algal oil",
+        "vegan omega"
+      ],
+      "typicalDose": "250–500 mg DHA",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Vegan için tek anlamlı DHA kaynağı; EPA genelde yok."
+    },
+    {
+      "name": "Keten Tohumu (ALA)",
+      "category": "yağ asidi",
+      "grade": "C",
+      "aliases": [
+        "keten",
+        "flax",
+        "flaxseed",
+        "ALA"
+      ],
+      "typicalDose": "1–2 yemek kaşığı öğütülmüş",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "ilaç emilimini yavaşlatır (ayrı saat)"
+      ],
+      "note": "ALA → DHA dönüşümü %5–10; tek başına omega hedefi kurmayın."
+    },
+    {
+      "name": "Chia Tohumu",
+      "category": "yağ asidi",
+      "grade": "C",
+      "aliases": [
+        "chia",
+        "çiya"
+      ],
+      "typicalDose": "15–25 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "kan sulandırıcı (yüksek ALA)",
+        "yutma güçlüğü"
+      ],
+      "note": "Lif ve yağ kaynağı; 'mucize' değil. Kuru halde bol suyla."
+    },
+    {
+      "name": "Akşam Çuha Yağı (GLA)",
+      "category": "yağ asidi",
+      "grade": "C",
+      "aliases": [
+        "akşam çuha",
+        "evening primrose",
+        "gla"
+      ],
+      "typicalDose": "500–1000 mg",
+      "timing": "Akşam",
+      "withFood": true,
+      "avoidWith": [
+        "epilepsi eşiği (kontroversi)",
+        "kan sulandırıcı"
+      ],
+      "note": "Egzama ve PMS iddiaları meta-analizde destek bulmadı."
+    },
+    {
+      "name": "Karın Yağı (Krill)",
+      "category": "yağ asidi",
+      "grade": "C",
+      "aliases": [
+        "krill",
+        "krill yağı"
+      ],
+      "typicalDose": "500–1000 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "kabuklu alerjisi",
+        "kan sulandırıcı"
+      ],
+      "note": "Fosfolipid emilim avantajı gösterildi ama dozu EPA/DHA açısından düşük kalıyor."
+    },
+    {
+      "name": "MCT Yağı",
+      "category": "yağ",
+      "grade": "B",
+      "aliases": [
+        "mct",
+        "trigliserid"
+      ],
+      "typicalDose": "1–2 yemek kaşığı",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "safra/karaciğer hastalığında hekim"
+      ],
+      "note": "Ketojenik yakıt; hızlı başlangıçta GI rahatsızlık yaygın."
+    },
+    {
+      "name": "CLA (Konjuge Linoleik Asit)",
+      "category": "yağ",
+      "grade": "C",
+      "aliases": [
+        "cla",
+        "linoleik"
+      ],
+      "typicalDose": "3 g",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "insülin direnci olanlarda dikkat"
+      ],
+      "note": "Yağ yakma iddiası insan verisinde minimal; insülin sensitivitesini kötüleştirebilir."
+    },
+    {
+      "name": "Probiyotik (çok suş)",
+      "category": "mikrobiyota",
+      "grade": "B",
+      "aliases": [
+        "probiyotik",
+        "lactobacillus",
+        "bifido",
+        "bacillus coagulans"
+      ],
+      "typicalDose": "10–20 milyar CFU",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "immün yetmezlik",
+        "santral kateter",
+        "kritik hastalık"
+      ],
+      "note": "Etki SUŞA özgüdür. 'Bağırsakları temizler' gibi genel iddia kurulmaz."
+    },
+    {
+      "name": "Psyllium (Karnabahar Tohumu Kabuğu)",
+      "category": "lif",
+      "grade": "B",
+      "aliases": [
+        "psyllium",
+        "ispagula",
+        "lif"
+      ],
+      "typicalDose": "5–10 g + bol su",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "tüm ilaçlarla 2 saat ara",
+        "yutma/bağırsak darlığı"
+      ],
+      "note": "LDL ve tokluk kan şekeri kanıtı güçlü. Su içmezsen tıkanıklık riski."
+    },
+    {
+      "name": "İnulin / FOS",
+      "category": "prebiyotik",
+      "grade": "C",
+      "aliases": [
+        "inulin",
+        "fukto-oligosakkarit",
+        "prebiyotik"
+      ],
+      "typicalDose": "3–5 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "IBS varsa FODMAP yükü şişkinlik yapar; yavaş artır."
+    },
+    {
+      "name": "Dirençli Nişasta",
+      "category": "prebiyotik",
+      "grade": "C",
+      "aliases": [
+        "dirençli nişasta",
+        "RS2",
+        "patates nişastası"
+      ],
+      "typicalDose": "15–30 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Kısa zincirli yağ asidi üretimi için mantıklı ama kanıt küçük çalışma."
+    },
+    {
+      "name": "Sindirim Enzimleri",
+      "category": "mikrobiyota",
+      "grade": "C",
+      "aliases": [
+        "enzim",
+        "digestive enzyme",
+        "lipaz",
+        "proteaz",
+        "amilaz"
+      ],
+      "typicalDose": "yemekle",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "pankreatit/ülserde hekim"
+      ],
+      "note": "Pankreas yetmezliğinde reçetesiz enzim yetersiz; gerçek enzim dozu hekim işi."
+    },
+    {
+      "name": "Betain HCl",
+      "category": "mikrobiyota",
+      "grade": "C",
+      "aliases": [
+        "betain",
+        "hidroklorik asit",
+        "hcl"
+      ],
+      "typicalDose": "650 mg yemekle",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "ülser",
+        "gastrit",
+        "reflü",
+        "NSAID"
+      ],
+      "note": "'Mide asidi düşük' teşhisi evde yapılmaz; asit yüklemesi hastaya zarar verebilir."
+    },
+    {
+      "name": "Zencefil",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "ginger",
+        "zencefil",
+        "gingerol"
+      ],
+      "typicalDose": "1–2 g",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "kan sulandırıcı",
+        "safra taşı"
+      ],
+      "note": "Bulantı (gebelik/kemoterapi/taşıma) kanıtı olumlu. Reflüyü artırabilir."
+    },
+    {
+      "name": "Kurkumin (C3 Kompleks)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "kurkumin",
+        "zerdeçal",
+        "turmeric",
+        "c3"
+      ],
+      "typicalDose": "500–1000 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "kan sulandırıcı",
+        "safra tıkanıklığı",
+        "demir (şelasyon)"
+      ],
+      "note": "Biyoyararlanımı çok düşük; piperin içeren formlar İLAÇ metabolizmasını da yavaşlatır (CYP3A4)."
+    },
+    {
+      "name": "Milk Thistle (Silmarin)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "milk thistle",
+        "devedikeni",
+        "silymarin"
+      ],
+      "typicalDose": "140–420 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "alerji (Asteraceae)",
+        "hormon duyarlı durumlar"
+      ],
+      "note": "Karaciğer hastalığında kanıt karışık; 'detoks' iddiası tıbbi olarak tanımsız."
+    },
+    {
+      "name": "Ashwagandha (KSM-66)",
+      "category": "adaptogen",
+      "grade": "C",
+      "aliases": [
+        "ashwagandha",
+        "hindiba",
+        "ksm-66",
+        "sensoril"
+      ],
+      "typicalDose": "300–600 mg",
+      "timing": "Akşam",
+      "withFood": false,
+      "avoidWith": [
+        "tiroid ilacı",
+        "sedatif",
+        "immün baskılayıcı",
+        "hamilelik"
+      ],
+      "note": "Çoğu çalışma üretici destekli ve kısa süreli. Karaciğer hasarı bildirimleri var — uzun vade bilinmiyor."
+    },
+    {
+      "name": "Rhodiola Rosea",
+      "category": "adaptogen",
+      "grade": "C",
+      "aliases": [
+        "rhodiola",
+        "altın kök"
+      ],
+      "typicalDose": "200–400 mg (%3 rozavin)",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "MAOI",
+        "lityum",
+        "antidepresan"
+      ],
+      "note": "Yorgunluk üzerinde küçük olumlu veriler; doz-standardizasyonu markalar arası çok değişken."
+    },
+    {
+      "name": "Saffron (Zaferan)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "saffron",
+        "zaferan",
+        "crocin"
+      ],
+      "typicalDose": "28–30 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "antidepresan (serotonin)",
+        "hamilelik (yüksek doz)"
+      ],
+      "note": "Depresyon verileri umut verici ama çoğu küçük ve İran merkezli/destekli çalışma; >5 g toksik."
+    },
+    {
+      "name": "Lavanta Yağı (Silexan)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "lavanta",
+        "lavender",
+        "silexan"
+      ],
+      "typicalDose": "80–160 mg",
+      "timing": "Gece",
+      "withFood": true,
+      "avoidWith": [
+        "sedatif",
+        "SSRI"
+      ],
+      "note": "Anksiyete verisi olumlu; çocuklarda jinekomastia bildirimleri var."
+    },
+    {
+      "name": "Melisa (Lemon Balm)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "melisa",
+        "lemon balm",
+        "melissa"
+      ],
+      "typicalDose": "300–600 mg",
+      "timing": "Akşam",
+      "withFood": false,
+      "avoidWith": [
+        "tiroid ilacı (tiroid supresyonu tartışması)",
+        "sedatif"
+      ],
+      "note": "Sakinlik ve uyku latensinde küçük etkiler."
+    },
+    {
+      "name": "Papatya (Kamille)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "papatya",
+        "chamomile",
+        "kamille"
+      ],
+      "typicalDose": "200–500 mg / 2-3 fincan",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [
+        "kan sulandırıcı (kumarin)",
+        "ambrosia alerjisi"
+      ],
+      "note": "Güvenli, hafif. Etkisi büyük değil."
+    },
+    {
+      "name": "Valeryan",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "valerian",
+        "valeryan",
+        "kekikotu"
+      ],
+      "typicalDose": "300–600 mg",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [
+        "alkol",
+        "sedatif",
+        "karaciğer hastalığı"
+      ],
+      "note": "Randomize çalışmalarda sonuç karışık; etki 2-4 haftada beliriyor iddiası kanıtsız."
+    },
+    {
+      "name": "Melatonin",
+      "category": "uyku",
+      "grade": "B",
+      "aliases": [
+        "melatonin",
+        "uyku hormonu"
+      ],
+      "typicalDose": "0,3–1 mg (düşük başla)",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [
+        "alkol",
+        "sedatif",
+        "immün baskılayıcı",
+        "antikoagülan"
+      ],
+      "note": "Sirkadiyen kayma (vardiya/jet-lag) en net kullanım. Yüksek doz gereksiz; uyku hijyeni yerine geçmez."
+    },
+    {
+      "name": "St. John's Wort (Kantaron)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "kantaron",
+        "st johns",
+        "hypericum"
+      ],
+      "typicalDose": "300 mg (0,3% hiperasin) 3x",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "DOĞUM KONTROL HAPI",
+        "antidepresan (serotonin)",
+        "warfarin",
+        "siklosporin",
+        "HIV ilacı",
+        "PDE5",
+        "kemoterapi",
+        "digoksin",
+        "statin"
+      ],
+      "note": "TEHLİKELİ ETKİLEŞİM PROFİLİ: CYP3A4/P-gp indüksiyonu ile ilaçları etkisizleştirir. En riskli 'masum' bitkisel."
+    },
+    {
+      "name": "Ginkgo Biloba",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "ginkgo",
+        "mabet ağacı"
+      ],
+      "typicalDose": "120–240 mg (EGb 761)",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "kan sulandırıcı",
+        "cerrahi öncesi",
+        "antiepileptik"
+      ],
+      "note": "Bilişi artırdığı iddiası büyük çalışmada (GEM) desteklenmedi. Kanama riski gerçek."
+    },
+    {
+      "name": "Saw Palmetto",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "saw palmetto",
+        "cüce palmiye",
+        "bph"
+      ],
+      "typicalDose": "320 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "hormon duyarlı durumlar",
+        "antikoagülan"
+      ],
+      "note": "BPH semptomlarında yüksek doz finasterid ile kıyaslandığında zayıf kaldı (NEJM 2012)."
+    },
+    {
+      "name": "Yeşil Çay Ekstresi (EGCG)",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "yeşil çay",
+        "green tea",
+        "egcg"
+      ],
+      "typicalDose": "250–500 mg EGCG",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "demir (şelasyon)",
+        "ilaç emilimi",
+        "karaciğer hastalığı"
+      ],
+      "note": "Yüksek doz sıvısız ekstrede KARACİĞER hasarı bildirimleri var. Çay olarak içmek güvenli yol."
+    },
+    {
+      "name": "Kafein",
+      "category": "performans",
+      "grade": "A",
+      "aliases": [
+        "kafein",
+        "caffeine",
+        "kahve"
+      ],
+      "typicalDose": "≤400 mg/gün",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "uyku (6 saat kuralı)",
+        "anksiyete",
+        "hamilelik (≤200 mg)",
+        "ritim bozukluğu"
+      ],
+      "note": "Performans kanıtı güçlü; gece yarılanması tolerans ve uyku borcu üretir."
+    },
+    {
+      "name": "Quercetin",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "kuersetin",
+        "quercetin"
+      ],
+      "typicalDose": "500 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "antibiyotik (kinolon)",
+        "warfarin",
+        "böbrek hastalığı"
+      ],
+      "note": "Biyoyararlanımı düşük. 'Senolitik' iddiası insan verisinde henüz kurulmadı."
+    },
+    {
+      "name": "Bromelain",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "bromelain",
+        "ananas enzimi"
+      ],
+      "typicalDose": "200–500 mg GDU",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "kan sulandırıcı",
+        "amoksisiklin (emilim artışı)"
+      ],
+      "note": "Şişlik/ödem verisi küçük. Aç karnına enzim, yemekle sindirim davranışı farklı."
+    },
+    {
+      "name": "Papain",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "papain",
+        "papaya enzimi"
+      ],
+      "typicalDose": "500 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "lateks alerjisi (çapraz)"
+      ],
+      "note": "Kanıt zayıf."
+    },
+    {
+      "name": "Kolajen (Hidrolize)",
+      "category": "protein",
+      "grade": "C",
+      "aliases": [
+        "kolajen",
+        "collagen",
+        "tip 1",
+        "tip 2"
+      ],
+      "typicalDose": "5–10 g",
+      "timing": "Her saat",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Ağızdan alınan kolajen amino asitlere parçalanır; 'doğrudan deriye gider' iddiası zayıf. Çalışmalar çoğunlukla üretici destekli."
+    },
+    {
+      "name": "Hyaluronik Asit",
+      "category": "eklem",
+      "grade": "C",
+      "aliases": [
+        "hyaluronic",
+        "hyaluronat",
+        "ha"
+      ],
+      "typicalDose": "120–240 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Ağızdan alınan için eklem/cilt kanıtı zayıf; enjeksiyon farklı bir tartışma."
+    },
+    {
+      "name": "MSM",
+      "category": "eklem",
+      "grade": "C",
+      "aliases": [
+        "msm",
+        "metilsülfonilmetan"
+      ],
+      "typicalDose": "1–3 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Genelde glukozaminle birlikte çalışıldı; tek başına kanıt zayıf."
+    },
+    {
+      "name": "Glukozamin Sülfat",
+      "category": "eklem",
+      "grade": "C",
+      "aliases": [
+        "glukozamin",
+        "glucosamine"
+      ],
+      "typicalDose": "1500 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "warfarin (INR artışı)",
+        "kabuklu alerjisi"
+      ],
+      "note": "En büyük bağımsız veri (GAIT) plasebodan ayırt edemedi. Şişman/ tip 2 diyabette kan şekeri izlenmeli."
+    },
+    {
+      "name": "Kondroitin",
+      "category": "eklem",
+      "grade": "C",
+      "aliases": [
+        "kondroitin",
+        "chondroitin"
+      ],
+      "typicalDose": "800–1200 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "warfarin"
+      ],
+      "note": "Glukozaminle birlikte kullanılır; tek başına etki küçük."
+    },
+    {
+      "name": "D-Mannoz",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "mannoz",
+        "d-mannose"
+      ],
+      "typicalDose": "1,5–2 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "diyabet (glikoz etkisi)",
+        "böbrek hastalığı"
+      ],
+      "note": "Tekrarlayan sistit için verisi umut verici ama küçük çalışma; enfeksiyon tedavisi antibiyotik yerine geçmez."
+    },
+    {
+      "name": "Kızılcık (Cranberry)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "cranberry",
+        "kızılcık",
+        "turna yemişi"
+      ],
+      "typicalDose": "36 mg PAC",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "warfarin",
+        "oksalat taşı öyküsü"
+      ],
+      "note": "İdrar yolu önleme verisi karışık; yüksek doz şurup şeker yükü demek."
+    },
+    {
+      "name": "Astaksantin",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "astaxanthin",
+        "astaksantin"
+      ],
+      "typicalDose": "4–12 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Antioksidan kapasitesi yüksek; klinik sonuç (kırışıklık/performans) kanıtı sınırlı."
+    },
+    {
+      "name": "Alfa Lipoik Asit",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "ala",
+        "lipoik asit",
+        "thioctic"
+      ],
+      "typicalDose": "300–600 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "kemoterapi (antioksidan)",
+        "insülin/hipoglisemi ilacı",
+        "tiroid ilacı (ayrı saat)"
+      ],
+      "note": "Diyabetik nöropatide (IV form) kanıt var; oral 'şeker düzenler' iddiası zayıf. Aç karnına emilir."
+    },
+    {
+      "name": "Berberin",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "berberin",
+        "berberine"
+      ],
+      "typicalDose": "500 mg 2-3x",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "METFORMİN ve diğer şeker ilaçları",
+        "siklosporin",
+        "statin",
+        "warfarin",
+        "hamilelik/emzirme"
+      ],
+      "note": "Metabolik verisi olumlu AMA metforminle birebir etkileşir, ilaç etkileşimi potansiyeli yüksek. Hamilelikte kullanılmaz."
+    },
+    {
+      "name": "Meyan Kökü (Liquorice)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "meyan",
+        "glycyrrhizin",
+        "liquorice"
+      ],
+      "typicalDose": "kısa süreli",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "tansiyon ilacı",
+        "hipokalemi",
+        "diüretik",
+        "böbrek"
+      ],
+      "note": "Potasyum düşürür ve tansiyon yükseltir — bitkisel değil, farmakolojik etkili."
+    },
+    {
+      "name": "Isırgan Otu",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "ısırgan",
+        "nettle",
+        "urtica"
+      ],
+      "typicalDose": "300 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "tansiyon ilacı",
+        "diüretik",
+        "lityum",
+        "kan sulandırıcı"
+      ],
+      "note": "BPH ve alerji verisi küçük; diüretik etkisi ilaç düzeylerini değiştirir."
+    },
+    {
+      "name": "Enginar Ekstresi",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "enginar",
+        "artichoke",
+        "sinkarin"
+      ],
+      "typicalDose": "600–1000 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "safra tıkanıklığı",
+        "sarı kantaron"
+      ],
+      "note": "Kolesterol etkisi küçük; reflüde kötüleştirebilir."
+    },
+    {
+      "name": "Reishi (Mantar)",
+      "category": "mantar",
+      "grade": "C",
+      "aliases": [
+        "reishi",
+        "ganoderma"
+      ],
+      "typicalDose": "500–1500 mg",
+      "timing": "Akşam",
+      "withFood": false,
+      "avoidWith": [
+        "kan sulandırıcı",
+        "immün baskılayıcı",
+        "ameliyat"
+      ],
+      "note": "Bağışıklık iddiaları çoğunlukla in-vitro; karaciğer toksisitesi bildirimleri var."
+    },
+    {
+      "name": "Cordyceps",
+      "category": "mantar",
+      "grade": "C",
+      "aliases": [
+        "kordiseps",
+        "cordyceps",
+        "cs-4"
+      ],
+      "typicalDose": "1–3 g",
+      "timing": "Öğle",
+      "withFood": false,
+      "avoidWith": [
+        "immün baskılayıcı",
+        "antikoagülan"
+      ],
+      "note": "VO2max iddiası sporcu dışı çalışmalarda tutarsız."
+    },
+    {
+      "name": "Lion's Mane (Yele Mantarı)",
+      "category": "mantar",
+      "grade": "C",
+      "aliases": [
+        "lion's mane",
+        "ercek",
+        "hericium",
+        "yele mantarı"
+      ],
+      "typicalDose": "500–1000 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "mantar alerjisi",
+        "kan sulandırıcı"
+      ],
+      "note": "NGF iddiası hayvan verisi; tek küçük insan çalışması üretici destekli."
+    },
+    {
+      "name": "Turkey Tail",
+      "category": "mantar",
+      "grade": "C",
+      "aliases": [
+        "kuyruk",
+        "trametes",
+        "psk"
+      ],
+      "typicalDose": "1–3 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "immün baskılayıcı"
+      ],
+      "note": "Japonya'da onkolojik yardımcı olarak ruhsatlı formları var; takviye formu ile eşdeğer değil."
+    },
+    {
+      "name": "Chlorella",
+      "category": "mantar",
+      "grade": "C",
+      "aliases": [
+        "klorella",
+        "chlorella"
+      ],
+      "typicalDose": "3–5 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "warfarin (vitamin K)",
+        "iyot hassasiyeti",
+        "immün baskılayıcı"
+      ],
+      "note": "'Ağır metal atar' iddiası küçük çalışma; hamilelik emniyeti belirsiz."
+    },
+    {
+      "name": "Spirulina",
+      "category": "mantar",
+      "grade": "C",
+      "aliases": [
+        "spirulina",
+        "mavi yeşil alg"
+      ],
+      "typicalDose": "1–3 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "fenilketonüri (füst)",
+        "otoimmün hastalık",
+        "warfarin"
+      ],
+      "note": "Kalite kritik: mikroisistisin kontaminasyonu gerçek bir karaciğer riski. Kaynak belgesi iste."
+    },
+    {
+      "name": "DHEA",
+      "category": "hormon",
+      "grade": "C",
+      "aliases": [
+        "dhea",
+        "dehidroepiandrosteron"
+      ],
+      "typicalDose": "hekim düzey ölçer",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "HORMON DUYARLI TÜMÖR",
+        "PCOS",
+        "endometriozis",
+        "prostat",
+        "hamilelik",
+        "doping (WADA yasaklı)"
+      ],
+      "note": "Kortizol ve testosteronunu ölçtürmeden alma. Sporcuda doping ihlali yaratır."
+    },
+    {
+      "name": "Pregnenolon",
+      "category": "hormon",
+      "grade": "C",
+      "aliases": [
+        "pregnenolon"
+      ],
+      "typicalDose": "hekim belirler",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "hormon duyarlı kanser",
+        "epilepsi",
+        "uyku apnesi"
+      ],
+      "note": "Hormon öncüsü; kendini reçete etme alanı."
+    },
+    {
+      "name": "Multivitamin",
+      "category": "kombinasyon",
+      "grade": "C",
+      "aliases": [
+        "multivitamin",
+        "multi",
+        "güne başlama"
+      ],
+      "typicalDose": "etiket",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "aynı besini ayrıca almak (D3, çinko, demir → üst sınır aşımı)"
+      ],
+      "note": "Klinik faydası gösterilmedi; RİSKİ farkında olmadan aynı maddeyi iki kez almak."
+    },
+    {
+      "name": "Magnezyum + B6 Kompleks",
+      "category": "kombinasyon",
+      "grade": "C",
+      "aliases": [
+        "mg b6",
+        "magnezyum b6"
+      ],
+      "typicalDose": "etiket",
+      "timing": "Gece",
+      "withFood": false,
+      "avoidWith": [
+        "ayrıca B6 almak (nöropati eşiği)"
+      ],
+      "note": "B6 dozun toplamı takip et: iki üründen gelen B6 birikir."
+    },
+    {
+      "name": "Çinko + Bakır",
+      "category": "kombinasyon",
+      "grade": "B",
+      "aliases": [
+        "zn cu",
+        "copper complex"
+      ],
+      "typicalDose": "15 mg Zn / 1 mg Cu",
+      "timing": "Akşam",
+      "withFood": false,
+      "avoidWith": [
+        "demir",
+        "kalsiyum"
+      ],
+      "note": "Uzun çinko kullanımında dengelenme mantıklı."
+    },
+    {
+      "name": "Demir + C Vitamini",
+      "category": "kombinasyon",
+      "grade": "A",
+      "aliases": [
+        "demir c",
+        "iron c"
+      ],
+      "typicalDose": "hekim dozu",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "kahve/çay",
+        "kalsiyum",
+        "magnezyum"
+      ],
+      "note": "C vitamini demir emilimini artırır — doğru kombinasyon örneği."
+    },
+    {
+      "name": "Kalsiyum + D3 + K2",
+      "category": "kombinasyon",
+      "grade": "B",
+      "aliases": [
+        "ca d3 k2",
+        "kemik formülü"
+      ],
+      "typicalDose": "500 mg Ca + 1000 IU D3",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [
+        "demir ve çinko ile aynı saatte almayın"
+      ],
+      "note": "Popüler kombinasyon; toplam kalsiyum diyetle 1200 mg'ı geçmesin."
+    },
+    {
+      "name": "B-Complex",
+      "category": "kombinasyon",
+      "grade": "B",
+      "aliases": [
+        "b complex",
+        "b grubu"
+      ],
+      "typicalDose": "etiket",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [
+        "ayrıca B6/B12 almak (toplam doz)"
+      ],
+      "note": "B2 idrarı sarı yapar, B6 toplamını takip et."
+    },
+    {
+      "name": "Electrolyte Mix",
+      "category": "kombinasyon",
+      "grade": "C",
+      "aliases": [
+        "elektrolit",
+        "shoral",
+        "oral rehidrasyon"
+      ],
+      "typicalDose": "etiket",
+      "timing": "Öğle",
+      "withFood": false,
+      "avoidWith": [
+        "hipertansiyon (sodyum)",
+        "böbrek hastalığı (potasyum)"
+      ],
+      "note": "Uzun antrenman/terleme için; sedanter kişide tuz-potasyum yüklemesi gereksiz."
+    }
+  ]
+}
