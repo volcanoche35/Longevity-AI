@@ -1,0 +1,921 @@
+/* ═══════════════════════════════════════════════════════════════════
+   BioTrack · Dashboard v3
+   Referans: solda sinematik anatomi, sağda veri kartları.
+   Tema korunur: koyu zemin + mercan (#FF4D5E) + amber (#FFB020) + camgöbeği (#22E1FF).
+   Bu dosya yalnız dashboard/anatomy bileşenlerini kapsar; globals.css'e dokunulmaz.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.dv-shell {
+  --dv-line: rgba(255, 255, 255, 0.08);
+  --dv-line-strong: rgba(255, 255, 255, 0.15);
+  --dv-card: linear-gradient(160deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 16px 108px;
+  min-width: 0;
+}
+
+/* ── Başlık ─────────────────────────────────────────────────────── */
+.dv-head { min-width: 0; }
+
+.dv-eyebrow {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--text-3);
+}
+
+.dv-title {
+  margin: 7px 0 0;
+  font-size: clamp(26px, 7vw, 34px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.dv-title-name {
+  background: linear-gradient(92deg, #ff4d5e 0%, #ffb020 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dv-date {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--text-2);
+  text-transform: capitalize;
+}
+
+.dv-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+.dv-model {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.dv-model-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8b97aa;
+}
+.dv-model-dot[data-variant='female'] { background: #22e1ff; }
+.dv-model-dot[data-variant='male'] { background: #ffb020; }
+.dv-model-dot[data-variant='demo'] { background: #8b97aa; }
+
+.dv-measure b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.dv-link {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #ff9aa4;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 160ms ease;
+}
+.dv-link:hover { border-bottom-color: rgba(255, 154, 164, 0.5); }
+
+.dv-demo {
+  display: inline-flex;
+  margin-top: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 176, 32, 0.28);
+  background: rgba(255, 176, 32, 0.08);
+  color: #ffc861;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+/* ── Onboarding (yalnız tercih yoksa) ───────────────────────────── */
+.dv-onboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(34, 225, 255, 0.22);
+  background: linear-gradient(140deg, rgba(34, 225, 255, 0.07), rgba(255, 77, 94, 0.05));
+}
+
+.dv-onboard-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.dv-onboard-text {
+  margin: 3px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-3);
+}
+
+.dv-onboard-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.dv-choice {
+  flex: 1 1 0;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.dv-choice:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.24); }
+.dv-choice--ghost {
+  flex: 0 0 auto;
+  padding: 0 10px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Anatomi düzeni ─────────────────────────────────────────────── */
+.dv-anatomy { min-width: 0; }
+
+.dv-anat-grid {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.dv-anat-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.dv-rail-title {
+  margin: 0 0 2px 2px;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.dv-sys-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Adlandırılmış sistem kontrolü: min 44px dokunma hedefi */
+.dv-sys {
+  width: 100%;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 7px 4px;
+  border-radius: 13px;
+  border: 1px solid var(--dv-line);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(242, 246, 251, 0.6);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+.dv-sys:hover {
+  color: #fff;
+  border-color: var(--dv-line-strong);
+  background: rgba(255, 255, 255, 0.06);
+}
+.dv-sys:focus-visible {
+  outline: 2px solid #22e1ff;
+  outline-offset: 2px;
+}
+.dv-sys[aria-pressed='true'] {
+  color: var(--sys, #ff9aa4);
+  border-color: var(--sys, #ff4d5e);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Sahne ──────────────────────────────────────────────────────── */
+.dv-stage {
+  position: relative;
+  height: clamp(300px, 38vh, 340px);
+  width: auto;
+  max-width: 100%;
+  justify-self: center;
+  aspect-ratio: 896 / 1200;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(120% 70% at 50% 22%, #0c1424 0%, #04060a 68%),
+    #04060a;
+  box-shadow: 0 24px 60px -34px rgba(0, 0, 0, 0.95);
+}
+
+.dv-stage-media {
+  position: absolute;
+  inset: 0;
+}
+
+/* İki görsel crossfade: aynı anda yalnız biri tam opak → çift kontur yok */
+.dv-stage-img {
+  opacity: 0;
+  mix-blend-mode: screen;
+  transition: opacity 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.dv-stage-img[data-active='true'] { opacity: 1; }
+
+.dv-digestive {
+  position: absolute; left: 27%; top: 43%; width: 46%; height: 40%;
+  mix-blend-mode: screen; opacity: 0; pointer-events: none; transition: opacity 220ms ease;
+}
+.dv-digestive[data-active='true'] { opacity: .95; }
+.dv-stage-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.dv-stage-hit {
+  fill: transparent;
+  cursor: default;
+}
+
+/* Organ/sistem sınırı: hover önizleme, tık sabitler. Nokta hotspot yok. */
+.dv-region {
+  cursor: pointer;
+  transition: fill 150ms ease, stroke 150ms ease, stroke-width 150ms ease;
+}
+
+.dv-stage-tip {
+  position: absolute;
+  transform: translate(-50%, -130%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(6, 10, 18, 0.92);
+  white-space: nowrap;
+  font-size: 11px;
+  line-height: 1.25;
+  pointer-events: none;
+  z-index: 3;
+}
+.dv-stage-tip b { font-weight: 650; color: var(--text); }
+.dv-stage-tip em { font-style: normal; font-size: 10px; color: var(--text-3); }
+
+.dv-stage-tools {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  z-index: 2;
+}
+
+.dv-tool {
+  min-height: 44px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(6, 10, 18, 0.58);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(242, 246, 251, 0.82);
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+.dv-tool:hover { color: #fff; border-color: rgba(255, 255, 255, 0.22); }
+.dv-tool:focus-visible { outline: 2px solid #22e1ff; outline-offset: 2px; }
+.dv-tool[aria-pressed='true'] {
+  color: #ff9aa4;
+  border-color: rgba(255, 77, 94, 0.45);
+  background: rgba(255, 77, 94, 0.16);
+}
+.dv-tool--icon {
+  width: 44px;
+  padding: 0;
+}
+
+.dv-stage-badge {
+  position: absolute;
+  left: 9px;
+  bottom: 9px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(6, 10, 18, 0.55);
+  color: rgba(242, 246, 251, 0.55);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dv-anat-hint {
+  margin: 8px 0 0;
+  font-size: 10px;
+  line-height: 1.4;
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* ── Sağ kolon / kartlar ────────────────────────────────────────── */
+.dv-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.dv-card {
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid var(--dv-line);
+  background: var(--dv-card);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  box-shadow: 0 18px 40px -28px rgba(0, 0, 0, 0.9);
+  min-width: 0;
+}
+
+.dv-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dv-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 13px;
+}
+
+.dv-metric-label {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.dv-metric-value {
+  margin: 3px 0 0;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.dv-metric-of {
+  margin-left: 1px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.dv-metric-caption {
+  margin: 0;
+  font-size: 10px;
+  color: var(--text-3);
+}
+
+.dv-bar {
+  height: 4px;
+  margin: 7px 0 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.dv-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff4d5e, #ffb020);
+  transition: width 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dv-today-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.dv-card-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.dv-card-sub {
+  margin: 3px 0 0;
+  font-size: 10.5px;
+  color: var(--text-3);
+}
+
+.dv-count {
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 176, 32, 0.25);
+  background: rgba(255, 176, 32, 0.1);
+  color: #ffc861;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.dv-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.dv-row {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 2px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+.dv-list li + li .dv-row { border-top: 1px solid rgba(255, 255, 255, 0.06); }
+.dv-row:hover { background: rgba(255, 255, 255, 0.035); }
+.dv-row:focus-visible { outline: 2px solid #22e1ff; outline-offset: 2px; }
+.dv-row[aria-pressed='true'] { background: rgba(57, 224, 122, 0.05); }
+
+.dv-time {
+  flex: 0 0 auto;
+  min-width: 46px;
+  padding: 5px 6px;
+  border: 1px solid;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.dv-row-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dv-row-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dv-row[aria-pressed='true'] .dv-row-name { color: rgba(242, 246, 251, 0.65); }
+
+.dv-row-sub {
+  font-size: 11px;
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dv-check {
+  flex: 0 0 auto;
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  color: transparent;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+.dv-check.is-on {
+  border-color: #39e07a;
+  background: rgba(57, 224, 122, 0.16);
+  color: #6def9e;
+}
+
+.dv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 0 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-3);
+}
+.dv-empty p { margin: 0; }
+
+/* ── Seçim kartı ────────────────────────────────────────────────── */
+.dv-detail { animation: dv-rise 220ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes dv-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.dv-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dv-detail-kicker {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.dv-detail-title {
+  margin: 4px 0 0;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+.dv-detail-text {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+.dv-detail-note {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 176, 32, 0.22);
+  background: rgba(255, 176, 32, 0.07);
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 214, 160, 0.9);
+}
+
+.dv-region-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.dv-region-chip {
+  min-height: 44px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-2);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+.dv-region-chip:hover { color: #fff; border-color: rgba(255, 255, 255, 0.22); }
+.dv-region-chip:focus-visible { outline: 2px solid #22e1ff; outline-offset: 2px; }
+.dv-region-chip[aria-pressed='true'] {
+  color: #ff9aa4;
+  border-color: rgba(255, 77, 94, 0.55);
+  background: rgba(255, 77, 94, 0.12);
+}
+
+.dv-icon-btn {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-2);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+.dv-icon-btn:hover { color: #fff; border-color: rgba(255, 255, 255, 0.22); }
+.dv-icon-btn:focus-visible { outline: 2px solid #22e1ff; outline-offset: 2px; }
+
+.dv-detail-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.dv-detail-tag {
+  font-size: 10px;
+  color: var(--text-3);
+}
+
+/* ── AI bağlantısı + gizlilik ───────────────────────────────────── */
+.dv-ai {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: linear-gradient(92deg, #ff4d5e, #ffb020);
+  color: #0a0f18;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: filter 160ms ease;
+}
+.dv-ai:hover { filter: brightness(1.07); }
+.dv-ai:focus-visible { outline: 2px solid #22e1ff; outline-offset: 3px; }
+.dv-ai--wide { width: 100%; }
+.dv-detail-foot .dv-ai { min-height: 40px; font-size: 11.5px; }
+
+.dv-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.dv-privacy {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--text-3);
+}
+.dv-privacy--dim { opacity: 0.78; }
+
+.dv-alert {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 107, 74, 0.3);
+  background: rgba(255, 107, 74, 0.09);
+  color: #ffb3a0;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+/* ── Büyük görünüm (yalnız compact ekranlarda) ──────────────────── */
+.dv-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(2, 4, 8, 0.84);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: dv-fade 160ms ease both;
+}
+
+@keyframes dv-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.dv-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(560px, 100%);
+  max-height: 94vh;
+  overflow: auto;
+  padding: 12px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(160deg, #0b1220, #05080e);
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.95);
+}
+
+.dv-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dv-dialog-title {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.dv-dialog-close {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+}
+.dv-dialog-close:focus-visible { outline: 2px solid #22e1ff; outline-offset: 2px; }
+
+.dv-stage--zoom {
+  height: auto;
+  width: min(100%, calc(66vh * 0.7466));
+  max-height: 66vh;
+  margin: 0 auto;
+  justify-self: auto;
+}
+
+/* ── Tablet / masaüstü ──────────────────────────────────────────── */
+@media (min-width: 720px) {
+  .dv-anat-grid { grid-template-columns: 96px minmax(0, 1fr); gap: 14px; }
+  .dv-stage { height: clamp(360px, 52vh, 480px); }
+  .dv-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  /* Uygulama kabuğu mobil için max-w-lg; panel referans gibi genişler. */
+  .dv-shell {
+    width: min(1200px, calc(100vw - 56px));
+    margin-left: calc((100% - min(1200px, 100vw - 56px)) / 2);
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(400px, 0.98fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 34px;
+    row-gap: 18px;
+    align-items: start;
+    padding: 28px 0 56px;
+  }
+
+  .dv-head { grid-column: 2; grid-row: 1; }
+  .dv-anatomy { grid-column: 1; grid-row: 1 / span 2; }
+  .dv-side { grid-column: 2; grid-row: 2; gap: 14px; }
+
+  .dv-title { font-size: clamp(38px, 3.6vw, 54px); }
+  .dv-date { font-size: 13px; }
+
+  .dv-onboard {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 16px;
+  }
+  .dv-onboard-actions { flex: 0 0 auto; }
+
+  .dv-anat-grid { grid-template-columns: 104px minmax(0, 1fr); gap: 18px; }
+  .dv-stage { height: clamp(400px, 62vh, 600px); justify-self: start; }
+  .dv-anat-hint { text-align: left; padding-left: 122px; }
+
+  .dv-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .dv-card { padding: 16px 18px; border-radius: 20px; }
+  .dv-metric { padding: 14px 16px; }
+  .dv-metric-value { font-size: 28px; }
+
+  .dv-tool span { display: inline; }
+}
+
+@media (min-width: 1280px) {
+  .dv-stage { height: clamp(440px, 64vh, 640px); }
+}
+
+/* Geniş ekranda seçim kartı iki kolon arasında değil, sağ kolonda kalır */
+@media (min-width: 1024px) and (max-width: 1180px) {
+  .dv-stage { height: clamp(380px, 54vh, 520px); }
+}
+
+/* ── Erişilebilirlik ────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .dv-shell *,
+  .dv-dialog *,
+  .dv-dialog-backdrop {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.dv-sys,
+.dv-tool,
+.dv-choice,
+.dv-row,
+.dv-region-chip,
+.dv-icon-btn,
+.dv-dialog-close,
+.dv-ai { -webkit-tap-highlight-color: transparent; }
+
+/* Çok küçük ekran: sistem sütunu daralır, sahne 300px'te kalır */
+@media (max-width: 374px) {
+  .dv-shell { padding-left: 12px; padding-right: 12px; }
+  .dv-anat-grid { grid-template-columns: 78px minmax(0, 1fr); gap: 8px; }
+  .dv-sys { font-size: 9.5px; padding: 6px 2px; }
+  .dv-stage { height: 300px; }
+  .dv-time { min-width: 42px; font-size: 9.5px; }
+}
+
+/* Mobilde günlük plan metriklerden önce gelir; detay ekranı örtülü alt paneldir. */
+.dv-detail-scrim { display: none; }
+@media (max-width: 767px) {
+  .dv-today { order: -1; }
+  .dv-detail-scrim { display: block; position: fixed; inset: 0; z-index: 80; border: 0; background: #0009; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .dv-detail { position: fixed; z-index: 90; left: 10px; right: 10px; bottom: max(12px, env(safe-area-inset-bottom)); max-height: 65dvh; overflow-y: auto; background: #101725; border: 1px solid #3B465C; box-shadow: 0 -20px 80px #0009; border-radius: 24px; padding: 20px; }
+  .dv-detail::before { content: ''; display: block; width: 36px; height: 4px; background: #566179; border-radius: 9px; margin: -5px auto 14px; }
+  .dv-head { gap: 8px; }
+}
+
+/* Daha insani arayüz: düz yüzeyler, sıcak nötrler, tek kontrollü vurgu. */
+.dv-shell { --dv-card: var(--surface); --dv-line: var(--line); }
+.dv-title-name { background: none; color: var(--text); -webkit-text-fill-color: var(--text); }
+.dv-eyebrow,.dv-metric-label,.dv-rail-title { font-family: inherit; letter-spacing: .08em; }
+.dv-card { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; border-radius: 16px; }
+.dv-link,.dv-tool[aria-pressed='true'] { color: var(--primary); }
+.dv-model-dot[data-variant] { background: var(--primary); }
+.dv-demo { color: var(--text-2); background: #ffffff05; border-color: var(--line); }
+.dv-bar span { background: var(--primary); }
+.dv-ai { background: var(--primary); color: #17231C; border-color: transparent; box-shadow: none; }
+.dv-check.is-on { background: var(--primary); border-color: var(--primary); color: #17231C; }
+.dv-row[aria-pressed='true'] { background: #A8BFAE08; }
+.dv-count { background: #C5B18E0D; color: var(--amber); }
+.dv-detail { background: var(--surface); }
+.dv-tool:focus-visible,.dv-row:focus-visible,.dv-sys:focus-visible { outline-color: var(--primary); }
+

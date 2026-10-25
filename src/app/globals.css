@@ -1,166 +1,60 @@
 @import "tailwindcss";
 
-/* ═══════════════════════════════════════════════════════════════════
-   BioTrack Tasarım Sistemi v2 — "Enerji & Güç"
-   Eski palet (terk edildi): #64FFDA turkuaz + #a09880 bej → "sakin spa" hissi
-   Yeni yön: koyu zemin + canlı mercan (kalp/güç) + enerji yeşili + elektrik camgöbeği
-   AMOLED: yüzeyler saf siyaha yakın; parlaklıklar screen-blend katmanlardan gelir
-   ═══════════════════════════════════════════════════════════════════ */
-
+/* BioTrack — sakin, okunaklı kişisel sağlık günlüğü. */
 :root {
-  /* yüzeyler */
-  --bg: #04060A;
-  --surface: #0A0F18;
-  --surface-2: #111927;
-  --line: rgba(255, 255, 255, 0.08);
-
-  /* marka / enerji */
-  --primary: #FF4D5E;      /* kardiyovasküler · güç · kalp */
-  --vital: #39E07A;        /* canlılık · kanıt A · başarı */
-  --electric: #22E1FF;     /* sinir sistemi · netlik */
-  --amber: #FFB020;        /* sindirim · kanıt B */
-  --magenta: #FF3DA6;      /* hormon · kanıt C / uyarı */
-
-  /* metin (bej yerine soğuk nötr) */
-  --text: #F2F6FB;
-  --text-2: #AEB9CC;
-  --text-3: #6B7893;
-
-  /* kanıt dereceleri */
-  --grade-a: #39E07A;
-  --grade-b: #FFB020;
-  --grade-c: #FF6B4A;
-
-  --r-lg: 22px;
-  --r-md: 16px;
+  --bg:#111617; --surface:#1A2021; --surface-2:#242B2C;
+  --line:rgba(229,234,226,.10);
+  --primary:#A8BFAE; --vital:#A8BFAE; --electric:#9EAEB8;
+  --amber:#C5B18E; --magenta:#B6A8B5;
+  --text:#F0F1EB; --text-2:#B7BEB9; --text-3:#909A94;
+  --grade-a:#A8BFAE; --grade-b:#C5B18E; --grade-c:#D2A99A;
+  --r-lg:18px; --r-md:14px;
 }
+* {box-sizing:border-box}
+html,body {background:var(--bg)}
+body {color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+a,button,input,textarea {touch-action:manipulation}
+button {cursor:pointer}
+button:disabled {cursor:wait}
+.glass-card,.glass-strong {background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg)}
+.glass-card {transition:border-color .18s ease}
+.glass-card:hover {border-color:rgba(229,234,226,.18)}
+.glass-strong {background:#202728;box-shadow:0 12px 40px #0005}
+.text-gradient {color:var(--text);background:none}
+.chip {display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;font-size:11px;font-weight:500;border:1px solid var(--line);background:#ffffff05}
+.chip-a {color:var(--vital);background:#A8BFAE0C;border-color:#A8BFAE30}
+.chip-b {color:var(--amber);background:#C5B18E0C;border-color:#C5B18E30}
+.chip-c {color:var(--grade-c);background:#D2A99A0C;border-color:#D2A99A30}
+@keyframes bt-fade-in {from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes bt-sheet-up {from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.animate-fade-in {animation:bt-fade-in .2s ease both}
+.animate-sheet-up {animation:bt-sheet-up .2s ease both}
+@media(prefers-reduced-motion:reduce) {*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+input,select,textarea {font-size:16px!important}
+::selection {background:#A8BFAE40;color:var(--text)}
+.supplement-form {color-scheme:dark;background:var(--surface);border:1px solid var(--line);border-radius:18px}
+.dose-section {background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.field-label {display:block;color:var(--text-2);font-size:12px;line-height:1.5;margin-bottom:6px}
+.dose-input {display:block;min-width:0;width:100%;background:#141B1C;color:var(--text);border:1px solid #3A4542;border-radius:10px;padding:12px;outline:none;color-scheme:dark;accent-color:var(--primary)}
+.dose-input:focus-visible {border-color:var(--primary);box-shadow:0 0 0 3px #A8BFAE17}
+.dose-input::placeholder {color:#89958D}
+.theme-select {position:relative;min-width:0}
+.theme-select:has([aria-expanded='true']) {z-index:40}
+.theme-select-trigger {display:flex;justify-content:space-between;align-items:center;text-align:left;font-size:16px;min-height:48px;cursor:pointer}
+.theme-options {position:absolute;top:100%;left:0;right:0;margin-top:6px;max-height:240px;overflow-y:auto;z-index:40;padding:5px;background:#202827;border:1px solid #526057;border-radius:12px;box-shadow:0 16px 40px #0008}
+.theme-option {display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:11px 12px;min-height:44px;border-radius:8px;color:var(--text);background:transparent;cursor:pointer}
+.theme-option[aria-selected='true'] {color:#CFDDD2;background:#A8BFAE20}
+.theme-option:hover,.theme-option:focus-visible {outline:1px solid var(--primary);background:#A8BFAE15}
+.dose-row {padding:12px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+.dose-add {width:100%;border:1px solid #7E96885C;border-radius:10px;padding:12px;color:var(--primary);background:#A8BFAE08;font-size:13px;min-height:44px}
+.dose-total {background:#A8BFAE0E;border:1px solid #A8BFAE40;color:#C0D3C5;padding:12px;margin-top:12px;border-radius:12px;font-size:14px;font-weight:600}
+[role=alert] {color:#E5B5A4}
 
-* { box-sizing: border-box; }
-
-html, body { background: var(--bg); }
-body {
-  color: var(--text);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ── Cam kart: puslu eski hâlinden kurtarıldı — kenar ve derinlik net ── */
-.glass-card {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  backdrop-filter: blur(14px) saturate(150%);
-  -webkit-backdrop-filter: blur(14px) saturate(150%);
-  box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.9);
-  transition: border-color 0.3s ease, background 0.3s ease;
-}
-.glass-card:hover { border-color: rgba(255, 255, 255, 0.16); }
-
-.glass-strong {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--r-lg);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-}
-
-/* ── Enerji vurguları ── */
-.text-gradient {
-  background: linear-gradient(92deg, var(--primary) 0%, var(--amber) 55%, var(--vital) 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.chip {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 11px; border-radius: 999px; font-size: 11px; font-weight: 600;
-  border: 1px solid var(--line); background: rgba(255, 255, 255, 0.04);
-}
-.chip-a { color: var(--grade-a); border-color: rgba(57, 224, 122, 0.3); background: rgba(57, 224, 122, 0.08); }
-.chip-b { color: var(--grade-b); border-color: rgba(255, 176, 32, 0.3); background: rgba(255, 176, 32, 0.08); }
-.chip-c { color: var(--grade-c); border-color: rgba(255, 107, 74, 0.3); background: rgba(255, 107, 74, 0.08); }
-
-/* ── Anatomi katmanları: screen blend = siyah kaybolur, parlaklık eklenir ── */
-.anat-stage { position: relative; isolation: isolate; }
-.anat-layer {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: contain; mix-blend-mode: screen; pointer-events: none;
-  transition: opacity 420ms cubic-bezier(.22, 1, .36, 1);
-}
-.anat-layer.is-off { opacity: 0; }
-
-/* kalp nabzı — SADECE transform/opacity (GPU). filter/box-shadow animate YOK:
-   mobilde her frame yeniden-raster üretir ve FPS yer. */
-@keyframes bt-pulse {
-  0%, 100% { transform: scale(1); opacity: .93 }
-  14% { transform: scale(1.035); opacity: 1 }
-  28% { transform: scale(1); opacity: .95 }
-}
-.anat-pulse { animation: bt-pulse 1.15s ease-in-out infinite; transform-origin: 50% 40%; }
-@media (prefers-reduced-motion: reduce) { .anat-pulse { animation: none } }
-
-/* ── Etkileşim hotspot'ları ── */
-.hotspot {
-  position: absolute; transform: translate(-50%, -50%);
-  width: 26px; height: 26px; border-radius: 999px; cursor: pointer;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.04));
-  display: grid; place-items: center; padding: 0;
-}
-.hotspot::after {
-  content: ''; width: 7px; height: 7px; border-radius: 999px; background: #fff;
-}
-.hotspot[data-active='true'] {
-  border-color: var(--primary);
-  background: radial-gradient(circle, rgba(255, 77, 94, 0.42), rgba(255, 77, 94, 0.08));
-}
-@keyframes bt-ring { 0% { transform: scale(1); opacity: .55 } 100% { transform: scale(2.2); opacity: 0 } }
-.hotspot-ring {
-  position: absolute; inset: -3px; border-radius: 999px;
-  border: 1.5px solid var(--primary); animation: bt-ring 1.9s ease-out infinite;
-}
-
-/* ── Hareket ── */
-@keyframes bt-fade-in { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
-@keyframes bt-sheet-up { from { transform: translateY(100%) } to { transform: translateY(0) } }
-.animate-fade-in { animation: bt-fade-in 0.34s cubic-bezier(.22, 1, .36, 1) both }
-.animate-sheet-up { animation: bt-sheet-up 0.34s cubic-bezier(.22, 1, .36, 1) both }
-
-/* kart giriş ritmi (eski davranış korundu) */
-.glass-card:nth-child(1) { animation-delay: 0s }
-.glass-card:nth-child(2) { animation-delay: .05s }
-.glass-card:nth-child(3) { animation-delay: .1s }
-.glass-card:nth-child(4) { animation-delay: .15s }
-.glass-card:nth-child(5) { animation-delay: .2s }
-
-/* ── Alt tab bar ── */
-.tabbar {
-  background: rgba(6, 9, 15, 0.82); border-top: 1px solid var(--line);
-  backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%);
-}
-.tabbar a { color: var(--text-3); transition: color 0.2s ease }
-.tabbar a[data-active='true'] { color: var(--text) }
-
-/* ── Formlar (mobil zoom tuzağı: 16px altı input iOS'ta zoom yapar) ── */
-input, select, textarea { font-size: 16px !important; }
-
-::-webkit-scrollbar { width: 0; height: 0 }
-::selection { background: rgba(255, 77, 94, 0.32); color: var(--text) }
-
-/* Product entry: no native white/blue menus. */
-.supplement-form { color-scheme: dark; background: #0A0F18; border: 1px solid #263145; border-radius: 22px; }
-.dose-section { background: #0E1522; border: 1px solid #253047; border-radius: 16px; padding: 14px; }
-.field-label { display: block; color: #AEB9CC; font-size: 11px; line-height: 1.5; margin-bottom: 6px; }
-.dose-input { display: block; min-width: 0; width: 100%; background: #111C2C; color: #F2F6FB; border: 1px solid #33415A; border-radius: 12px; padding: 12px; outline: none; color-scheme: dark; accent-color: #FF4D5E; }
-.dose-input:focus-visible { border-color: #FF4D5E; box-shadow: 0 0 0 3px #FF4D5E22; }
-.dose-input::placeholder { color: #8090AA; }
-.theme-select { position: relative; min-width: 0; }
-.theme-select:has([aria-expanded='true']) { z-index: 40; }
-.theme-select-trigger { display: flex; justify-content: space-between; align-items: center; text-align: left; font-size: 16px; min-height: 48px; cursor: pointer; }
-.theme-options { position: absolute; top: 100%; left: 0; right: 0; margin-top: 6px; max-height: 240px; overflow-y: auto; z-index: 40; padding: 5px; background: #111C2CF5; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid #44516A; border-radius: 12px; box-shadow: 0 16px 40px #0009; }
-.theme-option { display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; padding: 11px 12px; min-height: 44px; border-radius: 8px; color: #F2F6FB; background: transparent; cursor: pointer; }
-.theme-option[aria-selected='true'] { color: #FF9AA4; background: #FF4D5E24; }
-.theme-option:hover, .theme-option:focus-visible { outline: 1px solid #FF4D5E; background: #FF4D5E18; }
-.dose-row { padding: 12px; border: 1px solid #2B364B; border-radius: 12px; margin-bottom: 10px; }
-.dose-add { width: 100%; border: 1px dashed #FF4D5E70; border-radius: 12px; padding: 12px; color: #FF9AA4; background: #FF4D5E0A; font-size: 13px; }
-.dose-total { background: #39E07A12; border: 1px solid #39E07A40; color: #74EBA4; padding: 12px; margin-top: 12px; border-radius: 12px; font-size: 14px; font-weight: 600; }
-
+/* Alt menü: emoji ve neon yerine tutarlı çizgi ikonlar + net seçili durum. */
+.app-nav {position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;justify-content:space-around;max-width:640px;margin:auto;background:#1B2322F5;border:1px solid #425047;border-bottom:0;border-radius:20px 20px 0 0;padding:8px 6px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px #0003}
+.app-nav-link {position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1;min-width:0;min-height:48px;color:#ABB6AE;border-radius:12px;font-size:10px;font-weight:500;line-height:1.2;text-decoration:none;transition:background .18s,color .18s}
+.app-nav-link[aria-current=page] {background:#A8BFAE20;color:#E2EADF;font-weight:650}
+.app-nav-link[aria-current=page]::before {content:'';position:absolute;top:0;width:18px;height:2px;border-radius:2px;background:var(--primary)}
+.app-nav-link:focus-visible {outline:2px solid var(--primary);outline-offset:-2px}
+.app-nav-link svg {width:21px;height:21px;stroke-width:1.7}
+@media(min-width:1024px) {.app-nav{bottom:16px;border-bottom:1px solid #425047;border-radius:18px;padding-bottom:8px}.app-nav-link{flex-direction:row;font-size:12px;gap:8px;min-height:46px}.app-nav-link[aria-current=page]::before{display:none}}
