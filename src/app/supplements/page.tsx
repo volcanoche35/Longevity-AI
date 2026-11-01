@@ -10,7 +10,7 @@ import InteractionPanel from '@/components/interaction-panel'
 import UsageDisclosure from '@/components/usage-disclosure'
 import { usePreferences, type Preferences } from '@/lib/preferences'
 import { interactionsFor, type InteractionKind } from '@/lib/supplement-interactions'
-import { unitsForForm, validateDose, dailyIntakeSummary, type DosePlan } from '@/lib/dosage'
+import { unitsForForm, validateDose, dailyIntakeSummary, emptyPart, type DosePlan } from '@/lib/dosage'
 
 interface Supplement { id: string; name: string; dosage: string; frequency: string; time_of_day: string; notes: string; schedule: string[] }
 
@@ -80,6 +80,13 @@ export default function SupplementsPage() {
   const applySuggestion = (s: CatalogEntry) => {
     setName(s.name)
     setOpen(false)
+    // Etken maddeyi otomatik doldur — katalog seçimi zaten etken madde bazlı,
+    // kullanıcı aynı ismi "Ürün içeriği"nde bir daha yazmasın. Sadece miktarı girer.
+    setPlan(p => {
+      const hasContent = p.parts.some(part => part.label.trim() !== '' || part.amount.trim() !== '')
+      if (hasContent) return p
+      return { ...p, parts: [{ ...emptyPart(), label: s.name }] }
+    })
   }
 
   const addSupplement = async (e: React.FormEvent) => {
