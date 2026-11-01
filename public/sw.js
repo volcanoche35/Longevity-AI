@@ -1,4 +1,4 @@
-const CACHE_NAME = 'biotrack-assistant-v3';
+const CACHE_NAME = 'biotrack-assistant-v11';
 const ASSETS = ['/dashboard', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', event => {

@@ -1,0 +1,209 @@
+/* Birlikte kullanım paneli — mat, tema token'larına bağlı, mobil 360px güvenli. */
+
+.ixp {
+  margin-bottom: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line, #2E3A38);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ixp-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 14px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ixp-toggle:hover { background: #A8BFAE0A; }
+.ixp-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+.ixp-toggle-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ixp-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.ixp-sub { font-size: 12px; line-height: 1.5; color: var(--text-3); }
+
+.ixp-chevron {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #425047;
+  border-radius: 999px;
+  color: var(--primary);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.ixp-body {
+  padding: 2px 14px 14px;
+  border-top: 1px solid var(--line, #2E3A38);
+}
+
+.ixp-body[hidden] { display: none; }
+
+.ixp-kicker {
+  margin: 12px 0 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.ixp-notice,
+.ixp-empty {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-2);
+  background: #141B1C;
+  border: 1px solid #2E3A38;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.ixp-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.ixp-card {
+  background: var(--surface-2, #242B2C);
+  border: 1px solid #2E3A38;
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 0;
+}
+
+.ixp-label {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+  border: 1px solid #7E96885C;
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: #A8BFAE0A;
+}
+
+.ixp-pair {
+  margin: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.ixp-x { color: var(--text-3); font-weight: 400; }
+
+.ixp-dosage {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.ixp-dosage-tag {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  border: 1px solid #3A4542;
+  border-radius: 999px;
+  padding: 2px 6px;
+}
+
+.ixp-condition {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+.ixp-sources { margin: 8px 0 0; display: grid; gap: 4px; }
+
+.ixp-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+  font-size: 12px;
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid #7E96885C;
+  width: fit-content;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.ixp-source:hover,
+.ixp-source:focus-visible { color: var(--text); border-bottom-color: var(--primary); }
+
+.ixp-unreviewed {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px dashed #425047;
+  border-radius: 10px;
+  background: #141B1C;
+}
+
+.ixp-unreviewed-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.ixp-unreviewed-body {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-3);
+  overflow-wrap: anywhere;
+}
+
+.ixp-drug {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-2);
+  border-left: 2px solid var(--primary);
+  padding: 2px 0 2px 10px;
+}
+
+.ixp-scope {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+
+@media (max-width: 380px) {
+  .ixp { border-radius: 14px; }
+  .ixp-toggle { padding: 12px; }
+  .ixp-body { padding: 2px 12px 12px; }
+  .ixp-card { padding: 10px; }
+  .ixp-pair { font-size: 12.5px; }
+  .ixp-condition { font-size: 12px; }
+}

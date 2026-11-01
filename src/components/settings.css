@@ -1,0 +1,304 @@
+/*
+ * Ayarlar + "Bu ekranı özelleştir" stilleri.
+ * Kapsam: yalnız .cz-* / .settings-* sınıfları; globals.css'e dokunmaz.
+ * Palet: mat koyu (bg #111617, surface #1A2021, primary #A8BFAE). Neon yok,
+ * gradient yok, native beyaz menü yok — seçim listesi ThemeSelect ile temalı.
+ */
+
+/* --- Tetikleyici buton ------------------------------------------------ */
+.cz-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #45514a;
+  background: #1d2423;
+  color: #dbe3d8;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: border-color .16s ease, background .16s ease;
+}
+.cz-trigger:hover { border-color: #5c6b60; background: #222a28; }
+.cz-trigger:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.cz-trigger-icon { color: var(--primary); font-size: 14px; line-height: 1; }
+
+/* --- Native dialog ---------------------------------------------------- */
+.cz-dialog {
+  /* showModal(): top-layer + inert arka plan + Escape/focus trap tarayıcıdan. */
+  width: min(560px, calc(100vw - 24px));
+  max-width: 560px;
+  max-height: min(88dvh, 760px);
+  padding: 0;
+  margin: auto;
+  border: 1px solid #3c4841;
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--text);
+  color-scheme: dark;
+  box-shadow: 0 24px 64px #0009;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: cz-in .18s ease both;
+}
+.cz-dialog:not([open]) { display: none; }
+.cz-dialog::backdrop {
+  background: rgba(9, 13, 14, .74);
+  animation: cz-fade .18s ease both;
+}
+@keyframes cz-in { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+@keyframes cz-fade { from { opacity: 0 } to { opacity: 1 } }
+
+@media (max-width: 520px) {
+  .cz-dialog {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92dvh;
+    margin: auto auto 0;
+    border-radius: 20px 20px 0 0;
+  }
+}
+
+/* --- Başlık ----------------------------------------------------------- */
+.cz-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--line);
+  background: #1c2322;
+}
+.cz-head-text { min-width: 0; }
+.cz-eyebrow {
+  margin: 0 0 6px;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 600;
+}
+.cz-title { margin: 0; font-size: 18px; line-height: 1.25; font-weight: 700; color: var(--text); }
+.cz-close {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid #45514a;
+  background: #222a29;
+  color: #dfe6da;
+  font-size: 16px;
+  line-height: 1;
+}
+.cz-close:hover { background: #28312f; border-color: #5a685f; }
+.cz-close:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* --- Gövde / altlık --------------------------------------------------- */
+.cz-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cz-foot {
+  border-top: 1px solid var(--line);
+  background: #1c2322;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cz-foot-note { margin: 0; font-size: 11px; line-height: 1.6; color: var(--text-3); }
+.cz-foot-note a { color: #c3d3c6; text-decoration: underline; text-underline-offset: 2px; }
+.cz-foot-sep { margin: 0 6px; color: #6b7a71; }
+.cz-foot-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+.cz-btn {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 650;
+  border: 1px solid #45514a;
+  background: #232b2a;
+  color: #dfe6da;
+}
+.cz-btn:hover { background: #2a3331; }
+.cz-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.cz-btn-ghost { background: transparent; color: #ccd6cb; }
+.cz-btn-primary {
+  background: #2b3a32;
+  border-color: #7f9b88;
+  color: #dfeadd;
+}
+.cz-btn-primary:hover:not(:disabled) { background: #34453b; }
+.cz-btn-primary:disabled { opacity: .55; cursor: default; }
+
+.cz-guard {
+  border: 1px solid #7a6a4d;
+  background: #23231d;
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cz-guard p { margin: 0; font-size: 12px; line-height: 1.6; color: #dfd6c2; }
+.cz-guard-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.cz-status, .cz-error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.cz-status { color: #c8dcc9; background: #1e2a23; border: 1px solid #46594b; }
+.cz-error { color: #e5b5a4; background: #2a211f; border: 1px solid #6b4a42; }
+
+/* --- Ortak ayar içeriği ---------------------------------------------- */
+.settings-block {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #1e2524;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.settings-block-title { margin: 0; font-size: 14px; font-weight: 650; color: var(--text); }
+.settings-block-sub { margin: -6px 0 0; font-size: 12px; line-height: 1.55; color: var(--text-2); }
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.settings-row:first-of-type { border-top: 0; padding-top: 2px; }
+.settings-row-text { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.settings-row-label { font-size: 13px; font-weight: 600; color: #e7ece3; }
+.settings-row-hint { font-size: 11px; line-height: 1.55; color: var(--text-3); }
+
+.settings-switch {
+  flex: none;
+  position: relative;
+  width: 52px;
+  height: 30px;
+  min-height: 30px;
+  border-radius: 999px;
+  border: 1px solid #4a574e;
+  background: #232a29;
+  padding: 0;
+  transition: background .16s ease, border-color .16s ease;
+}
+.settings-switch:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+/* Dokunma alanı 44px: görsel iz 30px kalır, tıklama alanı büyür. */
+.settings-switch::before { content: ''; position: absolute; inset: -7px 0; }
+.settings-switch-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #9aa79c;
+  transition: transform .16s ease, background .16s ease;
+}
+.settings-switch[aria-checked='true'] { background: #33443a; border-color: #8aa493; }
+.settings-switch[aria-checked='true'] .settings-switch-knob { transform: translateX(22px); background: #dfe9dc; }
+
+.settings-fields { display: flex; flex-direction: column; gap: 14px; }
+.settings-field { display: flex; flex-direction: column; gap: 6px; }
+
+.settings-note {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--text-2);
+  background: #18201f;
+  border: 1px solid #2d3933;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.settings-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #3d4a42;
+  background: #202827;
+  color: #e2eae0;
+  text-decoration: none;
+}
+.settings-link:hover { background: #25302d; border-color: #526057; }
+.settings-link:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.settings-link-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.settings-link-title { font-size: 13px; font-weight: 600; }
+.settings-link-detail { font-size: 11px; line-height: 1.5; color: var(--text-3); }
+.settings-link-arrow { color: var(--primary); font-size: 15px; }
+
+/* --- /settings tam sayfa --------------------------------------------- */
+.settings-page {
+  min-height: 100vh;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px 16px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.settings-page-head { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+.settings-page-eyebrow {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 600;
+}
+.settings-page-title { margin: 0; font-size: 22px; font-weight: 700; color: var(--text); }
+.settings-page-sub { margin: 0; font-size: 13px; line-height: 1.65; color: var(--text-2); }
+.settings-page-card { display: flex; flex-direction: column; gap: 8px; }
+.settings-page-link {
+  align-self: flex-start;
+  font-size: 11px;
+  color: #c3d3c6;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 8px 2px;
+  min-height: 32px;
+}
+.settings-page-actions {
+  position: sticky;
+  bottom: calc(78px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #1b2322f2;
+  backdrop-filter: blur(8px);
+}
+.settings-theme-note {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--text-3);
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}

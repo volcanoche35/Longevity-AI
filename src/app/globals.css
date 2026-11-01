@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* BioTrack — sakin, okunaklı kişisel sağlık günlüğü. */
+/* LongevityAI — sakin, okunaklı kişisel sağlık günlüğü. */
 :root {
   --bg:#111617; --surface:#1A2021; --surface-2:#242B2C;
   --line:rgba(229,234,226,.10);
@@ -52,9 +52,11 @@ input,select,textarea {font-size:16px!important}
 
 /* Alt menü: emoji ve neon yerine tutarlı çizgi ikonlar + net seçili durum. */
 .app-nav {position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;justify-content:space-around;max-width:640px;margin:auto;background:#1B2322F5;border:1px solid #425047;border-bottom:0;border-radius:20px 20px 0 0;padding:8px 6px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px #0003}
-.app-nav-link {position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1;min-width:0;min-height:48px;color:#ABB6AE;border-radius:12px;font-size:10px;font-weight:500;line-height:1.2;text-decoration:none;transition:background .18s,color .18s}
-.app-nav-link[aria-current=page] {background:#A8BFAE20;color:#E2EADF;font-weight:650}
-.app-nav-link[aria-current=page]::before {content:'';position:absolute;top:0;width:18px;height:2px;border-radius:2px;background:var(--primary)}
+.app-nav-link {position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1;min-width:0;min-height:50px;color:#ABB6AE;border:1px solid transparent;border-radius:12px;font-size:10px;font-weight:600;line-height:1.2;text-decoration:none;transition:background .18s,color .18s,border-color .18s}
+.app-nav-link:nth-child(1){--nav-accent:#FFD35C}.app-nav-link:nth-child(2){--nav-accent:#A8BFAE}.app-nav-link:nth-child(3){--nav-accent:#9FB0BE}.app-nav-link:nth-child(4){--nav-accent:#B8A6C9}.app-nav-link:nth-child(5){--nav-accent:#C7A6A1}
+.app-nav-link[aria-current=page] {background:color-mix(in srgb,var(--nav-accent) 14%,#1B2322);border-color:color-mix(in srgb,var(--nav-accent) 55%,transparent);color:#F5F6F2;font-weight:700}
+.app-nav-link[aria-current=page]::before {content:'';position:absolute;top:3px;width:18px;height:2px;border-radius:2px;background:var(--nav-accent)}
+.app-nav-link[aria-current=page] svg{color:var(--nav-accent)}
 .app-nav-link:focus-visible {outline:2px solid var(--primary);outline-offset:-2px}
 .app-nav-link svg {width:21px;height:21px;stroke-width:1.7}
 @media(min-width:1024px) {.app-nav{bottom:16px;border-bottom:1px solid #425047;border-radius:18px;padding-bottom:8px}.app-nav-link{flex-direction:row;font-size:12px;gap:8px;min-height:46px}.app-nav-link[aria-current=page]::before{display:none}}

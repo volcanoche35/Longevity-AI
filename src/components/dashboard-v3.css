@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
-   BioTrack · Dashboard v3
+   LongevityAI · Dashboard v3
    Referans: solda sinematik anatomi, sağda veri kartları.
    Tema korunur: koyu zemin + mercan (#FF4D5E) + amber (#FFB020) + camgöbeği (#22E1FF).
    Bu dosya yalnız dashboard/anatomy bileşenlerini kapsar; globals.css'e dokunulmaz.
@@ -70,7 +70,7 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.09);
   background: rgba(255, 255, 255, 0.035);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   color: var(--text-2);
 }
@@ -196,21 +196,20 @@
 .dv-sys-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 /* Adlandırılmış sistem kontrolü: min 44px dokunma hedefi */
 .dv-sys {
   width: 100%;
-  min-height: 44px;
-  min-width: 44px;
+  min-height: 36px;
+  min-width: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 2px;
-  padding: 7px 4px;
-  border-radius: 13px;
+  gap: 6px;
+  padding: 6px 9px;
+  border-radius: 11px;
   border: 1px solid var(--dv-line);
   background: rgba(255, 255, 255, 0.03);
   color: rgba(242, 246, 251, 0.6);
@@ -229,6 +228,7 @@
   outline: 2px solid #22e1ff;
   outline-offset: 2px;
 }
+.dv-sys span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dv-sys[aria-pressed='true'] {
   color: var(--sys, #ff9aa4);
   border-color: var(--sys, #ff4d5e);
@@ -888,7 +888,7 @@
 @media (max-width: 374px) {
   .dv-shell { padding-left: 12px; padding-right: 12px; }
   .dv-anat-grid { grid-template-columns: 78px minmax(0, 1fr); gap: 8px; }
-  .dv-sys { font-size: 9.5px; padding: 6px 2px; }
+  .dv-sys { font-size: 10px; padding: 5px 7px; }
   .dv-stage { height: 300px; }
   .dv-time { min-width: 42px; font-size: 9.5px; }
 }
@@ -919,3 +919,71 @@
 .dv-detail { background: var(--surface); }
 .dv-tool:focus-visible,.dv-row:focus-visible,.dv-sys:focus-visible { outline-color: var(--primary); }
 
+
+/* ── Performans grafiği ─────────────────────────────────────────── */
+.pf-card { margin-top: 14px; }
+.pf-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.pf-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.pf-range { font-size: 11px; color: var(--text-3); letter-spacing: 0.04em; }
+.pf-switch { display: flex; gap: 6px; margin: 12px 0 4px; flex-wrap: wrap; }
+.pf-seg {
+  flex: 1; min-width: 0; padding: 8px 6px; border-radius: 10px; font-size: 12px;
+  background: transparent; border: 1px solid var(--line); color: var(--text-2);
+  transition: all 150ms ease; white-space: nowrap; cursor: pointer;
+}
+.pf-seg.is-on { background: var(--primary); border-color: var(--primary); color: var(--surface); font-weight: 600; }
+.pf-chart { display: block; width: 100%; height: auto; margin-top: 8px; }
+.pf-empty { padding: 18px 4px; font-size: 12px; color: var(--text-3); line-height: 1.5; }
+.pf-note { margin-top: 8px; font-size: 10px; color: var(--text-3); line-height: 1.5; }
+
+/* ── 3B atlas sahnesi ───────────────────────────────────────────── */
+.dv-atlas-stage {
+  position: relative;
+  width: 100%;
+  height: clamp(420px, 64vh, 560px);
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: radial-gradient(120% 70% at 50% 30%, #0c1424 0%, #04060a 70%), #04060a;
+  box-shadow: 0 24px 60px -34px rgba(0, 0, 0, 0.95);
+  touch-action: none;
+}
+.dv-atlas-stage canvas { display: block; outline: none; }
+.dv-atlas-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  color: rgba(242, 246, 251, 0.55);
+}
+.dv-atlas-tag {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 650;
+  color: #ffd35c;
+  background: rgba(8, 12, 20, 0.78);
+  border: 1px solid rgba(255, 211, 92, 0.5);
+  pointer-events: none;
+}
+
+/* Zaman dilimi grupları */
+.dv-group { margin-top: 10px; }
+.dv-group-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; margin: 0 2px 4px; color: var(--text-2); }
+.dv-group-head b { font-size: 13px; color: var(--text); letter-spacing: .02em; }
+.dv-group--focus { border: 1px solid var(--primary); border-radius: 16px; padding: 10px 8px 4px; background: color-mix(in srgb, var(--primary) 7%, transparent); }
+.dv-group--focus .dv-group-head b { font-size: 15px; color: var(--primary); }
+.dv-group--compact { opacity: .85; }
+.dv-group--compact .dv-row-sub { display: none; }
+.dv-group--compact .dv-time { display: none; }
+.dv-group--compact.is-done { opacity: .55; }
+.dv-allDone { color: var(--primary); margin: 8px 2px 0; }
+.dv-conflict { border: 1px solid rgba(255,154,122,.35); background: rgba(255,107,74,.07); border-radius: 14px; padding: 10px 12px; font-size: 12px; line-height: 1.45; color: var(--text); }
+.dv-conflict p { margin: 0 0 4px; }
+.dv-conflict span { display: block; color: var(--text-3); font-size: 10.5px; margin-top: 4px; }

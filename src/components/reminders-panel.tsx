@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import ThemeSelect from './theme-select'
 import { listSupplements } from '@/lib/data'
+import { isRemoteMode } from '@/lib/supabase'
 import { onStorageKey, storageState } from '@/lib/local-store'
 import {
   KIND_LABELS,
@@ -12,15 +13,17 @@ import {
   REMINDER_TITLE_MAX,
   REMINDERS_KEY,
   SNOOZE_MINUTES,
-  acknowledgeReminder,
-  addReminder,
-  deleteReminder,
+  acknowledgeReminderAsync,
+  addReminderAsync,
+  deleteReminderAsync,
+  getAcknowledgedIdsAsync,
+  listRemindersAsync,
   getAcknowledgedIds,
   listReminders,
   reminderDayKey,
   reminderStatus,
-  snoozeReminder,
-  updateReminder,
+  snoozeReminderAsync,
+  updateReminderAsync,
   type Reminder,
   type ReminderKind,
   type ReminderStatus,
@@ -53,8 +56,8 @@ function snoozeLabel(reminder: Reminder, now: Date): string {
 export default function RemindersPanel() {
   // Panel yalnızca istemciye bağlandıktan sonra render edildiği için ilk okuma
   // güvenli; SSR'de listReminders boş döner.
-  const [items, setItems] = useState<Reminder[]>(() => listReminders())
-  const [acked, setAcked] = useState<string[]>(() => getAcknowledgedIds())
+  const [items, setItems] = useState<Reminder[]>(() => (isRemoteMode() ? [] : listReminders()))
+  const [acked, setAcked] = useState<string[]>(() => (isRemoteMode() ? [] : getAcknowledgedIds()))
   const [now, setNow] = useState(() => new Date())
   const [formOpen, setFormOpen] = useState(false)
   const [title, setTitle] = useState('')
@@ -75,9 +78,20 @@ export default function RemindersPanel() {
   const timeRef = useRef<HTMLInputElement>(null)
   const announced = useRef<Set<string> | null>(null)
 
-  const refresh = useCallback((at: Date = new Date(), announce = false) => {
-    const nextItems = listReminders()
-    const nextAcked = getAcknowledgedIds(at)
+  const refresh = useCallback(async (at: Date = new Date(), announce = false) => {
+    let nextItems: Reminder[]
+    let nextAcked: string[]
+    try {
+      if (isRemoteMode()) {
+        ;[nextItems, nextAcked] = await Promise.all([listRemindersAsync(), getAcknowledgedIdsAsync(at)])
+      } else {
+        nextItems = listReminders()
+        nextAcked = getAcknowledgedIds(at)
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Hatırlatmalar yüklenemedi.')
+      return
+    }
     if (announce) {
       const dueNow = nextItems.filter(item => reminderStatus(item, at, nextAcked) === 'due')
       const ids = dueNow.map(item => item.id)
@@ -106,8 +120,9 @@ export default function RemindersPanel() {
   }, [])
 
   useEffect(() => {
-    const id = window.setInterval(() => refresh(new Date(), true), 30_000)
-    const off = onStorageKey(REMINDERS_KEY, () => refresh(new Date(), true))
+    if (isRemoteMode()) void refresh(new Date(), true)
+    const id = window.setInterval(() => { void refresh(new Date(), true) }, 30_000)
+    const off = onStorageKey(REMINDERS_KEY, () => { void refresh(new Date(), true) })
     return () => {
       window.clearInterval(id)
       off()
@@ -153,14 +168,14 @@ export default function RemindersPanel() {
     window.requestAnimationFrame(() => timeRef.current?.focus())
   }
 
-  const submit = (event: React.FormEvent) => {
+  const submit = async (event: React.FormEvent) => {
     event.preventDefault()
     setError('')
     try {
-      addReminder({ title, time, kind, note })
+      await addReminderAsync({ title, time, kind, note })
       resetForm()
       setFormOpen(false)
-      refresh()
+      await refresh()
       setLive('Hatırlatma eklendi. Saati siz seçtiniz; otomatik plan oluşturulmadı.')
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Hatırlatma eklenemedi.')
@@ -173,52 +188,52 @@ export default function RemindersPanel() {
     setError('')
   }
 
-  const saveEdit = (event: React.FormEvent) => {
+  const saveEdit = async (event: React.FormEvent) => {
     event.preventDefault()
     if (!editingId) return
     setError('')
     try {
-      updateReminder(editingId, editDraft)
+      await updateReminderAsync(editingId, editDraft)
       setEditingId(null)
-      refresh()
+      await refresh()
       setLive('Hatırlatma güncellendi.')
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Hatırlatma güncellenemedi.')
     }
   }
 
-  const acknowledge = (reminder: Reminder) => {
+  const acknowledge = async (reminder: Reminder) => {
     setError('')
     try {
-      if (!acknowledgeReminder(reminder.id)) throw new Error('Hatırlatma bulunamadı.')
+      if (!(await acknowledgeReminderAsync(reminder.id))) throw new Error('Hatırlatma bulunamadı.')
       announced.current?.delete(reminder.id)
       setLive(`${reminder.title} bugün için tamamlandı.`)
-      refresh()
+      await refresh()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'İşaretlenemedi.')
     }
   }
 
-  const snooze = (reminder: Reminder) => {
+  const snooze = async (reminder: Reminder) => {
     setError('')
     try {
-      const result = snoozeReminder(reminder.id, SNOOZE_MINUTES)
+      const result = await snoozeReminderAsync(reminder.id, SNOOZE_MINUTES)
       if (!result) throw new Error('Hatırlatma bulunamadı.')
       announced.current?.delete(reminder.id)
       setLive(`${reminder.title} ${result.minutes} dakika ertelendi; ${clock(result.until)} tekrar görünecek.`)
-      refresh()
+      await refresh()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Ertelenemedi.')
     }
   }
 
-  const remove = (reminder: Reminder) => {
+  const remove = async (reminder: Reminder) => {
     if (!window.confirm(`“${reminder.title}” hatırlatması silinsin mi? Bu işlem geri alınamaz.`)) return
     setError('')
     try {
-      deleteReminder(reminder.id)
+      if (!(await deleteReminderAsync(reminder.id)) && isRemoteMode()) throw new Error('Hatırlatma silinemedi.')
       if (editingId === reminder.id) setEditingId(null)
-      refresh()
+      await refresh()
       setLive('Hatırlatma silindi.')
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Hatırlatma silinemedi.')
@@ -277,7 +292,7 @@ export default function RemindersPanel() {
   return (
     <div className="rem-page">
       <header className="rem-head">
-        <p className="rem-kicker">BİYOTRACK · GÜNLÜK PLAN</p>
+        <p className="rem-kicker">LongevityAI · GÜNLÜK PLAN</p>
         <h1>Hatırlatmalar</h1>
         <p className="rem-intro">
           Takviye, kısa yürüyüş veya genel bir not için saati kendiniz seçin. Uygulama sizin yerinize

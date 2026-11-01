@@ -19,7 +19,7 @@ async function main() {
   await test('varsayılan profil boş ve uydurma kimlik yok', () => {
     assert.deepEqual(profile.loadProfile(), {
       displayName: '', anatomyVariant: null, heightCm: '', weightKg: '', onboardingComplete: false,
-      age: '', sex: null, goal: '', medications: '', conditions: '', allergies: '', aiProfileConsent: false,
+      age: '', sex: null, goal: [], medications: '', conditions: '', allergies: '', aiProfileConsent: false,
     })
     assert.equal(browser.storage.getItem(KEY), null, 'okuma diske yazmamalı')
   })
@@ -109,7 +109,7 @@ async function main() {
     profile = freshRequire(libPath('profile.ts'))
     assert.deepEqual(profile.loadProfile(), {
       displayName: '', anatomyVariant: null, heightCm: '', weightKg: '', onboardingComplete: false,
-      age: '', sex: null, goal: '', medications: '', conditions: '', allergies: '', aiProfileConsent: false,
+      age: '', sex: null, goal: [], medications: '', conditions: '', allergies: '', aiProfileConsent: false,
     })
     profile.saveProfile({ displayName: 'Onarıldı' })
     assert.equal(JSON.parse(browser.storage.getItem(KEY)).displayName, 'Onarıldı')
@@ -186,7 +186,7 @@ async function main() {
     assert.equal(loaded.sex, 'female')
     assert.equal(loaded.anatomyVariant, 'female', 'sex verilince anatomyVariant türetilmeli')
     assert.equal(loaded.weightKg, '62.5')
-    assert.equal(loaded.goal, 'Daha iyi uyku')
+    assert.deepEqual(loaded.goal, ['Daha iyi uyku'], 'eski tek metin hedef diziye çevrilir')
     assert.equal(loaded.medications, 'Demir 1x')
     assert.equal(loaded.conditions, 'Hipotiroidi')
     assert.equal(loaded.allergies, 'Polen')
@@ -232,7 +232,7 @@ async function main() {
     assert.equal(loaded.sex, 'male')
     assert.equal(loaded.anatomyVariant, 'male')
     assert.equal(loaded.age, '', 'eksik yaş uydurulmamalı')
-    assert.equal(loaded.goal, '')
+    assert.deepEqual(loaded.goal, [])
     assert.equal(loaded.medications, '')
     assert.equal(loaded.aiProfileConsent, false)
     assert.equal(loaded.displayName, 'Eski Kullanıcı')
@@ -256,8 +256,11 @@ async function main() {
   })
 
   await test('hedef ve not alanlarının üst sınırı var, onay bayrağı katı boolean', () => {
-    assert.equal(profile.loadProfile().goal.length <= 160, true)
+    assert.equal(Array.isArray(profile.loadProfile().goal), true, 'hedef artık dizi')
     assert.throws(() => profile.saveProfile({ goal: 'x'.repeat(161) }), /Hedef/)
+    assert.throws(() => profile.saveProfile({ goal: Array.from({ length: 9 }, (_, i) => `hedef ${i}`) }), /En fazla 8/)
+    profile.saveProfile({ goal: ['Enerji', '  Daha iyi uyku  ', 'Enerji'] })
+    assert.deepEqual(profile.loadProfile().goal, ['Enerji', 'Daha iyi uyku'], 'trim + tekilleştirme')
     assert.throws(() => profile.saveProfile({ medications: 'x'.repeat(501) }), /İlaçlar/)
     assert.throws(() => profile.saveProfile({ conditions: 'x'.repeat(501) }), /Sağlık durumları/)
     assert.throws(() => profile.saveProfile({ allergies: 'x'.repeat(501) }), /Alerjiler/)
@@ -275,7 +278,7 @@ async function main() {
     assert.equal(loaded.sex, null)
     assert.equal(loaded.anatomyVariant, 'female', 'sex geçersizse kayıtlı görünüm korunur')
     assert.equal(loaded.age, '')
-    assert.equal(loaded.goal, '')
+    assert.deepEqual(loaded.goal, [])
     assert.equal(loaded.medications, '')
     assert.equal(loaded.conditions, '')
     assert.equal(loaded.allergies, '')

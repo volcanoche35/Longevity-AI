@@ -4,6 +4,7 @@ import { parseObservations, buildObservationContext } from '@/lib/observation-co
 import { askAI, isAIConfigured, type ChatMessage } from '@/lib/ai'
 import { buildKnowledgeContext } from '@/lib/knowledge'
 import { parseHealthProfile, buildHealthContext } from '@/lib/health-profile'
+import { supabase, isDemoMode } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,7 +33,18 @@ function bad(message: string, status = 400) {
 export async function POST(req: Request) {
   if (!isAIConfigured()) return bad('AI yapılandırması eksik', 500)
 
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'bilinmeyen'
+  // Oturum zorunluluğu: demo modda atla; canlıda Supabase JWT doğrula.
+  if (!isDemoMode() && supabase) {
+    const authHeader = req.headers.get('authorization')
+    const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
+    if (!token) return bad('Oturum gerekli', 401)
+    const { data: { user }, error } = await supabase.auth.getUser(token)
+    if (error || !user) return bad('Oturum geçersiz veya süresi dolmuş', 401)
+  }
+
+  // Not: x-forwarded-for yalnız güvenilir reverse proxy arkasında doğrudur; yoksa sahte olabilir.
+  const fwd = req.headers.get('x-forwarded-for')?.split(',')
+  const ip = fwd?.[fwd.length - 1]?.trim() || req.headers.get('x-real-ip') || 'bilinmeyen'
   if (rateLimited(ip)) return bad('Çok fazla istek gönderdin, biraz bekle', 429)
 
   let body: unknown

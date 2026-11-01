@@ -1,5 +1,5 @@
 /**
- * BioTrack anatomi verisi — katmanlı sistem.
+ * LongevityAI anatomi verisi — katmanlı sistem.
  *
  * Neden katmanlı: her AI katmanı kendi koordinat sisteminde üretiliyor ve
  * gövdeye ölçeklenmiyor. Katmanlar `screen` blend ile bindirildiği için siyah

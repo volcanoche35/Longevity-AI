@@ -1,6 +1,6 @@
 {
-  "name": "BioTrack - Longevity AI",
-  "short_name": "BioTrack",
+  "name": "LongevityAI",
+  "short_name": "LongevityAI",
   "description": "AI destekli kişisel takviye asistanı",
   "start_url": "/dashboard",
   "display": "standalone",

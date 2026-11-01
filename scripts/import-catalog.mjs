@@ -61,9 +61,7 @@ function readCsv(path) {
 async function readXlsx(path) {
   let XLSX
   try { XLSX = await import('xlsx') } catch {
-    throw new Error('xlsx paketi kurulu değil. İki yol var:\n'
-      + '  1) npm i -D xlsx  (Excel dosyasını doğrudan okur)\n'
-      + '  2) Excel\'de Dosya → Farklı Kaydet → CSV (Türkçe sınırlı) ve bu betiği .csv ile çalıştır')
+    throw new Error('xlsx desteği güvenlik nedeniyle kaldırıldı (bilinen açık, düzeltme yok). Excel\'de Dosya → Farklı Kaydet → CSV (Türkçe sınırlı) ve bu betiği .csv ile çalıştır')
   }
   const lib = XLSX.default ?? XLSX
   const wb = lib.readFile(path)

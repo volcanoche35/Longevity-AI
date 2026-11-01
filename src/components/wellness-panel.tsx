@@ -9,7 +9,12 @@ import {
   SCORE_MIN,
   buildChart,
   clearWellness,
+  clearWellnessAsync,
   deleteWellnessDay,
+  deleteWellnessDayAsync,
+  loadWellnessAsync,
+  saveWellnessAsync,
+  type WellnessEntry,
   getWellnessServerSnapshot,
   getWellnessSnapshot,
   saveWellness,
@@ -19,7 +24,8 @@ import {
   type ChartModel,
   type WellnessMetric,
 } from '@/lib/wellness'
-import { DAY_MARKS_KEY, readMarks } from '@/lib/daymarks'
+import { DAY_MARKS_KEY, readMarks, readMarksAsync } from '@/lib/daymarks'
+import { isRemoteMode } from '@/lib/supabase'
 import { onStorageKey, readRaw } from '@/lib/local-store'
 import { listSupplements, onDemoChange, type ClientSupplement } from '@/lib/data'
 import './wellness.css'
@@ -171,8 +177,22 @@ function WellnessChart({ model, label }: { model: ChartModel; label: string }) {
 export default function WellnessPanel() {
   const mounted = useMounted()
   const today = useToday()
-  const entries = useSyncExternalStore(subscribeWellness, getWellnessSnapshot, getWellnessServerSnapshot)
-  const marks = useSyncExternalStore(subscribeMarks, marksSnapshot, marksServerSnapshot)
+  const remote = isRemoteMode()
+  const localEntries = useSyncExternalStore(subscribeWellness, getWellnessSnapshot, getWellnessServerSnapshot)
+  const localMarks = useSyncExternalStore(subscribeMarks, marksSnapshot, marksServerSnapshot)
+  const [remoteEntries, setRemoteEntries] = useState<WellnessEntry[]>([])
+  const [remoteMarks, setRemoteMarks] = useState<Record<string, string[]>>(EMPTY_MARKS)
+  const entries = remote ? remoteEntries : localEntries
+  const marks = remote ? remoteMarks : localMarks
+  const reloadRemote = async () => {
+    try {
+      const [e, m] = await Promise.all([loadWellnessAsync(), readMarksAsync()])
+      setRemoteEntries(e)
+      setRemoteMarks(m)
+    } catch (err) {
+      setErrors([err instanceof Error ? err.message : 'Günlük yüklenemedi.'])
+    }
+  }
 
   const [inventory, setInventory] = useState<ClientSupplement[]>([])
   const [selectedDay, setSelectedDay] = useState('')
@@ -183,6 +203,11 @@ export default function WellnessPanel() {
   const [status, setStatus] = useState('')
   const [askDelete, setAskDelete] = useState(false)
   const [askClear, setAskClear] = useState(false)
+
+  useEffect(() => {
+    if (remote) void reloadRemote()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remote])
 
   useEffect(() => {
     let alive = true
@@ -241,17 +266,18 @@ export default function WellnessPanel() {
   const todayNames = today ? namesFor(today) : []
   const todayMarkCount = today ? (marks[today] ?? []).length : 0
 
-  const handleSave = (event: React.FormEvent) => {
+  const handleSave = async (event: React.FormEvent) => {
     event.preventDefault()
     setAskDelete(false)
     setStatus('')
-    const result = saveWellness({
+    const payload = {
       day,
       energy: activeDraft.energy,
       sleep: activeDraft.sleep,
       digestion: activeDraft.digestion,
       note: activeDraft.note,
-    })
+    }
+    const result = remote ? await saveWellnessAsync(payload) : saveWellness(payload)
     if (!result.ok) {
       setErrors(result.errors)
       setStatus('')
@@ -259,11 +285,12 @@ export default function WellnessPanel() {
     }
     setErrors([])
     setDraft(null)
+    if (remote) await reloadRemote()
     setStatus(result.created ? 'Kayıt eklendi.' : 'Kayıt güncellendi.')
   }
 
-  const handleDelete = () => {
-    const result = deleteWellnessDay(day)
+  const handleDelete = async () => {
+    const result = remote ? await deleteWellnessDayAsync(day) : deleteWellnessDay(day)
     if (!result.ok) {
       setErrors([result.error])
       return
@@ -271,11 +298,12 @@ export default function WellnessPanel() {
     setDraft(null)
     setAskDelete(false)
     setErrors([])
+    if (remote) await reloadRemote()
     setStatus('Bu günün kaydı silindi.')
   }
 
-  const handleClear = () => {
-    const result = clearWellness()
+  const handleClear = async () => {
+    const result = remote ? await clearWellnessAsync() : clearWellness()
     if (!result.ok) {
       setErrors([result.error])
       return
@@ -283,6 +311,7 @@ export default function WellnessPanel() {
     setDraft(null)
     setAskClear(false)
     setErrors([])
+    if (remote) await reloadRemote()
     setStatus('Tüm günlük silindi.')
   }
 
@@ -569,7 +598,7 @@ export default function WellnessPanel() {
           </button>
         )}
         <p className="wl-fine">
-          Kayıtlar bu tarayıcıda saklanır. Sağlık durumunla ilgili kararlar için hekimine danış; bu ekran
+          Girdiğin kayıtlar uygulamaya kaydedilir. Sağlık durumunla ilgili kararlar için hekimine danış; bu ekran
           tıbbi değerlendirme üretmez.
         </p>
       </footer>

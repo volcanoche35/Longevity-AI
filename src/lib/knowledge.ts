@@ -1,5 +1,5 @@
 /**
- * BioTrack bilgi çekirdeği (demo/fider katmanı).
+ * LongevityAI bilgi çekirdeği (demo/fider katmanı).
  * Kanıt derecesi: A = güçlü insan kanıtı · B = olası fayda · C = zayıt/karmaşık
  * Amaç: AI'a gerçek bağlam vermek + arayüzde "kanıt rozeti" göstermek.
  */

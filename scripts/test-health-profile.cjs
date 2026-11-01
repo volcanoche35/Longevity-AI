@@ -20,7 +20,7 @@ function fullProfile(overrides = {}) {
     onboardingComplete: true,
     age: '34',
     sex: 'female',
-    goal: 'Daha iyi uyku',
+    goal: ['Daha iyi uyku'],
     medications: 'Demir 1x',
     conditions: 'Hipotiroidi',
     allergies: 'Polen',
@@ -43,7 +43,7 @@ async function main() {
       'age', 'allergies', 'conditions', 'goal', 'heightCm', 'medications', 'sex', 'weightKg',
     ])
     assert.equal(result.sex, 'female')
-    assert.equal(result.goal, 'Daha iyi uyku')
+    assert.deepEqual(result.goal, ['Daha iyi uyku'])
     const serialized = JSON.stringify(result)
     assert.ok(!serialized.includes('Gizli İsim'), 'isim sızmamalı')
     assert.ok(!serialized.includes('onboardingComplete'))
@@ -95,7 +95,7 @@ async function main() {
     ])
     assert.equal(parsed.age, '34')
     assert.equal(parsed.weightKg, '82.5')
-    assert.equal(parsed.goal, 'Kas koruma')
+    assert.deepEqual(parsed.goal, ['Kas koruma'])
     const serialized = JSON.stringify(parsed)
     assert.ok(!serialized.includes('instructions'), 'bilinmeyen alan taşınmamalı')
     assert.ok(!serialized.includes('nested'))
@@ -117,7 +117,7 @@ async function main() {
   await test('eksik alanlar boş kabul ediliyor (uydurma yok)', () => {
     const parsed = hp.parseHealthProfile({})
     assert.deepEqual(parsed, {
-      age: '', sex: null, heightCm: '', weightKg: '', goal: '',
+      age: '', sex: null, heightCm: '', weightKg: '', goal: [],
       medications: '', conditions: '', allergies: '',
     })
   })
@@ -128,14 +128,14 @@ async function main() {
 
   await test('bağlam güvenilmeyen veri uyarısı, üç başlık ve bilinmeyen alan notu içeriyor', () => {
     const parsed = hp.parseHealthProfile({
-      age: '34', sex: 'female', heightCm: '170', weightKg: '70', goal: 'Uyku',
+      age: '34', sex: 'female', heightCm: '170', weightKg: '70', goal: ['Uyku'],
       medications: '', conditions: '', allergies: '',
     })
     const ctx = hp.buildHealthContext(parsed)
     assert.ok(ctx.includes('GÜVENİLMEYEN VERİ'))
     assert.ok(ctx.includes('talimat'), 'veri içindeki metinlerin talimat olmadığı yazılmalı')
     assert.ok(ctx.includes('<KULLANICI_PROFILI>'))
-    assert.ok(ctx.includes('"goal": "Uyku"'))
+    assert.ok(ctx.includes('Uyku') && ctx.includes('beyan ettiği hedefler: Uyku'))
     assert.ok(ctx.includes('Profiline göre dikkat edilmesi gerekenler'))
     assert.ok(ctx.includes('Önce netleşmesi gerekenler'))
     assert.ok(ctx.includes('Ne zaman uzmana başvurmalı'))

@@ -2,6 +2,7 @@
 
 import { Suspense, useState, useEffect, useRef, useSyncExternalStore } from 'react'
 import Link from 'next/link'
+import CustomizeButton from '@/components/customize-button'
 import { SYSTEMS } from '@/lib/anatomy-regions'
 import { loadProfile, onProfileChange } from '@/lib/profile'
 import { useSearchParams } from 'next/navigation'
@@ -33,7 +34,7 @@ const QUICK_QUESTIONS = [
   'Bu iki takviye birlikte alınır mı?',
   'Hangi saatte almalıyım?',
   'Yan etkileri neler?',
-  'Dozaj önerisi verir misin?',
+  'Ürün etiketini nasıl okumalıyım?',
 ]
 
 export default function ChatPage() {
@@ -80,7 +81,7 @@ function ChatContent() {
     <div className="flex flex-col h-[calc(100vh-7rem)]">
       {/* Header */}
       <div className="px-4 pt-4 pb-2">
-        <h2 className="text-xl font-bold text-[#FF4D5E]">🤖 AI Asistan</h2>
+        <div className="flex items-center justify-between gap-3"><h2 className="text-xl font-bold text-[var(--text)]">Kişisel asistan</h2><CustomizeButton section="assistant" /></div>
         <Link href="/profile" className="block text-xs text-[var(--text-2)] mt-2">{profileEnabled ? 'Profil bilgilerin yanıtı kişiselleştirmek için paylaşılacak · Yönet →' : 'Profil paylaşımı kapalı · Açmak için profil →'}</Link>
         {system && <p className="text-xs text-[var(--amber)] mt-2">Seçili sistem: {system} · yalnız sen gönderince AI’a iletilir</p>}
         {supplements.length > 0 && (
@@ -156,7 +157,7 @@ function ChatContent() {
             ➤
           </button>
         </div>
-        <p className="text-[#AEB9CC]/20 text-[9px] mt-1.5 text-center">⚠️ AI önerileri doktor tavsiyesi değildir</p>
+        <p className="text-[#AEB9CC]/50 text-[10px] mt-1.5 text-center">⚠️ Bu asistan tıbbi tavsiye veya teşhis vermez; sağlık kararlarını doktorunla birlikte al.</p>
       </div>
     </div>
   )

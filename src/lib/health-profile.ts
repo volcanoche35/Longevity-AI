@@ -16,7 +16,7 @@ export interface HealthProfile {
   sex: 'female' | 'male' | null
   heightCm: string
   weightKg: string
-  goal: string
+  goal: string[]
   medications: string
   conditions: string
   allergies: string
@@ -24,6 +24,33 @@ export interface HealthProfile {
 
 const GOAL_MAX = 160
 const NOTE_MAX = 500
+const GOAL_COUNT_MAX = 8
+
+/** Hedefler: dizi, JSON dizi metni veya eski tek metin kabul edilir; temiz string[] döner. */
+export function parseGoals(value: unknown): string[] {
+  let list: unknown[]
+  if (value === null || value === undefined) list = []
+  else if (Array.isArray(value)) list = value
+  else if (typeof value === 'string') {
+    const raw = value.trim()
+    if (raw.startsWith('[')) {
+      try {
+        const parsed: unknown = JSON.parse(raw)
+        list = Array.isArray(parsed) ? parsed : [raw]
+      } catch { list = [raw] }
+    } else list = raw === '' ? [] : [raw]
+  } else throw new Error('Hedef metin veya liste olmalı.')
+  const out: string[] = []
+  for (const item of list) {
+    if (typeof item !== 'string') throw new Error('Hedef metin olmalı.')
+    const cleaned = item.trim()
+    if (cleaned === '') continue
+    if (cleaned.length > GOAL_MAX) throw new Error(`Hedef en fazla ${GOAL_MAX} karakter olabilir.`)
+    if (!out.includes(cleaned)) out.push(cleaned)
+  }
+  if (out.length > GOAL_COUNT_MAX) throw new Error(`En fazla ${GOAL_COUNT_MAX} hedef seçilebilir.`)
+  return out
+}
 
 function parseAge(value: unknown): string {
   if (typeof value !== 'string') throw new Error('Yaş metin olmalı.')
@@ -70,7 +97,7 @@ export function healthProfileFrom(profile: LocalProfile): HealthProfile | null {
     sex: profile.sex,
     heightCm: profile.heightCm,
     weightKg: profile.weightKg,
-    goal: profile.goal,
+    goal: [...profile.goal],
     medications: profile.medications,
     conditions: profile.conditions,
     allergies: profile.allergies,
@@ -93,7 +120,7 @@ export function parseHealthProfile(value: unknown): HealthProfile | null {
     sex: record.sex === undefined ? null : parseSex(record.sex),
     heightCm: record.heightCm === undefined ? '' : parseMeasure(record.heightCm, 'Boy', 50, 260),
     weightKg: record.weightKg === undefined ? '' : parseMeasure(record.weightKg, 'Kilo', 10, 400),
-    goal: record.goal === undefined ? '' : parseText(record.goal, 'Hedef', GOAL_MAX),
+    goal: record.goal === undefined ? [] : parseGoals(record.goal),
     medications: record.medications === undefined ? '' : parseText(record.medications, 'İlaçlar', NOTE_MAX),
     conditions: record.conditions === undefined ? '' : parseText(record.conditions, 'Sağlık durumları', NOTE_MAX),
     allergies: record.allergies === undefined ? '' : parseText(record.allergies, 'Alerjiler', NOTE_MAX),
@@ -128,7 +155,7 @@ function missingFields(p: HealthProfile): string[] {
  */
 export function buildHealthContext(p: HealthProfile | null): string {
   if (!p) return ''
-  const data = JSON.stringify(p, null, 2)
+  const data = JSON.stringify(p, null, 2).replace(/[<>]/g, '')
   const bmi = adultBmi(p)
   const missing = missingFields(p)
   const age = /^\d+$/.test(p.age) ? Number(p.age) : null
@@ -150,6 +177,11 @@ export function buildHealthContext(p: HealthProfile | null): string {
     '- Genel bilgi ver, kesin teşhis koyma; gerekli durumlarda hekime yönlendir.',
   ]
 
+  if (p.goal.length > 0) {
+    lines.push(`- Kullanıcının beyan ettiği hedefler: ${p.goal.join(', ').replace(/[<>]/g, '')}. Genel yaşam tarzı önerilerini bu hedeflere göre önceliklendir; hedeften tanı, eksiklik veya doz çıkarma, hedefe ulaşma vaadi verme.`)
+  } else {
+    lines.push('- Kullanıcı hedef belirtmemiş; hedef varsaymadan genel kal.')
+  }
   if (missing.length > 0) {
     lines.push(`- Şu alanlar beyan edilmemiş: ${missing.join(', ')} — bunları "bilinmiyor" olarak kabul et ve güvenlikle ilgili bir karardan önce kullanıcıya sor.`)
   }

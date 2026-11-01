@@ -3,7 +3,7 @@ import "./globals.css"
 import AppShell from "./app-shell"
 
 export const metadata: Metadata = {
-  title: "BioTrack - Longevity AI",
+  title: "LongevityAI",
   description: "AI destekli kişisel takviye asistanı",
   manifest: "/manifest.json",
   icons: {

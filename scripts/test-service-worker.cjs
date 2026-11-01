@@ -1,9 +1,11 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict')
+const swSource=fs.readFileSync('public/sw.js','utf8')
+const CACHE_NAME=(swSource.match(/CACHE_NAME\s*=\s*'([^']+)'/)||['',''])[1]
 const handlers={},writes=[],deleted=[]
 let networkCalls=0
 const context={URL,Response,Promise,
  self:{location:{origin:'https://example.test'},addEventListener:(name,cb)=>{handlers[name]=cb},skipWaiting:()=>Promise.resolve(),clients:{claim:()=>Promise.resolve()}},
- caches:{match:async()=>new Response('old-cache'),open:async()=>({put:async(req,copy)=>writes.push(await copy.text()),addAll:async()=>{}}),keys:async()=>['biotrack-v1','biotrack-assistant-v3','another-app'],delete:async key=>deleted.push(key)},
+ caches:{match:async()=>new Response('old-cache'),open:async()=>({put:async(req,copy)=>writes.push(await copy.text()),addAll:async()=>{}}),keys:async()=>['biotrack-v1',CACHE_NAME,'another-app'],delete:async key=>deleted.push(key)},
  fetch:async()=>{networkCalls++;return new Response('new-network')}
 }
 vm.runInNewContext(fs.readFileSync('public/sw.js','utf8'),context)

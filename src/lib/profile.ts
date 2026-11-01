@@ -13,6 +13,8 @@
  *    açıkça beyan ettiğinde dolar (anatomyVariant'tan otomatik çıkarım yapılmaz).
  */
 import { readRaw, writeRaw, removeRaw, onStorageKey, storageState, type StorageMode } from './local-store'
+import { parseGoals } from './health-profile'
+import { supabase, isRemoteMode, currentUserId } from './supabase'
 
 export type Sex = 'female' | 'male'
 
@@ -26,7 +28,8 @@ export interface LocalProfile {
   age: string
   /** Kullanıcının açıkça beyan ettiği tıbbi profildeki cinsiyet. */
   sex: Sex | null
-  goal: string
+  /** Çoklu hedef; eski kayıtlardaki tek metin diziye çevrilir. */
+  goal: string[]
   medications: string
   conditions: string
   allergies: string
@@ -43,7 +46,7 @@ export const EMPTY_PROFILE: LocalProfile = {
   onboardingComplete: false,
   age: '',
   sex: null,
-  goal: '',
+  goal: [],
   medications: '',
   conditions: '',
   allergies: '',
@@ -51,7 +54,6 @@ export const EMPTY_PROFILE: LocalProfile = {
 }
 
 const NAME_MAX = 60
-const GOAL_MAX = 160
 const NOTE_MAX = 500
 
 function normalizeName(value: unknown): string {
@@ -120,7 +122,7 @@ function lenient(profile: LocalProfile, key: keyof LocalProfile, value: unknown)
       case 'onboardingComplete': profile.onboardingComplete = normalizeBoolean(value, 'Profil tamamlandı'); break
       case 'age': profile.age = normalizeAge(value); break
       case 'sex': profile.sex = normalizeSex(value); break
-      case 'goal': profile.goal = normalizeText(value, 'Hedef', GOAL_MAX); break
+      case 'goal': profile.goal = parseGoals(value); break
       case 'medications': profile.medications = normalizeText(value, 'İlaçlar', NOTE_MAX); break
       case 'conditions': profile.conditions = normalizeText(value, 'Sağlık durumları', NOTE_MAX); break
       case 'allergies': profile.allergies = normalizeText(value, 'Alerjiler', NOTE_MAX); break
@@ -176,7 +178,7 @@ function mergeProfile(base: LocalProfile, partial: Partial<LocalProfile>): Local
     merged.onboardingComplete = normalizeBoolean(partial.onboardingComplete, 'Profil tamamlandı')
   }
   if (partial.age !== undefined) merged.age = normalizeAge(partial.age)
-  if (partial.goal !== undefined) merged.goal = normalizeText(partial.goal, 'Hedef', GOAL_MAX)
+  if (partial.goal !== undefined) merged.goal = parseGoals(partial.goal)
   if (partial.medications !== undefined) {
     merged.medications = normalizeText(partial.medications, 'İlaçlar', NOTE_MAX)
   }
@@ -239,4 +241,82 @@ export function onProfileChange(cb: () => void): () => void {
 /** Arayüzde "cihazda mı, sadece bellekte mi" göstergesi için. */
 export function profileStorageInfo(): { mode: StorageMode; error: string | null } {
   return storageState()
+}
+
+/* ── Supabase dalı (async): profiles (id = auth.uid()) ── */
+
+export async function loadProfileAsync(): Promise<LocalProfile> {
+  if (!isRemoteMode() || !supabase) return loadProfile()
+  const userId = await currentUserId()
+  if (!userId) return { ...EMPTY_PROFILE }
+  const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle()
+  if (error) throw new Error(`Profil yüklenemedi: ${error.message}`)
+  const profile: LocalProfile = { ...EMPTY_PROFILE }
+  if (!data) return profile
+  const r = data as Record<string, unknown>
+  lenient(profile, 'displayName', r.display_name ?? '')
+  lenient(profile, 'age', r.age == null ? '' : String(r.age))
+  lenient(profile, 'heightCm', r.height_cm == null ? '' : String(r.height_cm))
+  lenient(profile, 'weightKg', r.weight_kg == null ? '' : String(r.weight_kg))
+  lenient(profile, 'sex', r.sex ?? null)
+  lenient(profile, 'goal', r.goal ?? [])
+  lenient(profile, 'medications', r.medications ?? '')
+  lenient(profile, 'conditions', r.conditions ?? '')
+  lenient(profile, 'allergies', r.allergies ?? '')
+  lenient(profile, 'onboardingComplete', r.onboarding_complete === true)
+  lenient(profile, 'aiProfileConsent', r.ai_profile_consent === true)
+  profile.anatomyVariant = profile.sex
+  return profile
+}
+
+/** Doğrular, sonra Supabase'e upsert eder; hata fırlatır (yerel yolla aynı sözleşme). */
+export async function saveProfileAsync(partial: Partial<LocalProfile>): Promise<void> {
+  if (!isRemoteMode() || !supabase) return saveProfile(partial)
+  const merged = mergeProfile(await loadProfileAsync(), partial)
+  const userId = await currentUserId()
+  if (!userId) throw new Error('Profili kaydetmek için giriş yapmalısın.')
+  const { error } = await supabase.from('profiles').upsert({
+    id: userId,
+    display_name: merged.displayName,
+    age: merged.age === '' ? null : Number(merged.age),
+    height_cm: merged.heightCm === '' ? null : Number(merged.heightCm),
+    weight_kg: merged.weightKg === '' ? null : Number(merged.weightKg),
+    sex: merged.sex,
+    goal: JSON.stringify(merged.goal), // TEXT sütunu: JSON dizisi
+    medications: merged.medications,
+    conditions: merged.conditions,
+    allergies: merged.allergies,
+    onboarding_complete: merged.onboardingComplete,
+    ai_profile_consent: merged.aiProfileConsent,
+  })
+  if (error) throw new Error(error.message)
+  notify()
+}
+
+/**
+ * Oturum açmış kullanıcının profiles satırı yoksa oluşturur (idempotent).
+ * Hata fırlatmaz: console.warn ile yutar; başarıda true döner.
+ */
+export async function ensureProfile(fallbackName?: string): Promise<boolean> {
+  if (!isRemoteMode() || !supabase) return false
+  try {
+    const userId = await currentUserId()
+    if (!userId) return false
+    const found = await supabase.from('profiles').select('id').eq('id', userId).maybeSingle()
+    if (found.error) { console.warn('[profile] ensureProfile select:', found.error.message); return false }
+    if (found.data) return true
+    let name = fallbackName
+    if (!name) {
+      const { data } = await supabase.auth.getUser()
+      name = (data.user?.email ?? '').split('@')[0]
+    }
+    const { error } = await supabase.from('profiles').insert({
+      id: userId, display_name: (name ?? '').slice(0, NAME_MAX), onboarding_complete: false,
+    })
+    if (error) { console.warn('[profile] ensureProfile insert:', error.message); return false }
+    return true
+  } catch (err) {
+    console.warn('[profile] ensureProfile:', err)
+    return false
+  }
 }

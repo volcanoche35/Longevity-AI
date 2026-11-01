@@ -12,6 +12,7 @@
 import { onStorageKey, readRaw, writeRaw, removeRaw } from './local-store'
 import { DAY_MARKS_KEY, localDayKey, readMarks } from './daymarks'
 import { listSupplements } from './data'
+import { supabase, isRemoteMode, currentUserId } from './supabase'
 
 /** Günlük özbildirim kayıtlarının cihazdaki anahtarı. */
 export const WELLNESS_KEY = 'biotrack.wellness.v1'
@@ -493,3 +494,55 @@ export function readUsageMarks(): Record<string, string[]> {
 }
 
 export { DAY_MARKS_KEY }
+
+/* ── Supabase dalı (async) ───────────────────────────────────────────
+ * isRemoteMode() false iken (demo) bu fonksiyonlar yerel senkron API'ye düşer.
+ * Tablo: wellness_entries (user_id, day UNIQUE) — bkz. supabase-schema-v2.sql
+ */
+
+export async function loadWellnessAsync(): Promise<WellnessEntry[]> {
+  if (!isRemoteMode() || !supabase) return readWellnessEntries()
+  const { data, error } = await supabase.from('wellness_entries')
+    .select('day, energy, sleep, digestion, note').order('day', { ascending: true })
+  if (error) throw new Error(`Günlük yüklenemedi: ${error.message}`)
+  const out: WellnessEntry[] = []
+  for (const row of data ?? []) {
+    const entry: WellnessEntry = { day: row.day as string }
+    for (const metric of METRICS) if (typeof row[metric] === 'number') entry[metric] = row[metric] as number
+    if (typeof row.note === 'string' && row.note) entry.note = row.note
+    out.push(entry)
+  }
+  return out
+}
+
+export async function saveWellnessAsync(input: unknown, now = new Date()): Promise<SaveWellnessResult> {
+  if (!isRemoteMode() || !supabase) return saveWellness(input, now)
+  const validation = validateWellnessEntry(input, now)
+  if (!validation.ok || !validation.entry) return { ok: false, errors: validation.errors }
+  const userId = await currentUserId()
+  if (!userId) return { ok: false, errors: ['Kaydetmek için giriş yapmalısın.'] }
+  const entry = validation.entry
+  const existing = await supabase.from('wellness_entries').select('id').eq('user_id', userId).eq('day', entry.day).maybeSingle()
+  const { error } = await supabase.from('wellness_entries').upsert({
+    user_id: userId, day: entry.day,
+    energy: entry.energy ?? null, sleep: entry.sleep ?? null,
+    digestion: entry.digestion ?? null, note: entry.note ?? null,
+  }, { onConflict: 'user_id,day' })
+  if (error) return { ok: false, errors: [error.message] }
+  return { ok: true, entry, created: !existing.data }
+}
+
+export async function deleteWellnessDayAsync(day: string): Promise<MutationResult> {
+  if (!isRemoteMode() || !supabase) return deleteWellnessDay(day)
+  if (!isDayKey(day)) return { ok: false, error: 'Geçersiz gün.' }
+  const { error } = await supabase.from('wellness_entries').delete().eq('day', day)
+  return error ? { ok: false, error: error.message } : { ok: true }
+}
+
+export async function clearWellnessAsync(): Promise<MutationResult> {
+  if (!isRemoteMode() || !supabase) return clearWellness()
+  const userId = await currentUserId()
+  if (!userId) return { ok: false, error: 'Giriş yapmalısın.' }
+  const { error } = await supabase.from('wellness_entries').delete().eq('user_id', userId)
+  return error ? { ok: false, error: error.message } : { ok: true }
+}

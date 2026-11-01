@@ -26,7 +26,6 @@ import {
   SYSTEMS,
   anatomyAssets,
   getRegions,
-  modelLabel,
   toStagePercent,
   type AnatomyVariant,
   type Region,
@@ -48,8 +47,8 @@ interface AnatomyHeroProps {
 /* ── sistem ikonları (emoji yerine ince çizgi: platform tutarlılığı) ── */
 function SystemIcon({ system }: { system: SystemId }) {
   const common = {
-    width: 18,
-    height: 18,
+    width: 16,
+    height: 16,
     viewBox: '0 0 24 24',
     fill: 'none',
     stroke: 'currentColor',
@@ -248,9 +247,6 @@ function AnatomyStage({
         )}
       </div>
 
-      <span className="dv-stage-badge">
-        {imageFallback ? 'Genel görsel (yedek)' : modelLabel(variant)}
-      </span>
     </div>
   )
 }
@@ -376,7 +372,7 @@ export default function AnatomyHero({ variant, selection, onSelect }: AnatomyHer
         >
           <div className="dv-dialog" role="dialog" aria-modal="true" aria-label="Anatomi — büyük görünüm">
             <div className="dv-dialog-head">
-              <p className="dv-dialog-title">Anatomi · {modelLabel(variant)}</p>
+              <p className="dv-dialog-title">Anatomi</p>
               <button
                 type="button"
                 className="dv-dialog-close"

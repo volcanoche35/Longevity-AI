@@ -13,6 +13,7 @@
  *    sayfa açıkken çalışan arayüz tarafından kullanılır.
  */
 import { readRaw, writeRaw } from './local-store'
+import { supabase, isRemoteMode, currentUserId } from './supabase'
 
 export const REMINDERS_KEY = 'biotrack.reminders.v1'
 export const REMINDERS_VERSION = 1
@@ -350,4 +351,105 @@ export function snoozeReminder(
     day: reminderDayKey(until),
     minutes,
   }
+}
+
+/* ── Supabase dalı (async): reminders + reminder_acks ── */
+
+interface ReminderRow {
+  id: string; title: string; time: string; kind: string
+  note: string | null; snooze_until: string | null; created_at: string
+}
+
+export async function listRemindersAsync(): Promise<Reminder[]> {
+  if (!isRemoteMode() || !supabase) return listReminders()
+  const { data, error } = await supabase.from('reminders').select('*').order('time', { ascending: true })
+  if (error) throw new Error(`Hatırlatmalar yüklenemedi: ${error.message}`)
+  const out: Reminder[] = []
+  for (const row of (data ?? []) as ReminderRow[]) {
+    if (!isValidTime(row.time) || !isReminderKind(row.kind)) continue
+    out.push({
+      id: row.id, title: row.title, time: row.time, kind: row.kind,
+      note: row.note ?? '', createdAt: row.created_at, snoozeUntil: row.snooze_until,
+    })
+  }
+  return out
+}
+
+export async function addReminderAsync(input: ReminderInput, now = new Date()): Promise<Reminder> {
+  if (!isRemoteMode() || !supabase) return addReminder(input, now)
+  const error = validateReminderInput(input)
+  if (error) throw new Error(error)
+  const userId = await currentUserId()
+  if (!userId) throw new Error('Hatırlatma eklemek için giriş yapmalısın.')
+  const { data, error: dbError } = await supabase.from('reminders').insert({
+    user_id: userId, title: input.title.trim(), time: input.time, kind: input.kind,
+    note: (input.note ?? '').trim().slice(0, REMINDER_NOTE_MAX),
+  }).select('*').single()
+  if (dbError || !data) throw new Error(dbError?.message ?? 'Hatırlatma kaydedilemedi.')
+  const row = data as ReminderRow
+  return {
+    id: row.id, title: row.title, time: row.time, kind: input.kind,
+    note: row.note ?? '', createdAt: row.created_at, snoozeUntil: null,
+  }
+}
+
+export async function deleteReminderAsync(id: string): Promise<boolean> {
+  if (!isRemoteMode() || !supabase) return deleteReminder(id)
+  const { error } = await supabase.from('reminders').delete().eq('id', id)
+  return !error
+}
+
+export async function acknowledgeReminderAsync(id: string, now = new Date()): Promise<boolean> {
+  if (!isRemoteMode() || !supabase) return acknowledgeReminder(id, now)
+  const userId = await currentUserId()
+  if (!userId) return false
+  const { error } = await supabase.from('reminder_acks').upsert(
+    { user_id: userId, reminder_id: id, day: reminderDayKey(now) },
+    { onConflict: 'user_id,reminder_id,day' })
+  if (error) return false
+  await supabase.from('reminders').update({ snooze_until: null }).eq('id', id)
+  return true
+}
+
+export async function snoozeReminderAsync(id: string, minutes = SNOOZE_MINUTES, now = new Date()): Promise<ReminderSnooze | null> {
+  if (!isRemoteMode() || !supabase) return snoozeReminder(id, minutes, now)
+  if (!Number.isInteger(minutes) || minutes < 1 || minutes > 720) {
+    throw new Error('Erteleme süresi 1–720 dakika arasında olmalı.')
+  }
+  const until = new Date(now.getTime() + minutes * 60_000)
+  const { error } = await supabase.from('reminders').update({ snooze_until: until.toISOString() }).eq('id', id)
+  return error ? null : { until: until.toISOString(), day: reminderDayKey(until), minutes }
+}
+
+export async function getAcknowledgedIdsAsync(now = new Date()): Promise<string[]> {
+  if (!isRemoteMode() || !supabase) return getAcknowledgedIds(now)
+  const { data, error } = await supabase.from('reminder_acks').select('reminder_id').eq('day', reminderDayKey(now))
+  if (error) throw new Error(`Hatırlatma işaretleri yüklenemedi: ${error.message}`)
+  return (data ?? []).map(r => String(r.reminder_id))
+}
+
+export async function dueRemindersAsync(now = new Date()): Promise<Reminder[]> {
+  if (!isRemoteMode() || !supabase) return dueReminders(now)
+  const [items, acked] = await Promise.all([listRemindersAsync(), getAcknowledgedIdsAsync(now)])
+  return items.filter(item => reminderStatus(item, now, acked) === 'due')
+}
+
+export async function updateReminderAsync(id: string, patch: Partial<ReminderInput>, now = new Date()): Promise<Reminder> {
+  if (!isRemoteMode() || !supabase) return updateReminder(id, patch, now)
+  const current = (await listRemindersAsync()).find(item => item.id === id)
+  if (!current) throw new Error('Hatırlatma bulunamadı.')
+  const next: Reminder = {
+    ...current,
+    title: patch.title !== undefined ? patch.title.trim() : current.title,
+    time: patch.time !== undefined ? patch.time : current.time,
+    kind: patch.kind !== undefined ? patch.kind : current.kind,
+    note: patch.note !== undefined ? patch.note.trim().slice(0, REMINDER_NOTE_MAX) : current.note,
+    snoozeUntil: null,
+  }
+  const error = validateReminderInput(next)
+  if (error) throw new Error(error)
+  const { error: dbError } = await supabase.from('reminders')
+    .update({ title: next.title, time: next.time, kind: next.kind, note: next.note, snooze_until: null }).eq('id', id)
+  if (dbError) throw new Error(dbError.message)
+  return next
 }

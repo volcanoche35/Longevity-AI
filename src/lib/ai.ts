@@ -39,7 +39,7 @@ function requireConfig() {
       .map(m => m.trim()),
     headers: {
       'HTTP-Referer': site,
-      'X-Title': 'Longevity AI / BioTrack',
+      'X-Title': 'LongevityAI',
     },
   }
 }
@@ -60,6 +60,8 @@ async function callModel(
       model,
       messages,
       temperature: 0.3,
+      // Sağlık verisi: eğitimde kullanılmasın + sıfır veri saklama (ZDR).
+      provider: { data_collection: 'deny', zdr: true },
       // Reasoning modelleri bütçeyi akıl yürütmeye harcayabiliyor: 900 token
       // tamamı reasoning'e gidip içerik BOŞ dönüyordu (finish_reason=length).
       // Cevap + reasoning başlığa sığsın.

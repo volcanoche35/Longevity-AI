@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * Günlük panel — referans düzeni: solda sinematik anatomi, sağda veri kartları.
+ * Günlük panel — bugün odaklı: mood check-in, metrik şeridi, bugünkü kayıtlar, performans.
  *
  * Veri dürüstlüğü kuralları:
  *  - Uydurma laboratuvar sonucu, sağlık skoru, "kanıt derecesi" YOK.
@@ -9,7 +9,6 @@
  *    işaretlenen kullanım, farklı zaman dilimi sayısı, profil doluluğu.
  *  - "Alındı" işaretleri kullanıcının kendi tıklamasıdır, sağlık önerisi değil;
  *    yalnız bu cihazda ve yerel gün bazında saklanır. Senkronizasyon iddiası yok.
- *  - Cinsiyet çıkarımı yapılmaz: yalnız profildeki anatomyVariant kullanılır.
  *
  * Yerel veri, React'in kendi abonelik API'siyle (useSyncExternalStore) okunur:
  * sunucu render'ı boş profil döner, istemci cihazdaki gerçek kaydı gösterir.
@@ -17,18 +16,24 @@
 
 import Link from 'next/link'
 import ProfileEditor from '@/components/profile-editor'
-import { lockBodyScroll } from '@/lib/modal'
-import { DAY_MARKS_KEY as MARKS_KEY, localDayKey, readMarks, toggleDayMark } from '@/lib/daymarks'
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
-import AnatomyHero, { type AnatomySelection } from '@/components/anatomy-hero'
+import CustomizeButton from '@/components/customize-button'
+import { DAY_MARKS_KEY as MARKS_KEY, localDayKey, readMarks, readMarksAsync, toggleDayMark, toggleDayMarkAsync } from '@/lib/daymarks'
+import { isRemoteMode } from '@/lib/supabase'
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import SupplementSheet from '@/components/supplement-sheet'
+import PerformancePanel from '@/components/performance-panel'
+import { usePreferences } from '@/lib/preferences'
+import MoodGlow from '@/components/mood-glow'
+import '@/components/mobile-app.css'
 import '@/components/dashboard-v3.css'
-import { SYSTEM_BY_ID, getRegion, getRegions } from '@/lib/anatomy-regions'
 import { listSupplements, onDemoChange, type ClientSupplement } from '@/lib/data'
 import { onStorageKey, readRaw } from '@/lib/local-store'
+import { deleteWellnessDayAsync, loadWellnessAsync, saveWellnessAsync, subscribeWellness, type WellnessEntry } from '@/lib/wellness'
 import {
   EMPTY_PROFILE,
   PROFILE_STORAGE_KEY,
   loadProfile,
+  loadProfileAsync,
   onProfileChange,
   type LocalProfile,
 } from '@/lib/profile'
@@ -38,15 +43,24 @@ const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 /** Kullanıcının kendi "aldım" işaretleri — cihazda, gün bazında. */
 
 const TIME_TONE: Record<string, string> = {
-  Sabah: '#FFB020',
-  Öğle: '#22E1FF',
-  Akşam: '#FF4D5E',
-  Gece: '#FF3DA6',
+  Sabah: '#A8BFAE',
+  Öğle: '#9FB0BE',
+  Akşam: '#C5B18E',
+  Gece: '#B4A7C0',
 }
 
 const TIME_ORDER: Record<string, number> = { Sabah: 0, Öğle: 1, Akşam: 2, Gece: 3 }
 
 const EMPTY_IDS: string[] = []
+const SLICES = ['Sabah', 'Öğle', 'Akşam', 'Gece'] as const
+
+/** Yerel saate göre dilim: 05–11 Sabah, 11–16 Öğle, 16–21 Akşam, kalanı Gece. */
+function sliceOfHour(hour: number): number {
+  if (hour >= 5 && hour < 11) return 0
+  if (hour >= 11 && hour < 16) return 1
+  if (hour >= 16 && hour < 21) return 2
+  return 3
+}
 
 function formatToday(date = new Date()): string {
   return date.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' })
@@ -93,12 +107,13 @@ function notifyMarks(): void {
   marksListeners.forEach(listener => listener())
 }
 
-const mobileQuery = '(max-width: 767px)'
-const subscribeMobile = (cb: () => void) => {
-  const query = window.matchMedia(mobileQuery)
-  query.addEventListener('change', cb)
-  return () => query.removeEventListener('change', cb)
-}
+const MOODS = [
+  { value: 1, emoji: '😫', label: 'Çok yorgun' },
+  { value: 2, emoji: '😔', label: 'Düşük' },
+  { value: 3, emoji: '😐', label: 'Orta' },
+  { value: 4, emoji: '🙂', label: 'İyi' },
+  { value: 5, emoji: '😄', label: 'Harika' },
+] as const
 
 const subscribeDay = (callback: () => void) => {
   const timer = window.setInterval(callback, 60_000)
@@ -113,45 +128,74 @@ const subscribeDay = (callback: () => void) => {
 
 export default function DashboardPage() {
   const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false)
-  const profile = useSyncExternalStore(onProfileChange, profileSnapshot, () => EMPTY_PROFILE)
-  const taken = useSyncExternalStore(subscribeMarks, marksSnapshot, () => EMPTY_IDS)
+  const remote = isRemoteMode()
+  const localProfile = useSyncExternalStore(onProfileChange, profileSnapshot, () => EMPTY_PROFILE)
+  const localTaken = useSyncExternalStore(subscribeMarks, marksSnapshot, () => EMPTY_IDS)
+  const [remoteProfile, setRemoteProfile] = useState<LocalProfile | null>(null)
+  const [remoteTaken, setRemoteTaken] = useState<string[]>(EMPTY_IDS)
+  const profile = remote ? (remoteProfile ?? EMPTY_PROFILE) : localProfile
+  const taken = remote ? remoteTaken : localTaken
+  const reloadRemoteMarks = useCallback(() => {
+    readMarksAsync().then(all => setRemoteTaken(all[localDayKey()] ?? EMPTY_IDS)).catch(() => setRemoteTaken(EMPTY_IDS))
+  }, [])
+  useEffect(() => {
+    if (!remote) return
+    let alive = true
+    const loadP = () => { loadProfileAsync().then(p => { if (alive) setRemoteProfile(p) }).catch(() => { if (alive) setRemoteProfile({ ...EMPTY_PROFILE }) }) }
+    loadP()
+    reloadRemoteMarks()
+    const off = onProfileChange(loadP)
+    return () => { alive = false; off() }
+  }, [remote, reloadRemoteMarks])
   const todayKey = useSyncExternalStore(subscribeDay, localDayKey, () => '')
+  const hour = useSyncExternalStore(subscribeDay, () => new Date().getHours(), () => 8)
+  const dashboardPrefs = usePreferences().dashboard
 
   const [rows, setRows] = useState<ClientSupplement[]>([])
+  const [reloadTick, setReloadTick] = useState(0)
+  const [sheetRow, setSheetRow] = useState<ClientSupplement | null>(null)
+  /** Kullanıcının elle açıp kapattığı gruplar; yoksa varsayılan = yalnız focusGroup açık. Oturum boyunca state'te kalır. */
+  const [openOverride, setOpenOverride] = useState<Record<string, boolean>>({})
   const [listError, setListError] = useState<string | null>(null)
   const [listReady, setListReady] = useState(false)
   const [storageError, setStorageError] = useState<string | null>(null)
-  const [selection, setSelection] = useState<AnatomySelection | null>(null)
-  const mobile = useSyncExternalStore(subscribeMobile, () => window.matchMedia(mobileQuery).matches, () => false)
-  const detailRef = useRef<HTMLDivElement>(null)
-  const returnFocus = useRef<HTMLElement | null>(null)
-  const selectSystem = useCallback((next: AnatomySelection | null) => {
-    if (next && document.activeElement instanceof HTMLElement) returnFocus.current = document.activeElement
-    setSelection(next)
+  const [wellness, setWellness] = useState<WellnessEntry[]>([])
+  const [moodError, setMoodError] = useState<string | null>(null)
+  const [moodBusy, setMoodBusy] = useState(false)
+  const reloadWellness = useCallback(() => {
+    loadWellnessAsync().then(setWellness).catch(() => setWellness([]))
   }, [])
   useEffect(() => {
-    if (!selection || !mobile) return
-    const unlock = lockBodyScroll()
-    const background = [...document.querySelectorAll<HTMLElement>('.dv-head,.dv-anatomy,.dv-metrics,.dv-today,.dv-foot,nav.tabbar')]
-    const previousInert = background.map(node => node.inert)
-    background.forEach(node => { node.inert = true })
-    detailRef.current?.querySelector<HTMLButtonElement>('button')?.focus()
-    const trap = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { setSelection(null); return }
-      if (e.key !== 'Tab') return
-      const elements = [...(detailRef.current?.querySelectorAll<HTMLElement>('button,a[href]') ?? [])]
-      const first = elements[0], last = elements[elements.length - 1]
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus() }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus() }
+    reloadWellness()
+    return subscribeWellness(reloadWellness)
+  }, [reloadWellness])
+  const todayEntry = todayKey ? wellness.find(entry => entry.day === todayKey) : undefined
+  const mood = todayEntry?.energy ?? null
+  const pickMood = useCallback(async (value: number) => {
+    if (!todayKey || moodBusy) return
+    setMoodBusy(true)
+    setMoodError(null)
+    try {
+      // Aynı gün kaydı bütün satırı yazar: uyku/sindirim/not korunsun diye mevcut değerlerle birleştir.
+      const current = (await loadWellnessAsync()).find(entry => entry.day === todayKey)
+      const clearing = current?.energy === value
+      const { energy: _energy, ...rest } = current ?? { day: todayKey }
+      void _energy
+      const hasOthers = rest.sleep !== undefined || rest.digestion !== undefined || rest.note !== undefined
+      if (clearing && !hasOthers) {
+        const res = await deleteWellnessDayAsync(todayKey)
+        if (!res.ok) setMoodError(res.error)
+      } else {
+        const res = await saveWellnessAsync(clearing ? { ...rest, day: todayKey } : { ...rest, day: todayKey, energy: value })
+        if (!res.ok) setMoodError(res.errors[0] ?? 'Kaydedilemedi.')
+      }
+    } catch (error) {
+      setMoodError(error instanceof Error ? error.message : 'Kaydedilemedi.')
+    } finally {
+      setMoodBusy(false)
+      reloadWellness()
     }
-    window.addEventListener('keydown', trap)
-    return () => {
-      unlock()
-      background.forEach((node, i) => { node.inert = previousInert[i] })
-      window.removeEventListener('keydown', trap)
-      returnFocus.current?.focus()
-    }
-  }, [selection, mobile])
+  }, [todayKey, moodBusy, reloadWellness])
 
   /* ── envanter: demo değişimlerini dinle, hata durumunu gizleme ── */
   useEffect(() => {
@@ -178,10 +222,17 @@ export default function DashboardPage() {
       alive = false
       off()
     }
-  }, [])
+  }, [reloadTick])
 
   const toggleTaken = useCallback(
     (id: string) => {
+      if (isRemoteMode()) {
+        toggleDayMarkAsync(id).then(ok => {
+          setStorageError(ok ? null : 'İşaret kaydedilemedi.')
+          reloadRemoteMarks()
+        }).catch(() => setStorageError('İşaret kaydedilemedi.'))
+        return
+      }
       try {
         toggleDayMark(id)
         setStorageError(null)
@@ -190,7 +241,7 @@ export default function DashboardPage() {
         setStorageError(error instanceof Error ? error.message : 'İşaret cihaza kaydedilemedi.')
       }
     },
-    [],
+    [reloadRemoteMarks],
   )
 
   /* ── türetilmiş gerçek sayılar ── */
@@ -217,24 +268,96 @@ export default function DashboardPage() {
     [profile],
   )
 
-  const selectedSystem = selection ? SYSTEM_BY_ID[selection.system] : null
-  const selectedRegion = selection ? getRegion(profile.anatomyVariant, selection.region) : null
-  const systemRegions = useMemo(
-    () => (selectedSystem ? getRegions(profile.anatomyVariant).filter(region => region.system === selectedSystem.id) : []),
-    [selectedSystem, profile.anatomyVariant],
-  )
-
-  const takenPercent = sortedRows.length > 0 ? Math.round((takenCount / sortedRows.length) * 100) : 0
+  /* dilim grupları + şimdi/sonraki dilim (tüm dilim işaretlenince vurgu ilerler) */
+  const groups = useMemo(() => {
+    const list = [...SLICES, 'Diğer'].map(name => ({
+      name,
+      rows: sortedRows.filter(r => (SLICES as readonly string[]).includes(r.time_of_day) ? r.time_of_day === name : name === 'Diğer'),
+    })).filter(g => g.rows.length > 0)
+    return list.map(g => ({ ...g, done: g.rows.every(r => taken.includes(r.id)) }))
+  }, [sortedRows, taken])
+  const focusName = useMemo(() => {
+    const start = sliceOfHour(hour)
+    const pending = groups.filter(g => !g.done)
+    const ahead = pending.find(g => (TIME_ORDER[g.name] ?? 9) >= start)
+    return (ahead ?? pending[0])?.name ?? null
+  }, [groups, hour])
+  const focusGroup = groups.find(g => g.name === focusName) ?? null
+  const otherGroups = groups.filter(g => g.name !== focusName)
+  const allDone = groups.length > 0 && groups.every(g => g.done)
+  const renderRow = (row: ClientSupplement) => {
+    const isTaken = taken.includes(row.id)
+    const tone = TIME_TONE[row.time_of_day] ?? '#8B97AA'
+    return (
+      <li key={row.id} className="dv-li">
+        <button
+          type="button"
+          className="dv-row"
+          aria-pressed={isTaken}
+          onClick={() => toggleTaken(row.id)}
+          aria-label={`${row.name}: ${isTaken ? 'işareti kaldır' : 'alındı olarak işaretle'}`}
+        >
+          <span className="dv-time" style={{ color: tone, borderColor: `${tone}55`, background: `${tone}14` }}>
+            {row.time_of_day || '—'}
+          </span>
+          <span className="dv-row-main">
+            <span className="dv-row-name">{row.name}</span>
+            <span className="dv-row-sub">
+              {[row.dosage, row.frequency].filter(Boolean).join(' · ') || 'Doz belirtilmemiş'}
+            </span>
+          </span>
+          <span className={`dv-check ${isTaken ? 'is-on' : ''}`} aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </span>
+        </button>
+        <button
+          type="button"
+          className="row-more"
+          aria-haspopup="menu"
+          aria-label={`${row.name} için işlemler`}
+          onClick={e => { e.stopPropagation(); setSheetRow(row) }}
+        >
+          <span aria-hidden="true">⋯</span>
+        </button>
+      </li>
+    )
+  }
+  const isOpen = (name: string) => openOverride[name] ?? name === focusName
+  const toggleGroup = (name: string) => setOpenOverride(prev => ({ ...prev, [name]: !isOpen(name) }))
+  const renderGroup = (g: (typeof groups)[number], focus: boolean) => {
+    const open = isOpen(g.name)
+    const done = g.rows.filter(r => taken.includes(r.id)).length
+    const label = g.done ? 'tamam ✓' : `${done}/${g.rows.length}`
+    const listId = `grp-${g.name}`
+    return (
+      <div key={g.name} className={`dv-group ${focus ? 'dv-group--focus' : 'dv-group--compact'} ${g.done ? 'is-done' : ''}`} aria-label={`${g.name} dilimi`}>
+        <button type="button" className="grp-head" aria-expanded={open} aria-controls={listId} onClick={() => toggleGroup(g.name)}>
+          <span aria-hidden="true">🕒</span>
+          <b>{g.name}</b>
+          {focus && <em>{g.name === SLICES[sliceOfHour(hour)] ? 'şimdi' : 'sıradaki'}</em>}
+          <span className="grp-sum">{label}</span>
+          <span className="grp-chev" aria-hidden="true">{open ? '▾' : '▸'}</span>
+        </button>
+        {open && <ul id={listId} className="dv-list">{g.rows.map(renderRow)}</ul>}
+      </div>
+    )
+  }
   const emptyInventory = listReady && sortedRows.length === 0
   const today = todayKey ? formatToday(new Date(`${todayKey}T12:00:00`)) : ''
 
   if (!mounted) return <div className="p-4" aria-busy="true">Panel yükleniyor…</div>
+  if (remote && remoteProfile === null) return <div className="p-4" aria-busy="true">Panel yükleniyor…</div>
   if (!profile.onboardingComplete) return <ProfileEditor welcome />
 
   return (
     <div className="dv-shell">
       <header className="dv-head">
-        <p className="dv-eyebrow">BİYOTRACK · GÜNLÜK PANEL</p>
+        <div className="dv-head-top">
+          <p className="dv-eyebrow">LongevityAI · GÜNLÜK PANEL</p>
+          <CustomizeButton section="dashboard" />
+        </div>
         <h1 className="dv-title">
           {profile.displayName ? (
             <>
@@ -249,8 +372,8 @@ export default function DashboardPage() {
         <div className="dv-meta" aria-label="Profil özeti">
           <span className="dv-measure">Yaş <b>{profile.age || '—'}</b></span>
           <span className="dv-model">
-            <span className="dv-model-dot" data-variant={profile.anatomyVariant ?? 'demo'} aria-hidden="true" />
-            {profile.sex === 'female' ? 'Kadın' : profile.sex === 'male' ? 'Erkek' : 'Cinsiyet belirtilmedi'}
+            <span className="dv-model-dot" aria-hidden="true" />
+            Vücudum
           </span>
           <span className="dv-measure">
             Boy <b>{profile.heightCm ? `${profile.heightCm} cm` : '—'}</b>
@@ -266,90 +389,40 @@ export default function DashboardPage() {
         {DEMO_MODE && <span className="dv-demo">DEMO · cihaz verisi</span>}
       </header>
 
-      <section className="dv-anatomy" aria-label="İnteraktif anatomi">
-        <AnatomyHero variant={profile.anatomyVariant} selection={selection} onSelect={selectSystem} />
+      <section className="mood-card" aria-labelledby="mood-title">
+        <MoodGlow value={mood} />
+        <h2 id="mood-title" className="dv-card-title">Nasıl hissediyorum</h2>
+        <p className="dv-card-sub">Bugünkü halini tek dokunuşla kaydet · tekrar dokunursan kalkar</p>
+        <div className="mood-chips" role="group" aria-label="Bugünkü his">
+          {MOODS.map(m => (
+            <button
+              key={m.value}
+              type="button"
+              className={`mood-chip ${mood === m.value ? 'is-on' : ''}`}
+              aria-pressed={mood === m.value}
+              aria-label={`${m.label} (${m.value}/5)`}
+              disabled={moodBusy || !todayKey}
+              onClick={() => pickMood(m.value)}
+            >
+              <span aria-hidden="true">{m.emoji}</span>
+            </button>
+          ))}
+        </div>
+        <p className="dv-card-sub" aria-live="polite">
+          {mood ? `Bugün: ${MOODS[mood - 1].label}` : 'Bugün için henüz seçmedin.'}
+        </p>
+        {moodError && <p className="dv-alert" role="alert">{moodError}</p>}
       </section>
 
+      <div className="metric-strip" aria-label="Özet">
+        <div className="m-item"><b>{listReady ? rows.length : '—'}</b><span>Envanter</span></div>
+        <div className="m-item"><b>{takenCount}/{rows.length}</b><span>Bugün</span></div>
+        <div className="m-item"><b>{listReady ? differentTimes : '—'}</b><span>Farklı saat</span></div>
+        <div className="m-item"><b>{profileFilled}/4</b><span>Profil</span></div>
+      </div>
+
       <section className="dv-side" aria-label="Günlük veriler">
-        {selectedSystem && (
-          <>
-          {mobile && <button type="button" className="dv-detail-scrim" style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} aria-label="Sistem detayını kapat" onClick={() => setSelection(null)} />}
-          <div ref={detailRef} className="dv-card dv-detail" role={mobile ? 'dialog' : undefined} aria-modal={mobile || undefined} aria-label={selectedSystem.name + ' sistemi'} aria-live="polite">
-            <div className="dv-detail-head">
-              <div>
-                <p className="dv-detail-kicker" style={{ color: selectedSystem.tone.solid }}>
-                  {selectedSystem.name} sistemi
-                </p>
-                <h2 className="dv-detail-title">{selectedRegion?.name ?? selectedSystem.name}</h2>
-              </div>
-              <button type="button" className="dv-icon-btn" onClick={() => setSelection(null)} aria-label="Seçimi kapat">
-                ✕
-              </button>
-            </div>
-
-            <p className="dv-detail-text">{selectedRegion?.description ?? selectedSystem.description}</p>
-
-            {systemRegions.length > 0 && (
-              <div className="dv-region-chips" role="group" aria-label="Bölgeler">
-                {systemRegions.map(region => (
-                  <button
-                    key={region.id}
-                    type="button"
-                    className="dv-region-chip"
-                    aria-pressed={selection?.region === region.id}
-                    onClick={() => setSelection({ system: selectedSystem.id, region: region.id })}
-                  >
-                    {region.name}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {selectedSystem.note && <p className="dv-detail-note">{selectedSystem.note}</p>}
-
-            <div className="dv-detail-foot">
-              <Link href={`/chat?system=${encodeURIComponent(selectedSystem.name)}`} className="dv-ai">
-                Bu sistem için AI&apos;a sor <span aria-hidden="true">→</span>
-              </Link>
-              <span className="dv-detail-tag">Açıklayıcı bilgi</span>
-            </div>
-          </div>
-          </>
-        )}
-
-        <div className="dv-metrics">
-          <div className="dv-card dv-metric">
-            <p className="dv-metric-label">Envanter</p>
-            <p className="dv-metric-value">{listReady ? rows.length : '—'}</p>
-            <p className="dv-metric-caption">kayıtlı takviye</p>
-          </div>
-          <div className="dv-card dv-metric">
-            <p className="dv-metric-label">Bugün işaretlenen</p>
-            <p className="dv-metric-value">
-              {mounted ? takenCount : '—'}
-              <span className="dv-metric-of">/{rows.length}</span>
-            </p>
-            <div className="dv-bar" aria-hidden="true">
-              <span style={{ width: `${takenPercent}%` }} />
-            </div>
-            <p className="dv-metric-caption">senin işaretin</p>
-          </div>
-          <div className="dv-card dv-metric">
-            <p className="dv-metric-label">Farklı saat</p>
-            <p className="dv-metric-value">{listReady ? differentTimes : '—'}</p>
-            <p className="dv-metric-caption">zaman dilimi</p>
-          </div>
-          <div className="dv-card dv-metric">
-            <p className="dv-metric-label">Profil</p>
-            <p className="dv-metric-value">
-              {profileFilled}
-              <span className="dv-metric-of">/4</span>
-            </p>
-            <p className="dv-metric-caption">dolu alan</p>
-          </div>
-        </div>
-
-        <section className="dv-card dv-today" aria-labelledby="dv-today-title">
+        <section className="dv-card dv-today dv-today--hero" aria-labelledby="dv-today-title">
           <div className="dv-today-head">
             <div>
               <h2 id="dv-today-title" className="dv-card-title">
@@ -377,38 +450,9 @@ export default function DashboardPage() {
             </div>
           )}
 
-          <ul className="dv-list">
-            {sortedRows.map(row => {
-              const isTaken = taken.includes(row.id)
-              const tone = TIME_TONE[row.time_of_day] ?? '#8B97AA'
-              return (
-                <li key={row.id}>
-                  <button
-                    type="button"
-                    className="dv-row"
-                    aria-pressed={isTaken}
-                    onClick={() => toggleTaken(row.id)}
-                    aria-label={`${row.name}: ${isTaken ? 'işareti kaldır' : 'alındı olarak işaretle'}`}
-                  >
-                    <span className="dv-time" style={{ color: tone, borderColor: `${tone}55`, background: `${tone}14` }}>
-                      {row.time_of_day || '—'}
-                    </span>
-                    <span className="dv-row-main">
-                      <span className="dv-row-name">{row.name}</span>
-                      <span className="dv-row-sub">
-                        {[row.dosage, row.frequency].filter(Boolean).join(' · ') || 'Doz belirtilmemiş'}
-                      </span>
-                    </span>
-                    <span className={`dv-check ${isTaken ? 'is-on' : ''}`} aria-hidden="true">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 6 9 17l-5-5" />
-                      </svg>
-                    </span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+          {focusGroup && renderGroup(focusGroup, true)}
+          {allDone && <p className="dv-card-sub dv-allDone" role="status">Bugünkü tüm kayıtlar işaretlendi ✓</p>}
+          {otherGroups.map(g => renderGroup(g, false))}
 
           {storageError && (
             <p className="dv-alert" role="alert">
@@ -417,16 +461,27 @@ export default function DashboardPage() {
           )}
         </section>
 
+        {sheetRow && (
+          <SupplementSheet
+            key={sheetRow.id}
+            row={sheetRow}
+            onClose={() => setSheetRow(null)}
+            onChanged={() => { setReloadTick(t => t + 1); reloadRemoteMarks() }}
+          />
+        )}
+
+        {dashboardPrefs.showPerformance !== false && <PerformancePanel />}
+
         <footer className="dv-foot">
           <div className="flex gap-4 text-sm py-2"><Link href="/reminders" className="text-[var(--primary)]">Hatırlatmalarım →</Link><Link href="/tracking" className="text-[var(--primary)]">Etki günlüğüm →</Link></div>
           <Link href="/chat" className="dv-ai dv-ai--wide">
             AI&apos;a sor <span aria-hidden="true">→</span>
           </Link>
           <p className="dv-privacy">
-            Profil ve günlük işaretler bu tarayıcıda tutulur; depolama hataları ayrıca gösterilir. AI’a analiz gönderirsen yalnız izin verdiğin profil alanları da iletilir.
+            Profil ve günlük işaretler güvenli saklanır; depolama hataları ayrıca gösterilir. AI’a analiz gönderirsen yalnız izin verdiğin profil alanları da iletilir.
           </p>
           <p className="dv-privacy dv-privacy--dim">
-            BioTrack bilgi amaçlıdır; teşhis veya tedavi önerisi değildir.
+            LongevityAI bilgi amaçlıdır; teşhis veya tedavi önerisi değildir.
           </p>
         </footer>
       </section>
