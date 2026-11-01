@@ -27,7 +27,7 @@ import {
 import { DAY_MARKS_KEY, readMarks, readMarksAsync } from '@/lib/daymarks'
 import { isRemoteMode } from '@/lib/supabase'
 import { onStorageKey, readRaw } from '@/lib/local-store'
-import { listSupplements, onDemoChange, type ClientSupplement } from '@/lib/data'
+import { listSupplements, askAssistant, onDemoChange, type ClientSupplement } from '@/lib/data'
 import './wellness.css'
 
 const SCORES = [1, 2, 3, 4, 5]
@@ -207,6 +207,23 @@ export default function WellnessPanel() {
   const [askDelete, setAskDelete] = useState(false)
   const [askClear, setAskClear] = useState(false)
   const [formOpen, setFormOpen] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiResult, setAiResult] = useState('')
+  const [aiError, setAiError] = useState('')
+
+  const runAnalysis = async () => {
+    if (aiLoading) return
+    setAiLoading(true); setAiError(''); setAiResult('')
+    try {
+      const names = inventory.map(s => s.name)
+      const reply = await askAssistant([{ role: 'user', content: 'Bugünkü günlük özbildirimime (enerji, uyku, sindirim) ve sağlık profilime dayanarak bana 3-5 kısa, uygulanabilir günlük tavsiye ver (ör. su iç, kısa yürüyüş yap, uyku saatini düzenle). Madde işaretli, her biri tek cümle. Teşhis, doz veya kesin sayı verme; genel ve seçenekli tut.' }], names)
+      setAiResult(reply.content)
+    } catch (e) {
+      setAiError(e instanceof Error ? e.message : 'Analiz alınamadı.')
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   useEffect(() => {
     if (remote) void reloadRemote()
@@ -494,6 +511,23 @@ export default function WellnessPanel() {
         </div>
       </form>
       )}
+
+      {/* AI Analiz */}
+      <section className="wl-card" aria-labelledby="wl-ai-title">
+        <div className="wl-card-head">
+          <h2 id="wl-ai-title" className="wl-card-title">Günlük analiz</h2>
+          <button type="button" className="wl-ai-btn" onClick={runAnalysis} disabled={aiLoading}>
+            {aiLoading ? 'Düşünüyor…' : aiResult ? 'Yenile' : 'Analiz iste'}
+          </button>
+        </div>
+        {aiError ? (
+          <p className="wl-muted" role="alert">⚠️ {aiError}</p>
+        ) : aiResult ? (
+          <div className="wl-ai-result">{aiResult}</div>
+        ) : (
+          <p className="wl-muted">Takviyelerini ve günlük puanlarını kaydettikçe, profiline göre kısa günlük tavsiyeler alabilirsin. Yapay zekâ analizi tıbbi tavsiye değildir.</p>
+        )}
+      </section>
 
       {/* Grafik */}
       <section className="wl-card" aria-labelledby="wl-chart-title">
