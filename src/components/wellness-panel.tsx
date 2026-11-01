@@ -63,6 +63,7 @@ function subscribeClock(callback: () => void): () => void {
   }
 }
 const useToday = () => useSyncExternalStore(subscribeClock, () => todayKey(), () => '')
+const useHour = () => useSyncExternalStore(subscribeClock, () => new Date().getHours(), () => 8)
 
 let marksRawCache: string | null = null
 let marksCache: Record<string, string[]> = {}
@@ -177,6 +178,8 @@ function WellnessChart({ model, label }: { model: ChartModel; label: string }) {
 export default function WellnessPanel() {
   const mounted = useMounted()
   const today = useToday()
+  const hour = useHour()
+  const isEvening = hour >= 16
   const remote = isRemoteMode()
   const localEntries = useSyncExternalStore(subscribeWellness, getWellnessSnapshot, getWellnessServerSnapshot)
   const localMarks = useSyncExternalStore(subscribeMarks, marksSnapshot, marksServerSnapshot)
@@ -203,6 +206,7 @@ export default function WellnessPanel() {
   const [status, setStatus] = useState('')
   const [askDelete, setAskDelete] = useState(false)
   const [askClear, setAskClear] = useState(false)
+  const [formOpen, setFormOpen] = useState(false)
 
   useEffect(() => {
     if (remote) void reloadRemote()
@@ -287,6 +291,7 @@ export default function WellnessPanel() {
     setDraft(null)
     if (remote) await reloadRemote()
     setStatus(result.created ? 'Kayıt eklendi.' : 'Kayıt güncellendi.')
+    setFormOpen(false)
   }
 
   const handleDelete = async () => {
@@ -318,11 +323,12 @@ export default function WellnessPanel() {
   return (
     <div className="wl-shell">
       <header className="wl-head">
-        <p className="wl-eyebrow">GÜNLÜK ÖZBİLDİRİM</p>
-        <h1 className="wl-title">Etki günlüğü</h1>
+        <p className="wl-eyebrow">{isEvening ? 'AKŞAM DEĞERLENDİRMESİ' : 'GÜNLÜK ÖZBİLDİRİM'}</p>
+        <h1 className="wl-title">{isEvening ? 'Günü kapat' : 'Etki günlüğü'}</h1>
         <p className="wl-lede">
-          Takviye kullanımını ve kendi hissettiğin etkileri yan yana gör. Kayıtlar yalnız bu cihazda
-          tutulur; sağlık sonucu veya tanı değildir.
+          {isEvening
+            ? 'Gün sonunda enerji, uyku ve sindirimini puanla; gününü tek dokunuşla kaydet. Kayıtlar yalnız bu cihazda tutulur.'
+            : 'Takviye kullanımını ve kendi hissettiğin etkileri yan yana gör. Kayıtlar yalnız bu cihazda tutulur; sağlık sonucu veya tanı değildir.'}
         </p>
       </header>
 
@@ -350,7 +356,43 @@ export default function WellnessPanel() {
         </p>
       </section>
 
-      {/* Kayıt formu */}
+      {/* Değerlendirme — katlanabilir */}
+      {!formOpen ? (
+        <section className="wl-card" aria-labelledby="wl-review-title">
+          <div className="wl-card-head">
+            <h2 id="wl-review-title" className="wl-card-title">
+              {isEvening ? 'Akşam değerlendirmen' : 'Bugünü değerlendir'}
+            </h2>
+            {existing ? <span className="wl-chip">kayıtlı</span> : null}
+          </div>
+          <div className="wl-review">
+            {existing && (existing.energy != null || existing.sleep != null || existing.digestion != null || existing.note) ? (
+              <>
+                <div className="wl-review-scores">
+                  <span>Enerji <b>{existing.energy ?? '—'}</b></span>
+                  <span>Uyku <b>{existing.sleep ?? '—'}</b></span>
+                  <span>Sindirim <b>{existing.digestion ?? '—'}</b></span>
+                </div>
+                {existing.note ? <p className="wl-review-note">“{existing.note}”</p> : null}
+                <button type="button" className="wl-primary" onClick={() => { setFormOpen(true); setAskDelete(false); setStatus(''); setErrors([]) }}>
+                  Düzenle
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="wl-muted">
+                  {isEvening
+                    ? 'Günü kapatmak için üç puanı seç ve kaydet — form kendiliğinden kapanır.'
+                    : 'Enerji, uyku ve sindirimini puanla; trendini aşağıdaki grafikte gör.'}
+                </p>
+                <button type="button" className="wl-primary" onClick={() => setFormOpen(true)}>
+                  {isEvening ? 'Günü değerlendir' : 'Değerlendir'}
+                </button>
+              </>
+            )}
+          </div>
+        </section>
+      ) : (
       <form className="wl-card wl-form" onSubmit={handleSave}>
         <div className="wl-card-head">
           <h2 className="wl-card-title">{existing ? 'Günü güncelle' : 'Güne kayıt ekle'}</h2>
@@ -433,6 +475,9 @@ export default function WellnessPanel() {
           <button type="submit" className="wl-primary" disabled={!mounted || !today}>
             {existing ? 'Güncelle' : 'Kaydet'}
           </button>
+          <button type="button" className="wl-ghost" onClick={() => setFormOpen(false)}>
+            Kapat
+          </button>
           {existing ? (
             askDelete ? (
               <span className="wl-confirm">
@@ -448,6 +493,7 @@ export default function WellnessPanel() {
           ) : null}
         </div>
       </form>
+      )}
 
       {/* Grafik */}
       <section className="wl-card" aria-labelledby="wl-chart-title">

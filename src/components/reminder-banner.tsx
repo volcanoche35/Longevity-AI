@@ -72,7 +72,7 @@ export default function ReminderBanner() {
   const due = pathname === '/reminders' ? [] : remote ? remoteDue : dueReminders(now)
   if (!due.length && !dueSupps.length) return null
   return <div>
-    {dueSupps.length > 0 && <aside className="mx-4 mt-3 rounded-xl border px-4 py-3 text-sm space-y-2" style={{background:'#263129',borderColor:'#657B64'}} aria-label="Takviye hatırlatması" role="status">
+    {dueSupps.length > 0 && <aside className="mx-4 mt-3 rounded-xl border px-4 py-3 text-sm space-y-2" style={{background:'#0d1f45',borderColor:'#4a6b5a'}} aria-label="Takviye hatırlatması" role="status">
       {dueSupps.map(s => <div key={s.id} className="flex items-center justify-between gap-3">
         <span><strong>Şimdi {s.name} alma vakti</strong><span className="block text-xs text-[var(--text-2)] mt-0.5">Planlanan saat {s.slot}</span></span>
         <button type="button" disabled={busy === s.id} onClick={() => markTaken(s.id)}
@@ -81,7 +81,7 @@ export default function ReminderBanner() {
       </div>)}
       {failed && <p role="alert" className="text-xs text-[var(--primary)]">İşaret kaydedilemedi, tekrar dene.</p>}
     </aside>}
-    {due.length > 0 && <aside className="mx-4 mt-3 rounded-xl border px-4 py-3 text-sm" style={{background:'#263129',borderColor:'#657B64'}} aria-label="Zamanı gelen hatırlatmalar">
+    {due.length > 0 && <aside className="mx-4 mt-3 rounded-xl border px-4 py-3 text-sm" style={{background:'#0d1f45',borderColor:'#4a6b5a'}} aria-label="Zamanı gelen hatırlatmalar">
       <Link href="/reminders" className="flex items-center justify-between gap-3"><span><strong>{due[0].title}</strong><span className="block text-xs text-[var(--text-2)] mt-1">{due.length} hatırlatmanın zamanı geldi · senin planın</span></span><span aria-hidden="true">→</span></Link>
     </aside>}
   </div>

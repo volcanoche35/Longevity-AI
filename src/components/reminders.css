@@ -40,8 +40,8 @@
   min-height: 44px;
   padding: 0 14px;
   border-radius: 12px;
-  border: 1px solid #2B394F;
-  background: #101827;
+  border: 1px solid #142a54;
+  background: #0a1a3a;
   color: var(--text);
   font-size: 13px;
   font-weight: 600;
@@ -49,7 +49,7 @@
   cursor: pointer;
   transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
 }
-.rem-btn:hover { border-color: #3C4E69; background: #141F31; }
+.rem-btn:hover { border-color: #1a3358; background: #0d1f45; }
 .rem-btn:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
@@ -57,12 +57,12 @@
 .rem-btn-primary {
   border-color: var(--primary);
   background: var(--primary);
-  color: #152018;
+  color: #0d1f45;
 }
-.rem-btn-primary:hover { background: #B8CCBD; border-color: var(--primary); }
+.rem-btn-primary:hover { background: #a8d4c0; border-color: var(--primary); }
 .rem-btn-template {
   border-style: dashed;
-  border-color: #667467;
+  border-color: #3a4a6a;
   background: transparent;
   color: var(--text-2);
 }
@@ -76,9 +76,9 @@
 .rem-btn-danger {
   border-color: transparent;
   background: transparent;
-  color: #E8909A;
+  color: #eb7a54;
 }
-.rem-btn-danger:hover { color: #FFB3BB; background: rgba(255, 77, 94, 0.08); border-color: transparent; }
+.rem-btn-danger:hover { color: #f0a184; background: rgba(255, 77, 94, 0.08); border-color: transparent; }
 
 .rem-warn,
 .rem-error {
@@ -91,12 +91,12 @@
 .rem-warn {
   border: 1px solid rgba(255, 176, 32, 0.28);
   background: rgba(255, 176, 32, 0.07);
-  color: #F1C87F;
+  color: #ebd3a2;
 }
 .rem-error {
   border: 1px solid rgba(255, 77, 94, 0.36);
   background: rgba(255, 77, 94, 0.08);
-  color: #FFB8BF;
+  color: #f0a184;
 }
 
 /* aria-live bölgesi görünmez; yalnızca ekran okuyucuya duyurur. */
@@ -115,9 +115,9 @@
 .rem-form {
   margin-top: 16px;
   padding: 15px;
-  border: 1px solid #263145;
+  border: 1px solid #122a54;
   border-radius: 18px;
-  background: #0A0F18;
+  background: #08142e;
   display: grid;
   gap: 12px;
 }
@@ -142,9 +142,9 @@
 }
 
 .rem-picks {
-  border: 1px solid #222E42;
+  border: 1px solid #0d1f45;
   border-radius: 14px;
-  background: #0D1421;
+  background: #08142e;
   padding: 12px;
 }
 .rem-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 2px; }
@@ -152,18 +152,18 @@
   min-height: 34px;
   padding: 4px 10px;
   border-radius: 999px;
-  border: 1px solid #2F3E57;
-  background: #111B2B;
+  border: 1px solid #142a54;
+  background: #0a1a3a;
   color: var(--text-2);
   font-size: 12px;
   cursor: pointer;
   transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
 }
-.rem-chip:hover { border-color: #4A5D7B; color: var(--text); }
+.rem-chip:hover { border-color: #2a3a5a; color: var(--text); }
 .rem-chip[aria-pressed='true'] {
   border-color: rgba(255, 77, 94, 0.55);
   background: rgba(255, 77, 94, 0.12);
-  color: #FFD7DB;
+  color: #f0a184;
 }
 .rem-chip:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .rem-hint {
@@ -172,7 +172,7 @@
   line-height: 1.55;
   color: var(--text-3);
 }
-.rem-hint a { color: #FF9AA4; text-decoration: underline; text-underline-offset: 2px; }
+.rem-hint a { color: #f0a184; text-decoration: underline; text-underline-offset: 2px; }
 
 .rem-section { margin-top: 24px; }
 .rem-section-head {
@@ -194,8 +194,8 @@
   min-width: 24px;
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid #2A374C;
-  background: #0E1624;
+  border: 1px solid #142a54;
+  background: #0a1a3a;
   color: var(--text-3);
   font-size: 11px;
   text-align: center;
@@ -203,7 +203,7 @@
 .rem-empty-line {
   margin: 0;
   padding: 14px;
-  border: 1px dashed #273348;
+  border: 1px dashed #122a54;
   border-radius: 14px;
   color: var(--text-3);
   font-size: 12.5px;
@@ -211,9 +211,9 @@
 }
 .rem-empty {
   padding: 22px 18px;
-  border: 1px dashed #2A374C;
+  border: 1px dashed #142a54;
   border-radius: 18px;
-  background: #080D15;
+  background: #060f20;
   text-align: center;
 }
 .rem-empty-title {
@@ -241,13 +241,13 @@
   grid-template-columns: 58px minmax(0, 1fr);
   gap: 8px 12px;
   padding: 13px;
-  border: 1px solid #1F2B3E;
+  border: 1px solid #12243d;
   border-radius: 16px;
-  background: #0A111C;
+  background: #071026;
 }
 .rem-card-due {
   border-color: rgba(255, 77, 94, 0.42);
-  background: #120E16;
+  background: #071026;
   box-shadow: inset 3px 0 0 var(--primary);
 }
 .rem-time {
@@ -258,7 +258,7 @@
   color: var(--text);
   padding-top: 2px;
 }
-.rem-card-due .rem-time { color: #FFC3C9; }
+.rem-card-due .rem-time { color: #f0a184; }
 .rem-body { min-width: 0; }
 .rem-row-head {
   display: flex;
@@ -291,8 +291,8 @@
   flex-shrink: 0;
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid #2A374C;
-  background: #0E1624;
+  border: 1px solid #142a54;
+  background: #0a1a3a;
   color: var(--text-3);
   font-size: 10px;
   font-weight: 600;
@@ -301,17 +301,17 @@
 .rem-badge-due {
   border-color: rgba(255, 77, 94, 0.45);
   background: rgba(255, 77, 94, 0.12);
-  color: #FFB3BB;
+  color: #f0a184;
 }
 .rem-badge-snoozed {
   border-color: rgba(255, 176, 32, 0.38);
   background: rgba(255, 176, 32, 0.08);
-  color: #F1C87F;
+  color: #ebd3a2;
 }
 .rem-badge-done {
   border-color: rgba(57, 224, 122, 0.32);
   background: rgba(57, 224, 122, 0.07);
-  color: #8FE6B2;
+  color: #96d1aa;
 }
 .rem-badge-upcoming { color: var(--text-3); }
 
@@ -320,7 +320,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  border-top: 1px solid #182335;
+  border-top: 1px solid #0d1f45;
   margin-top: 2px;
   padding-top: 8px;
 }
@@ -331,17 +331,17 @@
   display: grid;
   gap: 10px;
   padding: 12px;
-  border: 1px solid #2A374C;
+  border: 1px solid #142a54;
   border-radius: 14px;
-  background: #0C1420;
+  background: #0a1a3a;
 }
 
 .rem-edu {
   margin-top: 26px;
   padding: 14px;
-  border: 1px solid #223047;
+  border: 1px solid #0d1f45;
   border-radius: 16px;
-  background: #0A1019;
+  background: #071026;
   font-size: 12px;
   line-height: 1.65;
   color: var(--text-2);
@@ -350,7 +350,7 @@
 .rem-edu a {
   display: inline-block;
   margin-top: 7px;
-  color: #FF9AA4;
+  color: #f0a184;
   text-decoration: underline;
   text-underline-offset: 2px;
   font-size: 11.5px;

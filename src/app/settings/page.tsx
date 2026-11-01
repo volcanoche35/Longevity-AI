@@ -122,7 +122,7 @@ export default function SettingsPage() {
       </div>
 
       <p className="settings-theme-note">
-        Tema sabit: koyu mat palet (zemin #111617, yüzey #1A2021, vurgu #A8BFAE). Bu sürümde renk veya
+        Tema sabit: koyu mat palet (zemin #051230, yüzey #0d1f45, vurgu #2fc1b4). Bu sürümde renk veya
         tema seçici yoktur; metin okunabilirliği için açık/koyu kontrast korunur. Hatırlatıcı saatleri
         ayrı <Link href="/reminders">hatırlatıcılar</Link> ekranında yönetilir; bu sayfadan bildirim
         veya zamanlanmış görev oluşturulmaz.

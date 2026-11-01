@@ -25,7 +25,7 @@ const TIMES = ['Sabah', 'Öğle', 'Akşam', 'Gece']
 const FORMS = ['Hap', 'Kapsül', 'Damla', 'Toz', 'Sıvı', 'Diğer']
 
 const KIND_ICON: Record<InteractionKind, string> = { conflict: '⚠️', timing: '⏰', food: '🍽️', avoid: '🚫' }
-const KIND_COLOR: Record<InteractionKind, string> = { conflict: '#FF9A7A', timing: '#9FB0BE', food: '#C5B18E', avoid: '#FF6B6B' }
+const KIND_COLOR: Record<InteractionKind, string> = { conflict: '#eb7a54', timing: '#8fb0d0', food: '#ebd3a2', avoid: '#eb5324' }
 const NOTE_DISCLAIMER = 'Bilgi amaçlı, tıbbi tavsiye değil.'
 
 function InteractionNotes({ name }: { name: string }) {

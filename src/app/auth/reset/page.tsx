@@ -44,34 +44,34 @@ export default function ResetPage() {
     <main className="min-h-screen bg-[#000000] flex items-center justify-center p-6">
       <div className="glass-card w-full max-w-md p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[#64FFDA] mb-2">🔑 Parola Sıfırlama</h1>
-          <p className="text-[#a09880] text-sm">{recovery ? 'Yeni şifreni belirle' : 'E-postana sıfırlama bağlantısı gönder'}</p>
+          <h1 className="text-3xl font-bold text-[#2fc1b4] mb-2">🔑 Parola Sıfırlama</h1>
+          <p className="text-[#8a96af] text-sm">{recovery ? 'Yeni şifreni belirle' : 'E-postana sıfırlama bağlantısı gönder'}</p>
         </div>
 
         {!recovery ? (
           <form onSubmit={requestReset} className="space-y-4">
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="E-posta" required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-[#e0d8c8] placeholder:text-[#a09880]/50 focus:outline-none focus:border-[#64FFDA]/50 transition-all" />
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-[#e7e3d4] placeholder:text-[#8a96af]/50 focus:outline-none focus:border-[#2fc1b4]/50 transition-all" />
             <button type="submit" disabled={loading}
-              className="w-full py-3.5 bg-[#64FFDA] text-[#000000] rounded-xl font-semibold hover:bg-[#4fd1b8] disabled:opacity-50 transition-all">
+              className="w-full py-3.5 bg-[#2fc1b4] text-[#000000] rounded-xl font-semibold hover:bg-[#2fc1b4] disabled:opacity-50 transition-all">
               {loading ? 'Gönderiliyor…' : 'Sıfırlama bağlantısı gönder'}
             </button>
           </form>
         ) : (
           <form onSubmit={setNewPassword} className="space-y-4">
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Yeni şifre" required minLength={6}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-[#e0d8c8] placeholder:text-[#a09880]/50 focus:outline-none focus:border-[#64FFDA]/50 transition-all" />
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-[#e7e3d4] placeholder:text-[#8a96af]/50 focus:outline-none focus:border-[#2fc1b4]/50 transition-all" />
             <button type="submit" disabled={loading}
-              className="w-full py-3.5 bg-[#64FFDA] text-[#000000] rounded-xl font-semibold hover:bg-[#4fd1b8] disabled:opacity-50 transition-all">
+              className="w-full py-3.5 bg-[#2fc1b4] text-[#000000] rounded-xl font-semibold hover:bg-[#2fc1b4] disabled:opacity-50 transition-all">
               {loading ? 'Güncelleniyor…' : 'Şifreyi güncelle'}
             </button>
           </form>
         )}
 
         {error && <p className="text-red-400 text-sm mt-4">{error}</p>}
-        {status && <p className="text-[#64FFDA] text-sm mt-4">{status}</p>}
+        {status && <p className="text-[#2fc1b4] text-sm mt-4">{status}</p>}
 
-        <button onClick={() => router.replace('/auth')} className="w-full mt-4 text-[#64FFDA]/60 hover:text-[#64FFDA] text-sm transition-colors">
+        <button onClick={() => router.replace('/auth')} className="w-full mt-4 text-[#2fc1b4]/60 hover:text-[#2fc1b4] text-sm transition-colors">
           Girişe dön
         </button>
       </div>

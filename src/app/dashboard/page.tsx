@@ -44,10 +44,10 @@ const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 /** Kullanıcının kendi "aldım" işaretleri — cihazda, gün bazında. */
 
 const TIME_TONE: Record<string, string> = {
-  Sabah: '#A8BFAE',
-  Öğle: '#9FB0BE',
-  Akşam: '#C5B18E',
-  Gece: '#B4A7C0',
+  Sabah: '#2fc1b4',
+  Öğle: '#a7d4e4',
+  Akşam: '#ebd3a2',
+  Gece: '#9a72aa',
 }
 
 const TIME_ORDER: Record<string, number> = { Sabah: 0, Öğle: 1, Akşam: 2, Gece: 3 }
@@ -288,7 +288,7 @@ export default function DashboardPage() {
   const allDone = groups.length > 0 && groups.every(g => g.done)
   const renderRow = (row: ClientSupplement) => {
     const isTaken = taken.includes(row.id)
-    const tone = TIME_TONE[row.time_of_day] ?? '#8B97AA'
+    const tone = TIME_TONE[row.time_of_day] ?? '#8a96af'
     return (
       <li key={row.id} className="dv-li">
         <button
@@ -359,7 +359,7 @@ export default function DashboardPage() {
           <p className="dv-eyebrow">LongevityAI · GÜNLÜK PANEL</p>
           <CustomizeButton section="dashboard" />
         </div>
-        <h1 className="dv-title">
+        <h1 className="dv-title font-display">
           {profile.displayName ? (
             <>
               Merhaba, <span className="dv-title-name">{profile.displayName}</span>

@@ -140,7 +140,7 @@ export default function ProfileEditor({ welcome = false }: { welcome?: boolean }
         <label className="flex items-start gap-3 text-xs text-[var(--text-2)] leading-relaxed cursor-pointer"><input type="checkbox" aria-label="Profilimi AI ile paylaş" className="mt-1 shrink-0 accent-[var(--primary)]" checked={draft.aiProfileConsent} onChange={e => update('aiProfileConsent',e.target.checked)} />AI’a soru/analiz gönderdiğimde yaş, boy, kilo, cinsiyet, hedef, doldurduğum ek sağlık bilgilerinin ve günlük özbildirim/kullanım kayıtlarımın yanıt için sunucu ve AI sağlayıcısına iletilmesine izin veriyorum. Adım paylaşılmaz; izni istediğim zaman kapatabilirim.</label>
         <p className="text-xs text-[var(--text-2)]">Profil analizi otomatik çalışmaz. Genel dikkat noktalarını açıklar; teşhis veya kişisel doz reçetesi değildir.</p>
       </section>
-      <button type="submit" className="w-full rounded-xl py-3 font-semibold text-sm" style={{background:'var(--primary)',color:'#152018'}}>{welcome ? 'Profilimi kaydet ve başla' : 'Kaydet'}</button>
+      <button type="submit" className="w-full rounded-xl py-3 font-semibold text-sm" style={{background:'var(--primary)',color:'#0d1f45'}}>{welcome ? 'Profilimi kaydet ve başla' : 'Kaydet'}</button>
       {!welcome && <button type="button" onClick={analyze} disabled={analyzing} className="dose-add disabled:opacity-50">{analyzing ? 'Profilin değerlendiriliyor…' : 'Profilimi AI ile değerlendir'}</button>}
       {error && <p role="alert" className="text-sm text-[var(--primary)]">{error}</p>}
       {status && <p role="status" className="text-sm text-[var(--vital)]">{status}</p>}
@@ -150,6 +150,6 @@ export default function ProfileEditor({ welcome = false }: { welcome?: boolean }
       <p>Profil ve ürün kayıtların hesabına bağlı olarak güvenli bulutta (Supabase) saklanır. AI paylaşım izni kapalı olsa bile gönderdiğin sohbet mesajı ve takviye adları yanıt için sağlayıcıya iletilir.</p>
       {storage.mode !== 'local' && <p role="alert" className="text-[var(--primary)] mt-2">Tarayıcı depolamasına erişilemiyor; kalıcı kayıt yapılamayabilir.</p>}
     </div>
-    {!welcome && <><Link href="/dashboard" className="block text-center mt-4 text-sm text-[var(--primary)]">Panele dön →</Link>{remote ? <><button type="button" onClick={logout} className="dose-add mt-5">Çıkış yap</button><button type="button" onClick={deleteAccount} className="dose-add mt-3" style={{ color: '#FF4D5E' }}>Hesabımı ve verilerimi sil</button></> : <button type="button" onClick={clear} className="dose-add mt-5">Bu cihazdaki verilerimi sil</button>}</>}
+    {!welcome && <><Link href="/dashboard" className="block text-center mt-4 text-sm text-[var(--primary)]">Panele dön →</Link>{remote ? <><button type="button" onClick={logout} className="dose-add mt-5">Çıkış yap</button><button type="button" onClick={deleteAccount} className="dose-add mt-3" style={{ color: '#eb5324' }}>Hesabımı ve verilerimi sil</button></> : <button type="button" onClick={clear} className="dose-add mt-5">Bu cihazdaki verilerimi sil</button>}</>}
   </div>
 }

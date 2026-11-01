@@ -1,7 +1,7 @@
 /*
  * Ayarlar + "Bu ekranı özelleştir" stilleri.
  * Kapsam: yalnız .cz-* / .settings-* sınıfları; globals.css'e dokunmaz.
- * Palet: mat koyu (bg #111617, surface #1A2021, primary #A8BFAE). Neon yok,
+ * Palet: mat koyu (bg #051230, surface #0d1f45, primary #2fc1b4). Neon yok,
  * gradient yok, native beyaz menü yok — seçim listesi ThemeSelect ile temalı.
  */
 
@@ -13,15 +13,15 @@
   min-height: 44px;
   padding: 10px 14px;
   border-radius: 12px;
-  border: 1px solid #45514a;
-  background: #1d2423;
-  color: #dbe3d8;
+  border: 1px solid #1a3358;
+  background: #0d1f45;
+  color: #e7e9df;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.2;
   transition: border-color .16s ease, background .16s ease;
 }
-.cz-trigger:hover { border-color: #5c6b60; background: #222a28; }
+.cz-trigger:hover { border-color: #2a3a5a; background: #0d1f45; }
 .cz-trigger:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .cz-trigger-icon { color: var(--primary); font-size: 14px; line-height: 1; }
 
@@ -33,7 +33,7 @@
   max-height: min(88dvh, 760px);
   padding: 0;
   margin: auto;
-  border: 1px solid #3c4841;
+  border: 1px solid #142a54;
   border-radius: 20px;
   background: var(--surface);
   color: var(--text);
@@ -70,7 +70,7 @@
   gap: 12px;
   padding: 16px 16px 12px;
   border-bottom: 1px solid var(--line);
-  background: #1c2322;
+  background: #0d1f45;
 }
 .cz-head-text { min-width: 0; }
 .cz-eyebrow {
@@ -87,13 +87,13 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  border: 1px solid #45514a;
-  background: #222a29;
-  color: #dfe6da;
+  border: 1px solid #1a3358;
+  background: #0d1f45;
+  color: #e7e9df;
   font-size: 16px;
   line-height: 1;
 }
-.cz-close:hover { background: #28312f; border-color: #5a685f; }
+.cz-close:hover { background: #0d1f45; border-color: #2a3a5a; }
 .cz-close:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
 /* --- Gövde / altlık --------------------------------------------------- */
@@ -109,15 +109,15 @@
 }
 .cz-foot {
   border-top: 1px solid var(--line);
-  background: #1c2322;
+  background: #0d1f45;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 .cz-foot-note { margin: 0; font-size: 11px; line-height: 1.6; color: var(--text-3); }
-.cz-foot-note a { color: #c3d3c6; text-decoration: underline; text-underline-offset: 2px; }
-.cz-foot-sep { margin: 0 6px; color: #6b7a71; }
+.cz-foot-note a { color: #a8d4c0; text-decoration: underline; text-underline-offset: 2px; }
+.cz-foot-sep { margin: 0 6px; color: #3a4a6a; }
 .cz-foot-actions { display: flex; gap: 8px; justify-content: flex-end; }
 
 .cz-btn {
@@ -126,31 +126,31 @@
   border-radius: 12px;
   font-size: 13px;
   font-weight: 650;
-  border: 1px solid #45514a;
-  background: #232b2a;
-  color: #dfe6da;
+  border: 1px solid #1a3358;
+  background: #0d1f45;
+  color: #e7e9df;
 }
-.cz-btn:hover { background: #2a3331; }
+.cz-btn:hover { background: #0d1f45; }
 .cz-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-.cz-btn-ghost { background: transparent; color: #ccd6cb; }
+.cz-btn-ghost { background: transparent; color: #c8d4cc; }
 .cz-btn-primary {
-  background: #2b3a32;
-  border-color: #7f9b88;
-  color: #dfeadd;
+  background: #0d1f45;
+  border-color: #6a7890;
+  color: #e7e9df;
 }
-.cz-btn-primary:hover:not(:disabled) { background: #34453b; }
+.cz-btn-primary:hover:not(:disabled) { background: #142a54; }
 .cz-btn-primary:disabled { opacity: .55; cursor: default; }
 
 .cz-guard {
-  border: 1px solid #7a6a4d;
-  background: #23231d;
+  border: 1px solid #8a7a5a;
+  background: #0d1f45;
   border-radius: 14px;
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.cz-guard p { margin: 0; font-size: 12px; line-height: 1.6; color: #dfd6c2; }
+.cz-guard p { margin: 0; font-size: 12px; line-height: 1.6; color: #a0907a; }
 .cz-guard-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .cz-status, .cz-error {
@@ -160,14 +160,14 @@
   border-radius: 12px;
   padding: 10px 12px;
 }
-.cz-status { color: #c8dcc9; background: #1e2a23; border: 1px solid #46594b; }
-.cz-error { color: #e5b5a4; background: #2a211f; border: 1px solid #6b4a42; }
+.cz-status { color: #a8d4c0; background: #0d1f45; border: 1px solid #1a3358; }
+.cz-error { color: #eb7a54; background: #0d1f45; border: 1px solid #3a2a24; }
 
 /* --- Ortak ayar içeriği ---------------------------------------------- */
 .settings-block {
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: #1e2524;
+  background: #0d1f45;
   padding: 14px;
   display: flex;
   flex-direction: column;
@@ -186,7 +186,7 @@
 }
 .settings-row:first-of-type { border-top: 0; padding-top: 2px; }
 .settings-row-text { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.settings-row-label { font-size: 13px; font-weight: 600; color: #e7ece3; }
+.settings-row-label { font-size: 13px; font-weight: 600; color: #e7e9df; }
 .settings-row-hint { font-size: 11px; line-height: 1.55; color: var(--text-3); }
 
 .settings-switch {
@@ -196,8 +196,8 @@
   height: 30px;
   min-height: 30px;
   border-radius: 999px;
-  border: 1px solid #4a574e;
-  background: #232a29;
+  border: 1px solid #1a3358;
+  background: #0d1f45;
   padding: 0;
   transition: background .16s ease, border-color .16s ease;
 }
@@ -211,11 +211,11 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #9aa79c;
+  background: #8a96af;
   transition: transform .16s ease, background .16s ease;
 }
-.settings-switch[aria-checked='true'] { background: #33443a; border-color: #8aa493; }
-.settings-switch[aria-checked='true'] .settings-switch-knob { transform: translateX(22px); background: #dfe9dc; }
+.settings-switch[aria-checked='true'] { background: #142a54; border-color: #6a7890; }
+.settings-switch[aria-checked='true'] .settings-switch-knob { transform: translateX(22px); background: #e7e9df; }
 
 .settings-fields { display: flex; flex-direction: column; gap: 14px; }
 .settings-field { display: flex; flex-direction: column; gap: 6px; }
@@ -225,8 +225,8 @@
   font-size: 12px;
   line-height: 1.65;
   color: var(--text-2);
-  background: #18201f;
-  border: 1px solid #2d3933;
+  background: #0a1a3a;
+  border: 1px solid #0d1f45;
   border-radius: 12px;
   padding: 10px 12px;
 }
@@ -239,12 +239,12 @@
   min-height: 48px;
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid #3d4a42;
-  background: #202827;
-  color: #e2eae0;
+  border: 1px solid #142a54;
+  background: #122a54;
+  color: #e7e9df;
   text-decoration: none;
 }
-.settings-link:hover { background: #25302d; border-color: #526057; }
+.settings-link:hover { background: #0d1f45; border-color: #2a3a5a; }
 .settings-link:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .settings-link-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .settings-link-title { font-size: 13px; font-weight: 600; }
@@ -276,7 +276,7 @@
 .settings-page-link {
   align-self: flex-start;
   font-size: 11px;
-  color: #c3d3c6;
+  color: #a8d4c0;
   text-decoration: underline;
   text-underline-offset: 2px;
   padding: 8px 2px;
@@ -291,7 +291,7 @@
   padding: 10px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: #1b2322f2;
+  background: #0d1f45f2;
   backdrop-filter: blur(8px);
 }
 .settings-theme-note {

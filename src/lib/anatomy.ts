@@ -20,15 +20,15 @@ export interface AnatomyLayer {
 
 export const LAYERS: AnatomyLayer[] = [
   {
-    id: 'body', label: 'Gövde', src: '/anatomy/body.webp', color: '#AEB9CC',
+    id: 'body', label: 'Gövde', src: '/anatomy/body.webp', color: '#8fb0d0',
     box: { left: 0, top: 0, width: 100, height: 100 },
   },
   {
-    id: 'cardio', label: 'Kardiyovasküler', src: '/anatomy/cardio.webp', color: '#FF4D5E',
+    id: 'cardio', label: 'Kardiyovasküler', src: '/anatomy/cardio.webp', color: '#eb5324',
     box: { left: 0, top: 0, width: 100, height: 100 },
   },
   {
-    id: 'digestive', label: 'Sindirim', src: '/anatomy/digestive.webp', color: '#FFB020',
+    id: 'digestive', label: 'Sindirim', src: '/anatomy/digestive.webp', color: '#f3a257',
     // karın boşluğuna sabitlendi: üstü diyafram altı, altı kasık üstü
     box: { left: 27, top: 43, width: 46, height: 40 },
   },

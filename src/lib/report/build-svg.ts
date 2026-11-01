@@ -60,17 +60,17 @@ const MARGIN = 40
 const CONTENT_W = PAGE_W - MARGIN * 2
 
 const C = {
-  ink: '#1f2430',
-  muted: '#5f6672',
-  faint: '#8a919c',
-  accent: '#2e7d5b',
-  accentSoft: '#e4efe9',
-  line: '#e7e9ec',
-  headerBg: '#f3f5f7',
-  planned: '#dfe3e6',
-  warn: '#8a6a1e',
+  ink: '#12243d',
+  muted: '#4a5a7a',
+  faint: '#8a96af',
+  accent: '#2e8a74',
+  accentSoft: '#e7e9df',
+  line: '#e7e9df',
+  headerBg: '#eef1f6',
+  planned: '#e0e4e8',
+  warn: '#f3a257',
   warnBg: '#f8f4e8',
-  warnBorder: '#e7d9a8',
+  warnBorder: '#ebd3a2',
 }
 
 const MONTHS_TR = [

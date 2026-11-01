@@ -153,7 +153,7 @@ export default function AnatomyScene({ organs, highlighted, onPick }: AnatomySce
       style={{ touchAction: 'none' }}
     >
       <ambientLight intensity={0.9} />
-      <hemisphereLight args={['#ffffff', '#40382f', 0.7]} />
+      <hemisphereLight args={['#ffffff', '#2a2418', 0.7]} />
       <directionalLight position={[60, 120, 160]} intensity={1.6} />
       <directionalLight position={[-80, 40, -120]} intensity={0.5} />
       {/* BodyParts3D: Z yukarı, -Y ön → Y-yukarı sahneye çevir */}

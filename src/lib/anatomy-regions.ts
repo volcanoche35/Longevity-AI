@@ -63,25 +63,25 @@ export interface Region {
 
 const TONES: Record<SystemId, SystemTone> = {
   nervous: {
-    solid: '#E6EDF8',
+    solid: '#e6ebf2',
     fill: 'rgba(230, 237, 248, 0.10)',
     fillStrong: 'rgba(230, 237, 248, 0.16)',
     line: 'rgba(230, 237, 248, 0.72)',
   },
   respiratory: {
-    solid: '#22E1FF',
+    solid: '#8fb0d0',
     fill: 'rgba(34, 225, 255, 0.10)',
     fillStrong: 'rgba(34, 225, 255, 0.16)',
     line: 'rgba(120, 240, 255, 0.78)',
   },
   cardiovascular: {
-    solid: '#FF4D5E',
+    solid: '#eb5324',
     fill: 'rgba(255, 77, 94, 0.12)',
     fillStrong: 'rgba(255, 77, 94, 0.18)',
     line: 'rgba(255, 140, 148, 0.82)',
   },
   digestive: {
-    solid: '#FFB020',
+    solid: '#f3a257',
     fill: 'rgba(255, 176, 32, 0.11)',
     fillStrong: 'rgba(255, 176, 32, 0.17)',
     line: 'rgba(255, 200, 120, 0.78)',

@@ -81,9 +81,9 @@ export default function ReportDownload() {
               style={{
                 padding: '6px 12px',
                 borderRadius: 10,
-                border: '1px solid var(--line, #e7e9ec)',
-                background: days === d ? 'var(--primary, #2e7d5b)' : 'transparent',
-                color: days === d ? '#152018' : 'var(--text-2, #8a919c)',
+                border: '1px solid var(--line, #e7e9df)',
+                background: days === d ? 'var(--primary, #2e8a74)' : 'transparent',
+                color: days === d ? '#0d1f45' : 'var(--text-2, #8a96af)',
                 fontSize: 13,
                 fontWeight: 600,
               }}
