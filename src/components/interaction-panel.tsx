@@ -8,10 +8,12 @@ import {
   SCOPE_NOTICE,
   type InteractionInput,
 } from '@/lib/interaction-review'
+import { reviewMedications, MEDICATION_NOTICE } from '@/lib/medication-interactions'
 import './interaction-panel.css'
 
 interface InteractionPanelProps {
   supplements: Array<{ name: string; dosage?: string }>
+  medications?: string
 }
 
 /**
@@ -19,13 +21,18 @@ interface InteractionPanelProps {
  * Karar mantığı src/lib/interaction-review.ts içinde; bu dosya yalnızca gösterir.
  * Ağ/AI çağrısı yok, doz ayrıştırma yok: `dosage` etiketteki metin olarak basılır.
  */
-export default function InteractionPanel({ supplements }: InteractionPanelProps) {
+export default function InteractionPanel({ supplements, medications }: InteractionPanelProps) {
   const [open, setOpen] = useState(false)
   const input: InteractionInput[] = useMemo(
     () => (supplements ?? []).map(s => ({ name: s.name, dosage: s.dosage })),
     [supplements],
   )
   const review = useMemo(() => reviewSupplements(input), [input])
+  const medConflicts = useMemo(
+    () => reviewMedications(medications ?? '', (supplements ?? []).map(s => s.name)),
+    [medications, supplements],
+  )
+  const hasMedications = Boolean(medications && medications.trim())
 
   return (
     <section className="ixp" aria-labelledby="ixp-title">
@@ -108,7 +115,32 @@ export default function InteractionPanel({ supplements }: InteractionPanelProps)
           </div>
         )}
 
-        <p className="ixp-drug">{DRUG_NOTICE}</p>
+        {hasMedications ? (
+          medConflicts.length > 0 ? (
+            <div className="ixp-med">
+              <p className="ixp-kicker">İlaç etkileşimi — sınırlı tarama</p>
+              <ul className="ixp-list">
+                {medConflicts.map((c, i) => (
+                  <li key={`${c.ruleId}-${i}`} className="ixp-card ixp-card--med">
+                    <span className="ixp-label">{c.medicationLabel}</span>
+                    <p className="ixp-pair">
+                      <span>{c.medicationText}</span>
+                      <span className="ixp-x" aria-hidden="true">↔</span>
+                      <span>{c.supplement}</span>
+                    </p>
+                    <p className="ixp-condition">{c.note}</p>
+                    <p className="ixp-sources"><span className="ixp-source">{c.source}</span></p>
+                  </li>
+                ))}
+              </ul>
+              <p className="ixp-scope">{MEDICATION_NOTICE}</p>
+            </div>
+          ) : (
+            <p className="ixp-drug">Bu sınırlı ilaç taramasında eşleşme bulunmadı. {MEDICATION_NOTICE}</p>
+          )
+        ) : (
+          <p className="ixp-drug">{DRUG_NOTICE}</p>
+        )}
         <p className="ixp-scope">{SCOPE_NOTICE}</p>
       </div>
     </section>

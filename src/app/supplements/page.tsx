@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useSyncExternalStore } from 'react'
 import { listSupplements, addSupplement as createSupplement, removeSupplement as deleteRow } from '@/lib/data'
 import { suggest, findEntry, catalogSize, type CatalogEntry } from '@/lib/catalog'
 import ThemeSelect from '@/components/theme-select'
@@ -11,6 +11,7 @@ import UsageDisclosure from '@/components/usage-disclosure'
 import { usePreferences, type Preferences } from '@/lib/preferences'
 import { interactionsFor, type InteractionKind } from '@/lib/supplement-interactions'
 import { unitsForForm, validateDose, dailyIntakeSummary, emptyPart, type DosePlan } from '@/lib/dosage'
+import { loadProfile, onProfileChange } from '@/lib/profile'
 
 interface Supplement { id: string; name: string; dosage: string; frequency: string; time_of_day: string; notes: string; schedule: string[] }
 
@@ -47,6 +48,7 @@ const emptyPlan = (form = 'Hap'): DosePlan => ({ parts: [], form, dailyCount: ''
 
 export default function SupplementsPage() {
   const [supplements, setSupplements] = useState<Supplement[]>([])
+  const medications = useSyncExternalStore(onProfileChange, () => loadProfile().medications, () => '')
   const [name, setName] = useState('')
   const [plan, setPlan] = useState<DosePlan>(emptyPlan())
   const [error, setError] = useState('')
@@ -211,7 +213,7 @@ export default function SupplementsPage() {
       {showForm && <UsageDisclosure />}
 
       {/* ── Zaman grupları ── */}
-      {supplements.length > 0 && <InteractionPanel supplements={supplements.map(s => ({ name: s.name, dosage: s.dosage }))} />}
+      {supplements.length > 0 && <InteractionPanel supplements={supplements.map(s => ({ name: s.name, dosage: s.dosage }))} medications={medications} />}
       {Object.entries(groupedByTime).map(([timeGroup, items]) => (
         <div key={timeGroup} className="mb-6">
           <h3 className="text-[var(--text-2)] text-xs font-semibold uppercase tracking-wider mb-3 ml-1">{timeGroup}</h3>

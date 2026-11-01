@@ -90,6 +90,9 @@
   min-width: 0;
 }
 
+.ixp-med { margin-top: 14px; }
+.ixp-card--med { border-left: 3px solid var(--magenta, #eb7a54); }
+
 .ixp-label {
   display: inline-block;
   font-size: 10px;
