@@ -2040,6 +2040,321 @@
         "böbrek hastalığı (potasyum)"
       ],
       "note": "Uzun antrenman/terleme için; sedanter kişide tuz-potasyum yüklemesi gereksiz."
+    },
+    {
+      "name": "BCAA",
+      "category": "aminoasit",
+      "grade": "A",
+      "aliases": [
+        "branched chain amino acids",
+        "lösin izolösin valin",
+        "leucine isoleucine valine",
+        "dalı amino"
+      ],
+      "typicalDose": "5–10 g (2:1:1)",
+      "timing": "Antrenman",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Lösin, izolösin ve valin. Kas protein sentezini destekler."
+    },
+    {
+      "name": "EAA (Esansiyel Amino Asit)",
+      "category": "aminoasit",
+      "grade": "A",
+      "aliases": [
+        "essential amino acids",
+        "esansiyel amino asit"
+      ],
+      "typicalDose": "5–10 g",
+      "timing": "Antrenman",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Vücudun üretemediği 9 esansiyel amino asit karışımı."
+    },
+    {
+      "name": "L-Karnitin (L-Carnitine)",
+      "category": "aminoasit",
+      "grade": "B",
+      "aliases": [
+        "karnitin",
+        "carnitine",
+        "l carnitine",
+        "asetil karnitin",
+        "acetyl l carnitine"
+      ],
+      "typicalDose": "500–2000 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Yağ asitlerini mitokondriye taşır; enerji metabolizmasında rol alır."
+    },
+    {
+      "name": "Glutatyon (Glutathione)",
+      "category": "aminoasit",
+      "grade": "B",
+      "aliases": [
+        "glutatyon",
+        "glutathione",
+        "gsh"
+      ],
+      "typicalDose": "250–500 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Hücresel antioksidan; sistein kaynağı olarak NAC da kullanılır."
+    },
+    {
+      "name": "Resveratrol",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "rezveratrol",
+        "trans resveratrol"
+      ],
+      "typicalDose": "100–500 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Üzümde bulunan polifenol; emilim için yağlı öğün yardımcı olur."
+    },
+    {
+      "name": "Likopen (Lycopene)",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "likopen",
+        "lycopene"
+      ],
+      "typicalDose": "10–30 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Domates kaynaklı karotenoid; yağda çözünür."
+    },
+    {
+      "name": "Mürver (Elderberry)",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "murver",
+        "elderberry",
+        "sambucus nigra",
+        "sambucus"
+      ],
+      "typicalDose": "500–1000 mg",
+      "timing": "Gün içi",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Bağışıklık desteği için kullanılan kara mürver ekstresi."
+    },
+    {
+      "name": "Ginseng",
+      "category": "adaptogen",
+      "grade": "B",
+      "aliases": [
+        "ginseng",
+        "panax ginseng",
+        "kore ginsengi",
+        "kırmızı ginseng"
+      ],
+      "typicalDose": "200–400 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Enerji ve zindelik için adaptogen; uyarıcı etkisi olabilir."
+    },
+    {
+      "name": "Ekinezya (Echinacea)",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "ekinezya",
+        "echinacea",
+        "echinacea purpurea"
+      ],
+      "typicalDose": "300–500 mg",
+      "timing": "Gün içi",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Bağışıklık desteği için kullanılan bitki; uzun süreli kullanım tartışmalı."
+    },
+    {
+      "name": "Sarımsak Ekstresi",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "sarimsak",
+        "garlic",
+        "allicin",
+        "alicin"
+      ],
+      "typicalDose": "600–1200 mg",
+      "timing": "Gün içi",
+      "withFood": true,
+      "avoidWith": [
+        "kan sulandırıcılar"
+      ],
+      "note": "Alisin bileşiği; yüksek dozda kanama riskine dikkat."
+    },
+    {
+      "name": "Çörek Otu Yağı",
+      "category": "yağ",
+      "grade": "B",
+      "aliases": [
+        "corek otu",
+        "black seed oil",
+        "nigella sativa",
+        "çörekotu"
+      ],
+      "typicalDose": "1–2 g",
+      "timing": "Gün içi",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Timokinon içeren yağ; genel sağlık desteği."
+    },
+    {
+      "name": "Tribulus (Demir Dikeni)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "tribulus",
+        "demir dikeni",
+        "tribulus terrestris"
+      ],
+      "typicalDose": "500–1000 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Spor desteği; etkinliğine dair kanıt sınırlı."
+    },
+    {
+      "name": "Maca",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "maca",
+        "lepidium meyenii",
+        "maca kökü"
+      ],
+      "typicalDose": "1.5–3 g",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Enerji ve dayanıklılık için kullanılan kök tozu."
+    },
+    {
+      "name": "Passiflora (Çarkıfelek)",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "passiflora",
+        "carkifelek",
+        "passion flower",
+        "passiflora incarnata"
+      ],
+      "typicalDose": "300–500 mg",
+      "timing": "Akşam",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Gevşeme ve uyku desteği için kullanılır."
+    },
+    {
+      "name": "Üzüm Çekirdeği Ekstresi",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "uzum cekirdegi",
+        "grape seed extract",
+        "opc",
+        "proantosiyanidin"
+      ],
+      "typicalDose": "100–300 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Proantosiyanidin kaynağı antioksidan."
+    },
+    {
+      "name": "Tarçın Ekstresi",
+      "category": "bitkisel",
+      "grade": "B",
+      "aliases": [
+        "tarcin",
+        "cinnamon",
+        "cinnamomum",
+        "tarçın"
+      ],
+      "typicalDose": "500–2000 mg",
+      "timing": "Gün içi",
+      "withFood": true,
+      "avoidWith": [
+        "diyabet ilaçları"
+      ],
+      "note": "Kan şekerini etkileyebilir; diyabet ilacıyla dikkat."
+    },
+    {
+      "name": "Lutein",
+      "category": "vitamin-benzeri",
+      "grade": "B",
+      "aliases": [
+        "lutein",
+        "zeaksantin",
+        "zeaxanthin",
+        "göz vitamini"
+      ],
+      "typicalDose": "10–20 mg",
+      "timing": "Sabah",
+      "withFood": true,
+      "avoidWith": [],
+      "note": "Göz sağlığı için karotenoid; genelde zeaksantinle birlikte."
+    },
+    {
+      "name": "Beta Glukan",
+      "category": "mantar",
+      "grade": "B",
+      "aliases": [
+        "beta glukan",
+        "beta glucan",
+        "b glukan",
+        "betaglukan"
+      ],
+      "typicalDose": "250–500 mg",
+      "timing": "Sabah",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Maya/yulaf kaynaklı; bağışıklık desteği."
+    },
+    {
+      "name": "Guarana",
+      "category": "performans",
+      "grade": "B",
+      "aliases": [
+        "guarana",
+        "paullinia cupana"
+      ],
+      "typicalDose": "200–800 mg",
+      "timing": "Sabah/Antrenman öncesi",
+      "withFood": false,
+      "avoidWith": [],
+      "note": "Kafein kaynağı; uyarıcı etki, geç saatte alınmamalı."
+    },
+    {
+      "name": "Alıç (Hawthorne)",
+      "category": "bitkisel",
+      "grade": "C",
+      "aliases": [
+        "alic",
+        "hawthorne",
+        "crataegus",
+        "alıç"
+      ],
+      "typicalDose": "300–600 mg",
+      "timing": "Gün içi",
+      "withFood": false,
+      "avoidWith": [
+        "kalp ilaçları"
+      ],
+      "note": "Kalp-damar desteği; kalp ilacıyla birlikte hekime danışın."
     }
   ]
 }
