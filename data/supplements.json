@@ -18,7 +18,8 @@
       "avoidWith": [
         "yüksek doz kalsiyum (hekim kontrolü)"
       ],
-      "note": "Düzeyi bilmeden yüksek doz riskli. 25-OH-D ölçümü şart."
+      "note": "Düzeyi bilmeden yüksek doz riskli. 25-OH-D ölçümü şart.",
+      "dailyRef": "5 µg (200 IU)"
     },
     {
       "name": "Vitamin D3 + K2",
@@ -51,7 +52,8 @@
       "avoidWith": [
         "warfarin"
       ],
-      "note": "Kan sulandırıcı kullanan için K vitamini ciddi etkileşim."
+      "note": "Kan sulandırıcı kullanan için K vitamini ciddi etkileşim.",
+      "dailyRef": "75 µg"
     },
     {
       "name": "Vitamin K1 (Fillokinon)",
@@ -67,7 +69,8 @@
       "avoidWith": [
         "warfarin"
       ],
-      "note": "Pıhtılaşma faktörü; takviye genelde gereksiz."
+      "note": "Pıhtılaşma faktörü; takviye genelde gereksiz.",
+      "dailyRef": "75 µg"
     },
     {
       "name": "Vitamin A (Retinol)",
@@ -83,7 +86,8 @@
       "avoidWith": [
         " İzotretinoin/akne ilacı ile birlikte"
       ],
-      "note": "Yağda çözünen, birikir. Karaciğer toksisitesi ve gebelikte teratojen riski gerçek."
+      "note": "Yağda çözünen, birikir. Karaciğer toksisitesi ve gebelikte teratojen riski gerçek.",
+      "dailyRef": "800 µg RE"
     },
     {
       "name": "Beta-Karoten",
@@ -99,7 +103,8 @@
       "avoidWith": [
         "sigara içenlerde yüksek doz"
       ],
-      "note": "Sigara içenlerde yüksek doz takviye akciğer kanseri riskini artırdığı gösterildi (ATB/CCS çalışmaları)."
+      "note": "Sigara içenlerde yüksek doz takviye akciğer kanseri riskini artırdığı gösterildi (ATB/CCS çalışmaları).",
+      "dailyRef": "800 µg RE (A eşdeğeri)"
     },
     {
       "name": "Vitamin E",
@@ -115,7 +120,8 @@
       "avoidWith": [
         "kan sulandırıcılar"
       ],
-      "note": "400 IU ve üstü kronik kullanımda mortalite artış sinyali; ek olarak önerilmiyor."
+      "note": "400 IU ve üstü kronik kullanımda mortalite artış sinyali; ek olarak önerilmiyor.",
+      "dailyRef": "12 mg"
     },
     {
       "name": "Vitamin C",
@@ -132,7 +138,8 @@
       "avoidWith": [
         "yüksek dozda statin + niacin kombinasyonu"
       ],
-      "note": "Eksiklikte A düzeyi kanıt; soğuk algınlığını önler iddiası C. Yüksek doz oksalat taşı riski."
+      "note": "Eksiklikte A düzeyi kanıt; soğuk algınlığını önler iddiası C. Yüksek doz oksalat taşı riski.",
+      "dailyRef": "80 mg"
     },
     {
       "name": "B12 (Metilkobalamin)",
@@ -147,7 +154,8 @@
       "timing": "Sabah",
       "withFood": false,
       "avoidWith": [],
-      "note": "Vegan, vejetaryen, metformin ve PPI kullananında eksiklik taraması mantıklı."
+      "note": "Vegan, vejetaryen, metformin ve PPI kullananında eksiklik taraması mantıklı.",
+      "dailyRef": "2,5 µg"
     },
     {
       "name": "Folat (5-MTHF)",
@@ -165,7 +173,8 @@
       "avoidWith": [
         "B12 eksikliğini maskeleyebilir"
       ],
-      "note": "Gebelik planında kanıt A. Yüksek doz çinko emilimini azaltabilir."
+      "note": "Gebelik planında kanıt A. Yüksek doz çinko emilimini azaltabilir.",
+      "dailyRef": "200 µg"
     },
     {
       "name": "Vitamin B6",
@@ -181,7 +190,8 @@
       "avoidWith": [
         "levodopa (düşük doz dopa ile)"
       ],
-      "note": "Uzun süre yüksek doz PERİFERAL NÖROPATİ yapar — bu bir güvenlik sınırı, tavsiye değil."
+      "note": "Uzun süre yüksek doz PERİFERAL NÖROPATİ yapar — bu bir güvenlik sınırı, tavsiye değil.",
+      "dailyRef": "1,4 mg"
     },
     {
       "name": "Tiamin (B1)",
@@ -195,7 +205,8 @@
       "timing": "Sabah",
       "withFood": false,
       "avoidWith": [],
-      "note": "Eksiklik (alkol kullanımı, yetersiz beslenme) varsa kanıt güçlü."
+      "note": "Eksiklik (alkol kullanımı, yetersiz beslenme) varsa kanıt güçlü.",
+      "dailyRef": "1,1 mg"
     },
     {
       "name": "Riboflavin (B2)",
@@ -209,7 +220,8 @@
       "timing": "Sabah",
       "withFood": false,
       "avoidWith": [],
-      "note": "Migren önlemede yüksek doz çalışma var. İdrarı parlak sarı yapar — normal."
+      "note": "Migren önlemede yüksek doz çalışma var. İdrarı parlak sarı yapar — normal.",
+      "dailyRef": "1,4 mg"
     },
     {
       "name": "Niasin (B3)",
@@ -227,7 +239,8 @@
         "istatin ile karaciğer yükü",
         "alkol"
       ],
-      "note": "Yüksek doz flushing ve karaciğer toksisitesi yapabilir; kolesterol ilacı dozu hekim işi."
+      "note": "Yüksek doz flushing ve karaciğer toksisitesi yapabilir; kolesterol ilacı dozu hekim işi.",
+      "dailyRef": "16 mg NE"
     },
     {
       "name": "Pantotenik Asit (B5)",
@@ -241,7 +254,8 @@
       "timing": "Sabah",
       "withFood": false,
       "avoidWith": [],
-      "note": "Eksiklik nadir; akne/cilt iddiaları zayıf."
+      "note": "Eksiklik nadir; akne/cilt iddiaları zayıf.",
+      "dailyRef": "6 mg"
     },
     {
       "name": "Biotin (B7)",
@@ -255,7 +269,8 @@
       "timing": "Sabah",
       "withFood": false,
       "avoidWith": [],
-      "note": "Tırnak kanıtı zayıf. KRİTİK: yüksek doz biotin tiroid ve troponin kan testlerini BOZAR, sonucu yanlış gösterir."
+      "note": "Tırnak kanıtı zayıf. KRİTİK: yüksek doz biotin tiroid ve troponin kan testlerini BOZAR, sonucu yanlış gösterir.",
+      "dailyRef": "50 µg"
     },
     {
       "name": "Kolin",
@@ -269,7 +284,8 @@
       "timing": "Sabah",
       "withFood": true,
       "avoidWith": [],
-      "note": "Gebelikte önem artıyor; yüksek doz balık kokusu sendromu ve TMAO tartışması."
+      "note": "Gebelikte önem artıyor; yüksek doz balık kokusu sendromu ve TMAO tartışması.",
+      "dailyRef": "400 mg (yeterli alım)"
     },
     {
       "name": "Alpha-GPC",
@@ -319,7 +335,8 @@
         "tetrasiklin/kinolon antibiotik",
         "levodopa"
       ],
-      "note": "Emilimi yüksek, laksatif etkisi düşük. Uyku/kramip kanıtı küçük ama tutarlı."
+      "note": "Emilimi yüksek, laksatif etkisi düşük. Uyku/kramip kanıtı küçük ama tutarlı.",
+      "dailyRef": "375 mg"
     },
     {
       "name": "Magnezyum Sitrat",
@@ -336,7 +353,8 @@
         "demir",
         "tetrasiklin"
       ],
-      "note": "İyi emilir; yüksek dozda yumuşatıcı etki belirgin."
+      "note": "İyi emilir; yüksek dozda yumuşatıcı etki belirgin.",
+      "dailyRef": "375 mg"
     },
     {
       "name": "Magnezyum Oksit",
@@ -352,7 +370,8 @@
       "avoidWith": [
         "demir"
       ],
-      "note": "Emsilim oranı düşük (~%4); reflü için magnezyum hastalığı için değil."
+      "note": "Emsilim oranı düşük (~%4); reflü için magnezyum hastalığı için değil.",
+      "dailyRef": "375 mg"
     },
     {
       "name": "Magnezyum L-Treonat",
@@ -367,7 +386,8 @@
       "timing": "Gece",
       "withFood": false,
       "avoidWith": [],
-      "note": "Beyne geçiş iddiası hayvan verisi; insan biliş kanıtı zayıf ve fiyatı yüksek."
+      "note": "Beyne geçiş iddiası hayvan verisi; insan biliş kanıtı zayıf ve fiyatı yüksek.",
+      "dailyRef": "375 mg"
     },
     {
       "name": "Magnezyum Malat",
@@ -383,7 +403,8 @@
       "avoidWith": [
         "demir"
       ],
-      "note": "Yorgunluk/hassasiyet iddiaları fibromiyalji çalışma grubuna dayanır."
+      "note": "Yorgunluk/hassasiyet iddiaları fibromiyalji çalışma grubuna dayanır.",
+      "dailyRef": "375 mg"
     },
     {
       "name": "Kalsiyum (Sitrat)",
@@ -402,7 +423,8 @@
         "magnezyum (aynı saatte)",
         "levotiroksin"
       ],
-      "note": "Diyet toplamı 1000–1200 mg'ı geçmesin; fazlası böbrek taşı ve damar kireçlenme tartışması."
+      "note": "Diyet toplamı 1000–1200 mg'ı geçmesin; fazlası böbrek taşı ve damar kireçlenme tartışması.",
+      "dailyRef": "800 mg"
     },
     {
       "name": "Çinko Pikolinat",
@@ -424,7 +446,8 @@
         "tetrasiklin",
         "penisilamin"
       ],
-      "note": "Aç karnına bulantı yapabilir. 40 mg üstü uzun süre BAKIR eksikliği ve bağışıklık baskılanması riski."
+      "note": "Aç karnına bulantı yapabilir. 40 mg üstü uzun süre BAKIR eksikliği ve bağışıklık baskılanması riski.",
+      "dailyRef": "10 mg"
     },
     {
       "name": "Demir (Bisglisinat)",
@@ -449,7 +472,8 @@
         "levodopa",
         "tiroid ilacı"
       ],
-      "note": "Ferritin/kan değeri görmeden demir EKLEMEK gereksiz yükleme demek. Çocuk için toksisite gerçek risk."
+      "note": "Ferritin/kan değeri görmeden demir EKLEMEK gereksiz yükleme demek. Çocuk için toksisite gerçek risk.",
+      "dailyRef": "14 mg"
     },
     {
       "name": "Selenyum",
@@ -463,7 +487,8 @@
       "timing": "Sabah",
       "withFood": false,
       "avoidWith": [],
-      "note": "Güvenlik penceresi dar. Türkiye'de 100 µg üstü takviye rejimi sınırlı; fazlası saç/tırnak kaybı ve selenozis."
+      "note": "Güvenlik penceresi dar. Türkiye'de 100 µg üstü takviye rejimi sınırlı; fazlası saç/tırnak kaybı ve selenozis.",
+      "dailyRef": "55 µg"
     },
     {
       "name": "İyot (Potasyum İyodür)",
@@ -480,7 +505,8 @@
       "avoidWith": [
         "tiroid hastalığında hekim onayı şart"
       ],
-      "note": "Eksiklikte kritik; fazlası Hashimoto'yu alevlendirebilir. Tuz kullanımı hesaba katılmalı."
+      "note": "Eksiklikte kritik; fazlası Hashimoto'yu alevlendirebilir. Tuz kullanımı hesaba katılmalı.",
+      "dailyRef": "150 µg"
     },
     {
       "name": "Bakır (Bisglisinat)",
@@ -498,7 +524,8 @@
         "çinko (aynı saatte)",
         "C vitamini (yüksek doz)"
       ],
-      "note": "Genellikle çinkoyu uzun kullananın dengelenmesi için; Wilson hastalığında YASAK."
+      "note": "Genellikle çinkoyu uzun kullananın dengelenmesi için; Wilson hastalığında YASAK.",
+      "dailyRef": "1 mg"
     },
     {
       "name": "Mangan",
@@ -512,7 +539,8 @@
       "timing": "Sabah",
       "withFood": false,
       "avoidWith": [],
-      "note": "Eksiklik nadir; yüksek dozda nörotoksisite (mesleki maruziyet) verisi var."
+      "note": "Eksiklik nadir; yüksek dozda nörotoksisite (mesleki maruziyet) verisi var.",
+      "dailyRef": "2 mg"
     },
     {
       "name": "Krom (Pikolinat)",
@@ -527,7 +555,8 @@
       "timing": "Sabah",
       "withFood": false,
       "avoidWith": [],
-      "note": "Kan şekeri iddiası meta-analizlerde küçük ve heterojen; tek başına strateji kurulmaz."
+      "note": "Kan şekeri iddiası meta-analizlerde küçük ve heterojen; tek başına strateji kurulmaz.",
+      "dailyRef": "40 µg"
     },
     {
       "name": "Bor",
@@ -541,7 +570,8 @@
       "timing": "Sabah",
       "withFood": false,
       "avoidWith": [],
-      "note": "Hormon ve kemik iddiaları küçük örneklemli."
+      "note": "Hormon ve kemik iddiaları küçük örneklemli.",
+      "dailyRef": "3 mg (yeterli alım)"
     },
     {
       "name": "Potasyum",
@@ -561,7 +591,8 @@
         "böbrek hastalığı",
         "spironolakton"
       ],
-      "note": "Tansiyon kanıtı güçlü AMA reçetesiz yüksek doz HİPERKALEMİ (ritim bozukluğu) riski. Diyet öncelikli."
+      "note": "Tansiyon kanıtı güçlü AMA reçetesiz yüksek doz HİPERKALEMİ (ritim bozukluğu) riski. Diyet öncelikli.",
+      "dailyRef": "2000 mg"
     },
     {
       "name": "Sodyum (Elektrolit)",
@@ -579,7 +610,8 @@
       "avoidWith": [
         "hipertansiyonda hekim onayı"
       ],
-      "note": "Terleme yoğunsa mantıklı; değilse gereksiz yükleme."
+      "note": "Terleme yoğunsa mantıklı; değilse gereksiz yükleme.",
+      "dailyRef": "resmi NRV yok"
     },
     {
       "name": "Kreatin Monohidrat",

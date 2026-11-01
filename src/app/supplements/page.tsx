@@ -169,7 +169,7 @@ export default function SupplementsPage() {
                       <span className="flex-1 min-w-0">
                         <span className="block text-sm text-white truncate">{s.name}</span>
                         <span className="block text-[10px] text-[var(--text-3)] truncate">
-                          {s.category}
+                          {s.category}{s.dailyRef ? ` · DSÖ ${s.dailyRef}` : ''}
                         </span>
                       </span>
                       <span className="chip shrink-0">Katalog</span>
@@ -181,7 +181,11 @@ export default function SupplementsPage() {
           </div>
 
           {/* seçilen kaydın kanıt notu — kullanıcı ne yazdığını bilsin */}
-          {picked && <p className="text-xs text-[var(--text-2)]">Katalogdan seçildi. Dozu kendi ürün etiketinizden girin; katalog tıbbi doğrulama içermez.</p>}
+          {picked && (
+            <p className="text-xs text-[var(--text-2)]">
+              Katalogdan seçildi.{picked.dailyRef ? <span> DSÖ günlük referans: <span className="text-[var(--amber)]">{picked.dailyRef}</span>.</span> : null} Dozu kendi ürün etiketinizden girin.
+            </p>
+          )}
           {name.trim() && <InteractionNotes name={name} />}
 
           <DoseEditor plan={plan} onChange={setPlan} />

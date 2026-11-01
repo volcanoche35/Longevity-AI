@@ -12,6 +12,7 @@ export interface CatalogEntry {
   grade: Grade
   aliases: string[]
   typicalDose: string
+  dailyRef?: string
   timing: string
   withFood: boolean
   avoidWith: string[]
