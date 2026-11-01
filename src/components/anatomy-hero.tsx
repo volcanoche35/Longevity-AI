@@ -7,7 +7,7 @@
  *  - Görsel hotspot NOKTASI yok. Etkileşim, görselle aynı 896×1200 koordinat
  *    uzayındaki organ/sistem sınır path'lerinde: hover = önizleme,
  *    tık/dokunma = sabitlenmiş seçim.
- *  - body.jpg ve cardio.jpg ÜST ÜSTE screen ile bindirilmez (çift kontur olur).
+ *  - body.webp ve cardio.webp ÜST ÜSTE screen ile bindirilmez (çift kontur olur).
  *    İkisi crossfade edilir; aynı anda yalnız biri tam opak.
  *  - Kafa üstü kırpık olduğu için beyin bölgesi çizilmez; "Sinir" sistemi
  *    yalnızca açıklama kartı açar (hayali bölge gösterilmez).
@@ -156,7 +156,7 @@ function AnatomyStage({
       </div>
 
       <div className="dv-digestive" data-active={digestiveVisible} aria-hidden="true">
-        <Image src="/anatomy/digestive.jpg" alt="" fill sizes="(max-width: 767px) 150px, 260px" style={{ objectFit: 'fill' }} />
+        <Image src="/anatomy/digestive.webp" alt="" fill sizes="(max-width: 767px) 150px, 260px" style={{ objectFit: 'fill' }} />
       </div>
       <svg
         className="dv-stage-svg"

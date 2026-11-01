@@ -248,8 +248,8 @@ export function getRegion(variant: AnatomyVariant | null, id: RegionId | null): 
 /** Görsel yolları: varyant yoksa genel (demo) model. */
 export function anatomyAssets(variant: AnatomyVariant | null): { body: string; cardio: string } {
   return variant
-    ? { body: `/anatomy/${variant}/body.jpg`, cardio: `/anatomy/${variant}/cardio.jpg` }
-    : { body: '/anatomy/body.jpg', cardio: '/anatomy/cardio.jpg' }
+    ? { body: `/anatomy/${variant}/body.webp`, cardio: `/anatomy/${variant}/cardio.webp` }
+    : { body: '/anatomy/body.webp', cardio: '/anatomy/cardio.webp' }
 }
 
 export function modelLabel(variant: AnatomyVariant | null): string {

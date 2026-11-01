@@ -21,6 +21,7 @@ import { DAY_MARKS_KEY as MARKS_KEY, localDayKey, readMarks, readMarksAsync, tog
 import { isRemoteMode } from '@/lib/supabase'
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import SupplementSheet from '@/components/supplement-sheet'
+import ReportDownload from '@/components/report-download'
 import PerformancePanel from '@/components/performance-panel'
 import { usePreferences } from '@/lib/preferences'
 import MoodGlow from '@/components/mood-glow'
@@ -474,6 +475,7 @@ export default function DashboardPage() {
 
         <footer className="dv-foot">
           <div className="flex gap-4 text-sm py-2"><Link href="/reminders" className="text-[var(--primary)]">Hatırlatmalarım →</Link><Link href="/tracking" className="text-[var(--primary)]">Etki günlüğüm →</Link></div>
+          <ReportDownload />
           <Link href="/chat" className="dv-ai dv-ai--wide">
             AI&apos;a sor <span aria-hidden="true">→</span>
           </Link>
