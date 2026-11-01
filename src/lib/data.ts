@@ -307,3 +307,36 @@ export async function askAssistant(
   }
   return { content: data.content as string, model: data.model, note: data.note }
 }
+
+export interface VerifiedIngredient {
+  name: string
+  category: string
+  grade: 'A' | 'B' | 'C'
+  typicalDose: string
+  dailyRef: string
+}
+
+/** Harici ürünün etken maddesini AI ile doğrular (katalog yapısına normalleştirir). */
+export async function verifyIngredient(
+  productName: string,
+  ingredientText: string,
+): Promise<VerifiedIngredient[]> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (supabase) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`
+    } catch {}
+  }
+  const res = await fetch('/api/ai/ingredient', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ productName, ingredientText }),
+  })
+  const data = (await res.json().catch(() => null)) as
+    { ok?: boolean; items?: VerifiedIngredient[]; error?: string } | null
+  if (!res.ok || !data?.ok || !Array.isArray(data.items)) {
+    throw new Error(data?.error || 'Etken madde doğrulanamadı')
+  }
+  return data.items
+}

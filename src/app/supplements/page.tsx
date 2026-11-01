@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useSyncExternalStore } from 'react'
-import { listSupplements, addSupplement as createSupplement, removeSupplement as deleteRow } from '@/lib/data'
+import { listSupplements, addSupplement as createSupplement, removeSupplement as deleteRow, verifyIngredient, type VerifiedIngredient } from '@/lib/data'
 import { suggest, findEntry, catalogSize, type CatalogEntry } from '@/lib/catalog'
 import ThemeSelect from '@/components/theme-select'
 import DoseEditor, { ScheduleEditor } from '@/components/dose-editor'
@@ -57,6 +57,39 @@ export default function SupplementsPage() {
   const [schedule, setSchedule] = useState<string[]>([])
   const [showForm, setShowForm] = useState(false); const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
+
+  // Harici ürün ekleme (katalogda olmayan ürün, AI ile etken madde doğrulama)
+  const [showExternal, setShowExternal] = useState(false)
+  const [extName, setExtName] = useState('')
+  const [extIngredient, setExtIngredient] = useState('')
+  const [extAmount, setExtAmount] = useState('')
+  const [extLoading, setExtLoading] = useState(false)
+  const [extError, setExtError] = useState('')
+  const [extResult, setExtResult] = useState<VerifiedIngredient[] | null>(null)
+
+  const runVerify = async () => {
+    if (!extName.trim() || !extIngredient.trim()) { setExtError('Ürün adı ve etken maddeyi yaz.'); return }
+    setExtLoading(true); setExtError(''); setExtResult(null)
+    try { setExtResult(await verifyIngredient(extName.trim(), extIngredient.trim())) }
+    catch (e) { setExtError(e instanceof Error ? e.message : 'Doğrulama başarısız.') }
+    finally { setExtLoading(false) }
+  }
+
+  const addExternal = async () => {
+    const part = extResult?.[0]
+    if (!part || !extName.trim()) { setExtError('Önce etken maddeyi doğrula.'); return }
+    const amount = extAmount.trim()
+    if (!amount) { setExtError('Günlük miktarı yaz (örn. 400).'); return }
+    setExtLoading(true); setExtError('')
+    try {
+      const plan: DosePlan = { parts: [{ label: part.name, amount, unit: 'mg' }], form: 'Hap', dailyCount: '', dailyAmount: '', dailyUnit: 'adet' }
+      const ok = await createSupplement({ name: extName.trim(), dosage: dailyIntakeSummary(plan), frequency: 'Günlük toplam', time_of_day: 'Sabah', notes: '', schedule: [], dose_plan: plan })
+      if (!ok) throw new Error('Ürün kaydedilemedi.')
+      setShowExternal(false); setExtName(''); setExtIngredient(''); setExtAmount(''); setExtResult(null)
+      await fetchSupplements()
+    } catch (e) { setExtError(e instanceof Error ? e.message : 'Eklenemedi.') }
+    finally { setExtLoading(false) }
+  }
 
   // Yeni form açılırken ayarlardaki güncel varsayılanlar; açık formdaki değişiklikleri ezmez.
   const prefs: Preferences = usePreferences()
@@ -133,11 +166,18 @@ export default function SupplementsPage() {
             {supplements.length} envanter · {catalogSize()} katalog kaydı
           </p>
         </div>
-        <button onClick={toggleForm}
-          className="w-11 h-11 rounded-full grid place-items-center text-xl transition-colors"
-          style={{ background: 'var(--surface)', border: '1px solid var(--line)', color: 'var(--primary)' }}>
-          {showForm ? '×' : '+'}
-        </button>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={() => { setShowExternal(v => !v); setShowForm(false) }}
+            className="h-11 px-3.5 rounded-full text-xs font-semibold transition-colors"
+            style={{ background: 'var(--surface)', border: '1px solid var(--line)', color: showExternal ? 'var(--primary)' : 'var(--text-2)' }}>
+            Harici ürün
+          </button>
+          <button onClick={toggleForm}
+            className="w-11 h-11 rounded-full grid place-items-center text-xl transition-colors"
+            style={{ background: 'var(--surface)', border: '1px solid var(--line)', color: 'var(--primary)' }}>
+            {showForm ? '×' : '+'}
+          </button>
+        </div>
       </div>
 
       {/* ── Ekleme formu ── */}
@@ -211,6 +251,48 @@ export default function SupplementsPage() {
         </form>
       )}
       {showForm && <UsageDisclosure />}
+
+      {/* ── Harici ürün ekleme (katalogda olmayan, AI doğrulamalı) ── */}
+      {showExternal && (
+        <form onSubmit={e => { e.preventDefault(); addExternal() }} className="supplement-form p-4 space-y-4 mb-6 animate-fade-in">
+          <label className="block"><span className="field-label">Ürün adı</span>
+            <input value={extName} onChange={e => setExtName(e.target.value)} placeholder="Katalogda olmayan ürün — örn: XYZ Magnezyum Kompleksi" className="dose-input" />
+          </label>
+          <label className="block"><span className="field-label">Etken madde(ler)</span>
+            <input value={extIngredient} onChange={e => setExtIngredient(e.target.value)} placeholder="Örn: magnezyum bisglisinat 200 mg" className="dose-input" />
+          </label>
+          {extResult ? (
+            <div className="rounded-2xl p-3" style={{ border: '1px solid var(--line)' }}>
+              <p className="text-xs text-[var(--text-3)] mb-2">Yapay zekâ doğrulaması:</p>
+              {extResult.map((r, i) => (
+                <div key={i} className="flex flex-wrap items-center gap-2 mb-1">
+                  <span className="text-sm text-white font-medium">{r.name}</span>
+                  <span className="text-[10px] text-[var(--text-3)]">{r.category} · {r.grade}</span>
+                  {r.dailyRef ? <span className="text-[10px] text-[var(--amber)]">DSÖ {r.dailyRef}</span> : null}
+                </div>
+              ))}
+              <label className="block mt-3"><span className="field-label">Günlük miktar (mg)</span>
+                <input value={extAmount} onChange={e => setExtAmount(e.target.value)} inputMode="decimal" placeholder="örn. 400" className="dose-input" />
+              </label>
+            </div>
+          ) : (
+            <button type="button" onClick={runVerify} disabled={extLoading}
+              className="w-full py-3 rounded-xl text-sm font-semibold transition-colors"
+              style={{ background: 'var(--surface)', border: '1px solid var(--line)', color: 'var(--primary)' }}>
+              {extLoading ? 'Doğrulanıyor…' : 'Yapay zekâ ile doğrula'}
+            </button>
+          )}
+          {extError && <p role="alert" className="text-sm text-[var(--primary)]">{extError}</p>}
+          <div className="flex gap-2">
+            <button type="button" onClick={() => setShowExternal(false)} className="flex-1 py-3 text-sm text-[var(--text-3)] hover:text-white transition-colors">İptal</button>
+            {extResult && (
+              <button type="submit" disabled={extLoading} className="flex-1 py-3 rounded-xl font-semibold text-sm" style={{ background: 'var(--primary)', color: 'var(--surface)' }}>
+                {extLoading ? '…' : 'Envantere ekle'}
+              </button>
+            )}
+          </div>
+        </form>
+      )}
 
       {/* ── Zaman grupları ── */}
       {supplements.length > 0 && <InteractionPanel supplements={supplements.map(s => ({ name: s.name, dosage: s.dosage }))} medications={medications} />}
