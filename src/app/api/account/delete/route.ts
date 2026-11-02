@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     'user_medications',
     'usage_logs',
     'biomarkers',
-    'subscription_summary',
+    // NOT: subscription_summary — bir VIEW; subscriptions silinince otomatik boşalır.
     'subscriptions',
   ]
 
