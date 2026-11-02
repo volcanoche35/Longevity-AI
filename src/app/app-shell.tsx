@@ -59,8 +59,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
-    if (session && pathname === '/onboarding') router.replace('/dashboard')
-  }, [session, pathname, router])
+    if (!loading && session && (pathname === '/onboarding' || pathname === '/')) {
+      router.replace('/dashboard')
+    }
+  }, [loading, session, pathname, router])
 
   if (loading) {
     return (
@@ -69,17 +71,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </div>
     )
   }
-  // Giriş yapmış kullanıcı onboarding'e takılırsa ana ekrana yönlendir (useEffect ile).
-  if (session && pathname === '/onboarding') return null
-  if (!session && remoteAuth && pathname !== '/auth' && pathname !== '/onboarding') return <AuthPage />
+  // Giriş yapmış kullanıcı onboarding/kök'e takılırsa ana ekrana yönlendir (useEffect ile).
+  if (session && (pathname === '/onboarding' || pathname === '/')) return null
+  // Girişsiz: onboarding, auth ve kök dışındaki rotalar login'e döner.
+  if (!session && remoteAuth && pathname !== '/auth' && pathname !== '/onboarding' && pathname !== '/') return <AuthPage />
 
   // Masaüstünde panel geniş alan kullanır; diğer sayfalar mobil kolonda kalır.
   const wide = pathname.startsWith('/dashboard')
   const mainWidth = wide
     ? 'max-w-7xl w-full md:px-6 md:pt-2'
     : 'max-w-lg w-full'
-  // Giriş öncesi ekranlar (onboarding, auth): uygulama navigasyonu ve hatırlatma çubuğu gizlenir.
-  const hideChrome = pathname === '/onboarding' || pathname === '/auth'
+  // Giriş öncesi ekranlar (onboarding, auth, kök): uygulama navigasyonu ve hatırlatma çubuğu gizlenir.
+  const hideChrome = pathname === '/onboarding' || pathname === '/auth' || pathname === '/'
 
   return (
     <div className="min-h-screen">
