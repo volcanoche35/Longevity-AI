@@ -5,7 +5,7 @@ import { supabase, IS_DEMO } from '@/lib/data'
 import AuthPage from './auth/page'
 import ReminderBanner from '@/components/reminder-banner'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 type SessionState = { user: { email?: string | null; id: string } } | null
 
@@ -39,6 +39,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<SessionState>(null)
   const [loading, setLoading] = useState(remoteAuth)
   const pathname = usePathname()
+  const router = useRouter()
 
   useEffect(() => {
     if (!remoteAuth || !supabase) return
@@ -57,6 +58,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  useEffect(() => {
+    if (session && pathname === '/onboarding') router.replace('/dashboard')
+  }, [session, pathname, router])
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
@@ -64,13 +69,17 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </div>
     )
   }
-  if (!session && remoteAuth && pathname !== '/auth') return <AuthPage />
+  // Giriş yapmış kullanıcı onboarding'e takılırsa ana ekrana yönlendir (useEffect ile).
+  if (session && pathname === '/onboarding') return null
+  if (!session && remoteAuth && pathname !== '/auth' && pathname !== '/onboarding') return <AuthPage />
 
   // Masaüstünde panel geniş alan kullanır; diğer sayfalar mobil kolonda kalır.
   const wide = pathname.startsWith('/dashboard')
   const mainWidth = wide
     ? 'max-w-7xl w-full md:px-6 md:pt-2'
     : 'max-w-lg w-full'
+  // Giriş öncesi ekranlar (onboarding, auth): uygulama navigasyonu ve hatırlatma çubuğu gizlenir.
+  const hideChrome = pathname === '/onboarding' || pathname === '/auth'
 
   return (
     <div className="min-h-screen">
@@ -85,13 +94,15 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </p>
           </div>
         )}
-        <ReminderBanner />
+        {!hideChrome && <ReminderBanner />}
         {children}
-        <nav className="app-nav tabbar" aria-label="Ana menü">
-          {TABS.map(t => <Link key={t.href} href={t.href} className="app-nav-link" aria-current={pathname.startsWith(t.href) ? 'page' : undefined}>
-            <NavIcon kind={t.icon} /><span>{t.label}</span>
-          </Link>)}
-        </nav>
+        {!hideChrome && (
+          <nav className="app-nav tabbar" aria-label="Ana menü">
+            {TABS.map(t => <Link key={t.href} href={t.href} className="app-nav-link" aria-current={pathname.startsWith(t.href) ? 'page' : undefined}>
+              <NavIcon kind={t.icon} /><span>{t.label}</span>
+            </Link>)}
+          </nav>
+        )}
       </main>
     </div>
   )

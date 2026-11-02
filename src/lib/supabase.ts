@@ -41,6 +41,8 @@ export function isRemoteMode(): boolean {
 /** Oturum açmış kullanıcının id'si; yoksa null. */
 export async function currentUserId(): Promise<string | null> {
   if (!supabase) return null
-  const { data } = await supabase.auth.getUser()
-  return data.user?.id ?? null
+  // getSession önbellekten okur (ağ çağrısı YAPMAZ); getUser JWT'yi ağdan doğrular
+  // ve her işaretlemede 200-500 ms gecikmeye yol açar. ID için getSession yeterli.
+  const { data } = await supabase.auth.getSession()
+  return data.session?.user?.id ?? null
 }

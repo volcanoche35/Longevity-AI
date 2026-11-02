@@ -228,10 +228,22 @@ export default function DashboardPage() {
   const toggleTaken = useCallback(
     (id: string) => {
       if (isRemoteMode()) {
-        toggleDayMarkAsync(id).then(ok => {
-          setStorageError(ok ? null : 'İşaret kaydedilemedi.')
-          reloadRemoteMarks()
-        }).catch(() => setStorageError('İşaret kaydedilemedi.'))
+        // İyimser (optimistic) güncelleme: işareti HEMEN çevir, ağı arka planda bekle.
+        // (Önceki hâl: ağ bitene kadar hiçbir şey değişmiyor, sonra tam liste yeniden çekiliyordu → gecikme.)
+        const wasTaken = taken.includes(id)
+        setRemoteTaken(prev => (wasTaken ? prev.filter(x => x !== id) : [...prev, id]))
+        setStorageError(null)
+        toggleDayMarkAsync(id)
+          .then(ok => {
+            if (!ok) {
+              setRemoteTaken(prev => (wasTaken ? [...prev, id] : prev.filter(x => x !== id)))
+              setStorageError('İşaret kaydedilemedi.')
+            }
+          })
+          .catch(() => {
+            setRemoteTaken(prev => (wasTaken ? [...prev, id] : prev.filter(x => x !== id)))
+            setStorageError('İşaret kaydedilemedi.')
+          })
         return
       }
       try {
@@ -242,7 +254,7 @@ export default function DashboardPage() {
         setStorageError(error instanceof Error ? error.message : 'İşaret cihaza kaydedilemedi.')
       }
     },
-    [reloadRemoteMarks],
+    [taken],
   )
 
   /* ── türetilmiş gerçek sayılar ── */
