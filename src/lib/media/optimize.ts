@@ -14,6 +14,7 @@
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
 import { mkdtemp, rm, writeFile, readFile } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { detectFormat, stripMetadata } from './metadata'
@@ -55,10 +56,15 @@ export class MediaError extends Error {
 export const MAX_INPUT_BYTES = 15 * 1024 * 1024
 const MAX_INPUT_PIXELS = 100_000_000
 const TIMEOUT_MS = 30_000
-const DEFAULT_CLI = '/root/craft-tools/bin/photocraft-cli'
+const CLI_CANDIDATES = [
+  '/app/bin/photocraft-cli',              // konteyner (nixpacks build aşamasında indirilir)
+  '/root/craft-tools/bin/photocraft-cli', // host geliştirme
+]
 
 function cliPath(): string {
-  return process.env.PHOTOCRAFT_CLI || DEFAULT_CLI
+  if (process.env.PHOTOCRAFT_CLI) return process.env.PHOTOCRAFT_CLI
+  for (const c of CLI_CANDIDATES) if (existsSync(c)) return c
+  return CLI_CANDIDATES[0]
 }
 
 /** photocraft `run` stdout'u: her satır {command,result} JSON. */

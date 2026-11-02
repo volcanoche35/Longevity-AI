@@ -1,0 +1,18 @@
+# nixpacks.toml — LongevityAI konteyner imajı yapılandırması.
+#
+# PDF raporu (vectorcraft-cli) ve görsel işleme (photocraft-cli) host'ta
+# /root/craft-tools altında duruyor; konteyner imajına gömülmüyor. Bu dosya
+# build aşamasında gereken sistem paketlerini kurar (pdfunite için poppler-utils,
+# indirme için curl + CA sertifikaları). Binary'lerin kendisi, Coolify'de
+# `build_command` içine eklenen scripts/fetch-craft-cli.sh ile indirilir
+# (build_command, bu dosyadaki [phases.build]'i ezer).
+#
+# Kod, CLI yolunu şu sırayla bulur (bkz. lib/report/render-pdf.ts,
+# lib/media/optimize.ts): env → /app/bin/* → /root/craft-tools/bin/*.
+
+[phases.setup]
+aptPkgs = ["poppler-utils", "curl", "ca-certificates"]
+
+[variables]
+VECTORCRAFT_CLI = "/app/bin/vectorcraft-cli"
+PHOTOCRAFT_CLI = "/app/bin/photocraft-cli"

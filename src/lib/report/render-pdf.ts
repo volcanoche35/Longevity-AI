@@ -11,17 +11,23 @@
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 
 const execFileAsync = promisify(execFile)
 
-const DEFAULT_CLI = '/root/craft-tools/bin/vectorcraft-cli'
+const CLI_CANDIDATES = [
+  '/app/bin/vectorcraft-cli',             // konteyner (nixpacks build aşamasında indirilir)
+  '/root/craft-tools/bin/vectorcraft-cli', // host geliştirme
+]
 const TIMEOUT_MS = 30_000
 const MAX_BUFFER = 16 * 1024 * 1024
 
 function cliPath(): string {
-  return process.env.VECTORCRAFT_CLI || DEFAULT_CLI
+  if (process.env.VECTORCRAFT_CLI) return process.env.VECTORCRAFT_CLI
+  for (const c of CLI_CANDIDATES) if (existsSync(c)) return c
+  return CLI_CANDIDATES[0]
 }
 
 /**
