@@ -19,6 +19,7 @@ const KEY = 'biotrack.preferences.v1'
 const DEFAULTS = {
   dashboard: { showPerformance: true },
   supplements: { defaultForm: 'Hap', defaultTime: 'Sabah' },
+  tracking: { aiAnalysis: true },
 }
 
 /* --- react köprüsü: hook'u çalıştırmadan store sözleşmesini yakala ------ */
@@ -83,7 +84,7 @@ async function main() {
     assert.equal(read.dashboard.showPerformance, false)
     assert.equal(read.supplements.defaultForm, 'Kapsül')
     assert.equal(read.supplements.defaultTime, 'Gece')
-    assert.deepEqual(Object.keys(read).sort(), ['dashboard', 'supplements'])
+    assert.deepEqual(Object.keys(read).sort(), ['dashboard', 'supplements', 'tracking'])
 
     const saved = prefs.savePreferences({ supplements: { defaultTime: 'Akşam' } })
     assert.equal(saved.ok, true)
