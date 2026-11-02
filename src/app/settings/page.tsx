@@ -19,6 +19,7 @@ import SettingsPanel, {
   SETTINGS_ORDER,
 } from '@/components/settings-panel'
 import ThemeSelector from '@/components/theme-selector'
+import { exportUserData } from '@/lib/export-data'
 import {
   resetPreferences,
   savePreferences,
@@ -32,6 +33,8 @@ export default function SettingsPage() {
   const [draft, setDraft] = useState<Preferences | null>(null)
   const [status, setStatus] = useState('')
   const [error, setError] = useState('')
+  const [exporting, setExporting] = useState(false)
+  const [exportError, setExportError] = useState('')
   const value = draft ?? stored
 
   const save = () => {
@@ -62,6 +65,18 @@ export default function SettingsPage() {
     }
   }
 
+  const handleExport = async () => {
+    setExporting(true); setExportError('')
+    try {
+      await exportUserData()
+      setStatus('Verilerin JSON olarak indirildi.')
+    } catch (e) {
+      setExportError(e instanceof Error ? e.message : 'Veri dışa aktarılamadı.')
+    } finally {
+      setExporting(false)
+    }
+  }
+
   return (
     <div className="settings-page">
       <header className="settings-page-head">
@@ -83,6 +98,17 @@ export default function SettingsPage() {
           <h3 className="settings-block-title">Tema</h3>
           <p className="settings-block-sub">Uygulamanın renk paletini seç. Tercihin bu cihazda saklanır.</p>
           <ThemeSelector />
+        </section>
+      </div>
+
+      <div className="settings-page-card">
+        <section className="settings-block" aria-label="Gizlilik ve veri">
+          <h3 className="settings-block-title">Gizlilik & Veri</h3>
+          <p className="settings-block-sub">Tüm verilerini tek dosya olarak indir.</p>
+          <button type="button" className="cz-btn cz-btn-ghost" onClick={handleExport} disabled={exporting}>
+            {exporting ? 'Hazırlanıyor…' : 'Verileri dışa aktar (JSON)'}
+          </button>
+          {exportError && <p className="cz-error" role="alert">{exportError}</p>}
         </section>
       </div>
 
