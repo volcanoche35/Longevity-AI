@@ -130,6 +130,20 @@ export default function SettingsPage() {
         </div>
       ))}
 
+      <div className="settings-page-card">
+        <section className="settings-block" aria-label="Hakkında">
+          <h3 className="settings-block-title">Hakkında</h3>
+          <p className="settings-block-sub">LongevityAI — uzun ömür takip asistanı. Sürüm 0.1.0</p>
+          <Link className="settings-link" href="/information">
+            <span className="settings-link-text">
+              <span className="settings-link-title">Kullanım bilgisi ve sınırlar</span>
+              <span className="settings-link-detail">Verilerin nasıl kullanıldığı ve KVKK.</span>
+            </span>
+            <span className="settings-link-arrow" aria-hidden="true">→</span>
+          </Link>
+        </section>
+      </div>
+
       {status && (
         <p className="cz-status" role="status">
           {status}
