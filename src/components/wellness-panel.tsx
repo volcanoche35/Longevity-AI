@@ -28,6 +28,7 @@ import { DAY_MARKS_KEY, readMarks, readMarksAsync } from '@/lib/daymarks'
 import { isRemoteMode } from '@/lib/supabase'
 import { onStorageKey, readRaw } from '@/lib/local-store'
 import { listSupplements, askAssistant, onDemoChange, type ClientSupplement } from '@/lib/data'
+import { usePreferences } from '@/lib/preferences'
 import './wellness.css'
 
 const SCORES = [1, 2, 3, 4, 5]
@@ -210,6 +211,8 @@ export default function WellnessPanel() {
   const [aiLoading, setAiLoading] = useState(false)
   const [aiResult, setAiResult] = useState('')
   const [aiError, setAiError] = useState('')
+  const preferences = usePreferences()
+  const showAiAnalysis = preferences.tracking.aiAnalysis
 
   const runAnalysis = async () => {
     if (aiLoading) return
@@ -513,21 +516,23 @@ export default function WellnessPanel() {
       )}
 
       {/* AI Analiz */}
-      <section className="wl-card" aria-labelledby="wl-ai-title">
-        <div className="wl-card-head">
-          <h2 id="wl-ai-title" className="wl-card-title">Günlük analiz</h2>
-          <button type="button" className="wl-ai-btn" onClick={runAnalysis} disabled={aiLoading}>
-            {aiLoading ? 'Düşünüyor…' : aiResult ? 'Yenile' : 'Analiz iste'}
-          </button>
-        </div>
-        {aiError ? (
-          <p className="wl-muted" role="alert">⚠️ {aiError}</p>
-        ) : aiResult ? (
-          <div className="wl-ai-result">{aiResult}</div>
-        ) : (
-          <p className="wl-muted">Takviyelerini ve günlük puanlarını kaydettikçe, profiline göre kısa günlük tavsiyeler alabilirsin. Yapay zekâ analizi tıbbi tavsiye değildir.</p>
-        )}
-      </section>
+      {showAiAnalysis && (
+        <section className="wl-card" aria-labelledby="wl-ai-title">
+          <div className="wl-card-head">
+            <h2 id="wl-ai-title" className="wl-card-title">Günlük analiz</h2>
+            <button type="button" className="wl-ai-btn" onClick={runAnalysis} disabled={aiLoading}>
+              {aiLoading ? 'Düşünüyor…' : aiResult ? 'Yenile' : 'Analiz iste'}
+            </button>
+          </div>
+          {aiError ? (
+            <p className="wl-muted" role="alert">⚠️ {aiError}</p>
+          ) : aiResult ? (
+            <div className="wl-ai-result">{aiResult}</div>
+          ) : (
+            <p className="wl-muted">Takviyelerini ve günlük puanlarını kaydettikçe, profiline göre kısa günlük tavsiyeler alabilirsin. Yapay zekâ analizi tıbbi tavsiye değildir.</p>
+          )}
+        </section>
+      )}
 
       {/* Grafik */}
       <section className="wl-card" aria-labelledby="wl-chart-title">

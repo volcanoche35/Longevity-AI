@@ -33,9 +33,14 @@ export interface SupplementPreferences {
   defaultTime: SupplementTime
 }
 
+export interface TrackingPreferences {
+  aiAnalysis: boolean
+}
+
 export interface Preferences {
   dashboard: DashboardPreferences
   supplements: SupplementPreferences
+  tracking: TrackingPreferences
 }
 
 export type DeepPartial<T> = {
@@ -60,6 +65,7 @@ function deepFreeze<T>(value: T): T {
 const DEFAULT_PREFERENCES: Preferences = deepFreeze<Preferences>({
   dashboard: { showPerformance: true },
   supplements: { defaultForm: 'Hap', defaultTime: 'Sabah' },
+  tracking: { aiAnalysis: true },
 })
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -70,6 +76,7 @@ function freshDefaults(): Preferences {
   return {
     dashboard: { ...DEFAULT_PREFERENCES.dashboard },
     supplements: { ...DEFAULT_PREFERENCES.supplements },
+    tracking: { ...DEFAULT_PREFERENCES.tracking },
   }
 }
 
@@ -84,6 +91,7 @@ function normalize(input: unknown): Preferences {
   const root = isRecord(input) ? input : {}
   const dashboard = isRecord(root.dashboard) ? root.dashboard : {}
   const supplements = isRecord(root.supplements) ? root.supplements : {}
+  const tracking = isRecord(root.tracking) ? root.tracking : {}
   const form = supplements.defaultForm
   const time = supplements.defaultTime
   return {
@@ -104,6 +112,12 @@ function normalize(input: unknown): Preferences {
           ? (time as SupplementTime)
           : DEFAULT_PREFERENCES.supplements.defaultTime,
     },
+    tracking: {
+      aiAnalysis:
+        typeof tracking.aiAnalysis === 'boolean'
+          ? tracking.aiAnalysis
+          : DEFAULT_PREFERENCES.tracking.aiAnalysis,
+    },
   }
 }
 
@@ -120,7 +134,8 @@ function samePreferences(a: Preferences, b: Preferences): boolean {
   return (
     a.dashboard.showPerformance === b.dashboard.showPerformance &&
     a.supplements.defaultForm === b.supplements.defaultForm &&
-    a.supplements.defaultTime === b.supplements.defaultTime
+    a.supplements.defaultTime === b.supplements.defaultTime &&
+    a.tracking.aiAnalysis === b.tracking.aiAnalysis
   )
 }
 
@@ -234,6 +249,17 @@ function validatePatch(patch: unknown): PreferencesPatch {
     if (Object.keys(supplements).length) out.supplements = supplements
   }
 
+  if (patch.tracking !== undefined) {
+    if (!isRecord(patch.tracking)) throw new Error('Günlük ayarları nesne olmalı.')
+    const tracking: NonNullable<PreferencesPatch['tracking']> = {}
+    const ai = patch.tracking.aiAnalysis
+    if (ai !== undefined) {
+      if (typeof ai !== 'boolean') throw new Error('AI analizi ayarı yalnızca açık veya kapalı olabilir.')
+      tracking.aiAnalysis = ai
+    }
+    if (Object.keys(tracking).length) out.tracking = tracking
+  }
+
   return out
 }
 
@@ -245,6 +271,9 @@ function mergePreferences(current: Preferences, patch: PreferencesPatch): Prefer
     supplements: {
       defaultForm: patch.supplements?.defaultForm ?? current.supplements.defaultForm,
       defaultTime: patch.supplements?.defaultTime ?? current.supplements.defaultTime,
+    },
+    tracking: {
+      aiAnalysis: patch.tracking?.aiAnalysis ?? current.tracking.aiAnalysis,
     },
   }
 }

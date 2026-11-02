@@ -288,6 +288,13 @@ export default function SettingsPanel({
           <p className="settings-block-sub">{SECTION_SUBTITLES.tracking}</p>
         </>
       )}
+      <Toggle
+        id={`${idPrefix}-aianalysis`}
+        label="AI günlük analizi"
+        hint="Günlüğüm'deki yapay zekâ analiz kartını gösterir. Kapatırsan verilerin AI'ya gönderilmez."
+        checked={value.tracking.aiAnalysis}
+        onChange={next => onChange({ ...value, tracking: { ...value.tracking, aiAnalysis: next } })}
+      />
       <Note>
         Günlük işaretler ve ölçümler kendi ekranında tutulur. Görünürlük ve hatırlatma tercihleri için
         ilgili ekranları kullan.
