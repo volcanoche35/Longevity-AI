@@ -3,7 +3,7 @@
 .ixp {
   margin-bottom: 20px;
   background: var(--surface);
-  border: 1px solid var(--line, #142a54);
+  border: 1px solid var(--line, var(--surface-2));
   border-radius: 16px;
   overflow: hidden;
 }
@@ -24,7 +24,7 @@
   cursor: pointer;
 }
 
-.ixp-toggle:hover { background: #2fc1b40A; }
+.ixp-toggle:hover { background: color-mix(in srgb, var(--primary) 4%, transparent); }
 .ixp-toggle:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: -2px;
@@ -40,7 +40,7 @@
   height: 22px;
   display: grid;
   place-items: center;
-  border: 1px solid #2a3a5a;
+  border: 1px solid var(--input-border);
   border-radius: 999px;
   color: var(--primary);
   font-size: 14px;
@@ -49,7 +49,7 @@
 
 .ixp-body {
   padding: 2px 14px 14px;
-  border-top: 1px solid var(--line, #142a54);
+  border-top: 1px solid var(--line, var(--surface-2));
 }
 
 .ixp-body[hidden] { display: none; }
@@ -68,8 +68,8 @@
   font-size: 12px;
   line-height: 1.6;
   color: var(--text-2);
-  background: #0a1a3a;
-  border: 1px solid #142a54;
+  background: var(--input-bg);
+  border: 1px solid var(--surface-2);
   border-radius: 10px;
   padding: 10px 12px;
 }
@@ -83,15 +83,15 @@
 }
 
 .ixp-card {
-  background: var(--surface-2, #142a54);
-  border: 1px solid #142a54;
+  background: var(--surface-2, var(--surface-2));
+  border: 1px solid var(--surface-2);
   border-radius: 12px;
   padding: 12px;
   min-width: 0;
 }
 
 .ixp-med { margin-top: 14px; }
-.ixp-card--med { border-left: 3px solid var(--magenta, #eb7a54); }
+.ixp-card--med { border-left: 3px solid var(--magenta, var(--magenta)); }
 
 .ixp-label {
   display: inline-block;
@@ -99,10 +99,10 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--primary);
-  border: 1px solid #2a3a5a5C;
+  border: 1px solid color-mix(in srgb, var(--input-border) 36%, transparent);
   border-radius: 999px;
   padding: 3px 8px;
-  background: #2fc1b40A;
+  background: color-mix(in srgb, var(--primary) 4%, transparent);
 }
 
 .ixp-pair {
@@ -132,7 +132,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-3);
-  border: 1px solid #142a54;
+  border: 1px solid var(--surface-2);
   border-radius: 999px;
   padding: 2px 6px;
 }
@@ -154,7 +154,7 @@
   font-size: 12px;
   color: var(--primary);
   text-decoration: none;
-  border-bottom: 1px solid #2a3a5a5C;
+  border-bottom: 1px solid color-mix(in srgb, var(--input-border) 36%, transparent);
   width: fit-content;
   max-width: 100%;
   overflow-wrap: anywhere;
@@ -166,9 +166,9 @@
 .ixp-unreviewed {
   margin-top: 12px;
   padding: 10px 12px;
-  border: 1px dashed #2a3a5a;
+  border: 1px dashed var(--input-border);
   border-radius: 10px;
-  background: #0a1a3a;
+  background: var(--input-bg);
 }
 
 .ixp-unreviewed-title {

@@ -40,8 +40,8 @@
   min-height: 44px;
   padding: 0 14px;
   border-radius: 12px;
-  border: 1px solid #142a54;
-  background: #0a1a3a;
+  border: 1px solid var(--surface-2);
+  background: var(--input-bg);
   color: var(--text);
   font-size: 13px;
   font-weight: 600;
@@ -49,7 +49,7 @@
   cursor: pointer;
   transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
 }
-.rem-btn:hover { border-color: #1a3358; background: #0d1f45; }
+.rem-btn:hover { border-color: var(--surface-2); background: var(--surface); }
 .rem-btn:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
@@ -57,12 +57,12 @@
 .rem-btn-primary {
   border-color: var(--primary);
   background: var(--primary);
-  color: #0d1f45;
+  color: var(--surface);
 }
 .rem-btn-primary:hover { background: #a8d4c0; border-color: var(--primary); }
 .rem-btn-template {
   border-style: dashed;
-  border-color: #3a4a6a;
+  border-color: var(--popover-border);
   background: transparent;
   color: var(--text-2);
 }
@@ -76,9 +76,9 @@
 .rem-btn-danger {
   border-color: transparent;
   background: transparent;
-  color: #eb7a54;
+  color: var(--magenta);
 }
-.rem-btn-danger:hover { color: #f0a184; background: rgba(255, 77, 94, 0.08); border-color: transparent; }
+.rem-btn-danger:hover { color: var(--alert); background: rgba(255, 77, 94, 0.08); border-color: transparent; }
 
 .rem-warn,
 .rem-error {
@@ -91,12 +91,12 @@
 .rem-warn {
   border: 1px solid rgba(255, 176, 32, 0.28);
   background: rgba(255, 176, 32, 0.07);
-  color: #ebd3a2;
+  color: var(--amber);
 }
 .rem-error {
   border: 1px solid rgba(255, 77, 94, 0.36);
   background: rgba(255, 77, 94, 0.08);
-  color: #f0a184;
+  color: var(--alert);
 }
 
 /* aria-live bölgesi görünmez; yalnızca ekran okuyucuya duyurur. */
@@ -115,9 +115,9 @@
 .rem-form {
   margin-top: 16px;
   padding: 15px;
-  border: 1px solid #122a54;
+  border: 1px solid var(--popover-bg);
   border-radius: 18px;
-  background: #08142e;
+  background: var(--bg-3);
   display: grid;
   gap: 12px;
 }
@@ -142,9 +142,9 @@
 }
 
 .rem-picks {
-  border: 1px solid #0d1f45;
+  border: 1px solid var(--surface);
   border-radius: 14px;
-  background: #08142e;
+  background: var(--bg-3);
   padding: 12px;
 }
 .rem-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 2px; }
@@ -152,18 +152,18 @@
   min-height: 34px;
   padding: 4px 10px;
   border-radius: 999px;
-  border: 1px solid #142a54;
-  background: #0a1a3a;
+  border: 1px solid var(--surface-2);
+  background: var(--input-bg);
   color: var(--text-2);
   font-size: 12px;
   cursor: pointer;
   transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
 }
-.rem-chip:hover { border-color: #2a3a5a; color: var(--text); }
+.rem-chip:hover { border-color: var(--input-border); color: var(--text); }
 .rem-chip[aria-pressed='true'] {
   border-color: rgba(255, 77, 94, 0.55);
   background: rgba(255, 77, 94, 0.12);
-  color: #f0a184;
+  color: var(--alert);
 }
 .rem-chip:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .rem-hint {
@@ -172,7 +172,7 @@
   line-height: 1.55;
   color: var(--text-3);
 }
-.rem-hint a { color: #f0a184; text-decoration: underline; text-underline-offset: 2px; }
+.rem-hint a { color: var(--alert); text-decoration: underline; text-underline-offset: 2px; }
 
 .rem-section { margin-top: 24px; }
 .rem-section-head {
@@ -194,8 +194,8 @@
   min-width: 24px;
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid #142a54;
-  background: #0a1a3a;
+  border: 1px solid var(--surface-2);
+  background: var(--input-bg);
   color: var(--text-3);
   font-size: 11px;
   text-align: center;
@@ -203,7 +203,7 @@
 .rem-empty-line {
   margin: 0;
   padding: 14px;
-  border: 1px dashed #122a54;
+  border: 1px dashed var(--popover-bg);
   border-radius: 14px;
   color: var(--text-3);
   font-size: 12.5px;
@@ -211,9 +211,9 @@
 }
 .rem-empty {
   padding: 22px 18px;
-  border: 1px dashed #142a54;
+  border: 1px dashed var(--surface-2);
   border-radius: 18px;
-  background: #060f20;
+  background: var(--bg-3);
   text-align: center;
 }
 .rem-empty-title {
@@ -241,13 +241,13 @@
   grid-template-columns: 58px minmax(0, 1fr);
   gap: 8px 12px;
   padding: 13px;
-  border: 1px solid #12243d;
+  border: 1px solid var(--input-border);
   border-radius: 16px;
-  background: #071026;
+  background: var(--bg-2);
 }
 .rem-card-due {
   border-color: rgba(255, 77, 94, 0.42);
-  background: #071026;
+  background: var(--bg-2);
   box-shadow: inset 3px 0 0 var(--primary);
 }
 .rem-time {
@@ -258,7 +258,7 @@
   color: var(--text);
   padding-top: 2px;
 }
-.rem-card-due .rem-time { color: #f0a184; }
+.rem-card-due .rem-time { color: var(--alert); }
 .rem-body { min-width: 0; }
 .rem-row-head {
   display: flex;
@@ -291,8 +291,8 @@
   flex-shrink: 0;
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid #142a54;
-  background: #0a1a3a;
+  border: 1px solid var(--surface-2);
+  background: var(--input-bg);
   color: var(--text-3);
   font-size: 10px;
   font-weight: 600;
@@ -301,12 +301,12 @@
 .rem-badge-due {
   border-color: rgba(255, 77, 94, 0.45);
   background: rgba(255, 77, 94, 0.12);
-  color: #f0a184;
+  color: var(--alert);
 }
 .rem-badge-snoozed {
   border-color: rgba(255, 176, 32, 0.38);
   background: rgba(255, 176, 32, 0.08);
-  color: #ebd3a2;
+  color: var(--amber);
 }
 .rem-badge-done {
   border-color: rgba(57, 224, 122, 0.32);
@@ -320,7 +320,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  border-top: 1px solid #0d1f45;
+  border-top: 1px solid var(--surface);
   margin-top: 2px;
   padding-top: 8px;
 }
@@ -331,17 +331,17 @@
   display: grid;
   gap: 10px;
   padding: 12px;
-  border: 1px solid #142a54;
+  border: 1px solid var(--surface-2);
   border-radius: 14px;
-  background: #0a1a3a;
+  background: var(--input-bg);
 }
 
 .rem-edu {
   margin-top: 26px;
   padding: 14px;
-  border: 1px solid #0d1f45;
+  border: 1px solid var(--surface);
   border-radius: 16px;
-  background: #071026;
+  background: var(--bg-2);
   font-size: 12px;
   line-height: 1.65;
   color: var(--text-2);
@@ -350,7 +350,7 @@
 .rem-edu a {
   display: inline-block;
   margin-top: 7px;
-  color: #f0a184;
+  color: var(--alert);
   text-decoration: underline;
   text-underline-offset: 2px;
   font-size: 11.5px;

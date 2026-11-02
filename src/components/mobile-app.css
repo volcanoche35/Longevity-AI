@@ -15,7 +15,7 @@
 .metric-strip .m-item b,.metric-strip .m-item strong{font-size:20px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--text)}
 .metric-strip .m-item small,.metric-strip .m-item span{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .mood-glow{--mg-color:var(--text-2);--mg-int:.25;position:relative;width:100%;height:72px;pointer-events:none;display:grid;place-items:center;isolation:isolate}
-.mood-glow[data-mood="1"]{--mg-color:#8fb0d0;--mg-int:.3}
+.mood-glow[data-mood="1"]{--mg-color:var(--electric);--mg-int:.3}
 .mood-glow[data-mood="2"]{--mg-color:#5aa7c9;--mg-int:.4}
 .mood-glow[data-mood="3"]{--mg-color:var(--amber);--mg-int:.5}
 .mood-glow[data-mood="4"]{--mg-color:#96d1aa;--mg-int:.65}
@@ -47,10 +47,10 @@
 .sheet-row { width: 100%; min-height: 52px; display: flex; align-items: center; gap: 14px; padding: 10px 12px; border: 0; border-radius: 14px; background: transparent; color: var(--text); font-size: 15px; text-align: left; cursor: pointer; }
 .sheet-row:hover, .sheet-row:focus-visible { background: var(--surface-2); outline: none; }
 .sheet-row small { margin-left: auto; color: var(--text-3); font-size: 12px; }
-.sheet-row--danger { color: #eb7a54; }
-.sheet-primary { width: 100%; min-height: 48px; margin-top: 16px; border: 0; border-radius: 14px; background: var(--primary); color: #051230; font-size: 15px; font-weight: 600; cursor: pointer; }
+.sheet-row--danger { color: var(--magenta); }
+.sheet-primary { width: 100%; min-height: 48px; margin-top: 16px; border: 0; border-radius: 14px; background: var(--primary); color: var(--bg); font-size: 15px; font-weight: 600; cursor: pointer; }
 .sheet-primary:disabled { opacity: .6; cursor: default; }
-.sheet-primary--danger { background: #eb7a54; }
+.sheet-primary--danger { background: var(--magenta); }
 .chip-time { min-height: 44px; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--text-2); font-size: 14px; cursor: pointer; }
 .chip-time.is-on { border-color: var(--primary); color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, transparent); }
 @media (min-width: 640px) { .sheet { margin: auto; border-bottom: 1px solid var(--line); border-radius: 22px; } }

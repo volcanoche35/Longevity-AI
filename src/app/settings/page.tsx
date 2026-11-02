@@ -18,6 +18,7 @@ import SettingsPanel, {
   SECTION_HREFS,
   SETTINGS_ORDER,
 } from '@/components/settings-panel'
+import ThemeSelector from '@/components/theme-selector'
 import {
   resetPreferences,
   savePreferences,
@@ -77,6 +78,14 @@ export default function SettingsPage() {
         verisi bu sayfada tutulmaz.
       </p>
 
+      <div className="settings-page-card">
+        <section className="settings-block" aria-label="Görünüm">
+          <h3 className="settings-block-title">Tema</h3>
+          <p className="settings-block-sub">Uygulamanın renk paletini seç. Tercihin bu cihazda saklanır.</p>
+          <ThemeSelector />
+        </section>
+      </div>
+
       {SETTINGS_ORDER.map(section => (
         <div className="settings-page-card" key={section}>
           <SettingsPanel
@@ -122,10 +131,8 @@ export default function SettingsPage() {
       </div>
 
       <p className="settings-theme-note">
-        Tema sabit: koyu mat palet (zemin #051230, yüzey #0d1f45, vurgu #2fc1b4). Bu sürümde renk veya
-        tema seçici yoktur; metin okunabilirliği için açık/koyu kontrast korunur. Hatırlatıcı saatleri
-        ayrı <Link href="/reminders">hatırlatıcılar</Link> ekranında yönetilir; bu sayfadan bildirim
-        veya zamanlanmış görev oluşturulmaz.
+        Hatırlatıcı saatleri ayrı <Link href="/reminders">hatırlatıcılar</Link> ekranında yönetilir; bu
+        sayfadan bildirim veya zamanlanmış görev oluşturulmaz.
       </p>
     </div>
   )
