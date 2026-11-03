@@ -12,6 +12,7 @@ type SessionState = { user: { email?: string | null; id: string } } | null
 const TABS = [
   { href: '/dashboard', icon: 'today', label: 'Bugün' },
   { href: '/supplements', icon: 'pill', label: 'Takviyeler' },
+  { href: '/interactions', icon: 'network', label: 'Etkileşim' },
   { href: '/tracking', icon: 'chart', label: 'Günlüğüm' },
   { href: '/chat', icon: 'chat', label: 'Asistan' },
   { href: '/profile', icon: 'profile', label: 'Profil' },
@@ -20,6 +21,7 @@ function NavIcon({ kind }: { kind: string }) {
   const shapes: Record<string, React.ReactNode> = {
     today: <><path d="M4 10 12 3l8 7v10H4z"/><path d="M9 20v-7h6v7"/></>,
     pill: <><path d="M8.5 4.5a5 5 0 0 1 7 7l-5 5a5 5 0 0 1-7-7z" transform="translate(3 1)"/><path d="m8 9 7 7"/></>,
+    network: <><circle cx="6" cy="12" r="3"/><circle cx="18" cy="12" r="3"/><path d="M9 12h6"/></>,
     chart: <><path d="M4 4v16h16"/><path d="m7 14 4-4 4 2 5-7"/></>,
     chat: <><path d="M20 11a8 8 0 0 1-8 8H7l-4 3v-7a8 8 0 1 1 17-4Z"/><path d="M8 10h8M8 14h5"/></>,
     profile: <><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></>,

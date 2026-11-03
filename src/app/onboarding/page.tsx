@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react'
 import Link from 'next/link'
+import BrandMark from '@/components/brand-mark'
 import './onboarding.css'
 
 const SLIDES = [
@@ -56,7 +57,7 @@ export default function OnboardingPage() {
   return (
     <div className="ob" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <header className="ob-head">
-        <span className="ob-brand">🧬 LongevityAI</span>
+        <span className="ob-brand"><BrandMark size={22} label="LongevityAI" /> LongevityAI</span>
         <Link href="/auth" className="ob-link">Giriş yap</Link>
       </header>
 

@@ -18,6 +18,9 @@
   padding: 8px 0 24px;
 }
 .ob-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--serif);
   font-weight: 600;
   font-size: 18px;
