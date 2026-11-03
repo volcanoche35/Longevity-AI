@@ -1,0 +1,63 @@
+/* Animasyonlu marka işareti — dönen orbital halkalar + çekirdek. */
+
+.brand-mark {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--primary) 40%, transparent));
+}
+
+.brand-mark__ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: brand-spin 6s linear infinite;
+}
+
+.brand-mark__ring--2 {
+  inset: 12%;
+  border-color: var(--magenta);
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  animation: brand-spin 9s linear infinite reverse;
+}
+
+.brand-mark__nucleus {
+  position: absolute;
+  inset: 32%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 32%, var(--electric), var(--primary) 70%);
+}
+
+@keyframes brand-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Dönen bir parıltı noktası ekle (halka üzerinde hareket eden vurgu). */
+.brand-mark__ring::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+}
+
+.brand-mark__ring--2::after {
+  background: var(--magenta);
+  box-shadow: 0 0 8px var(--magenta);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark__ring,
+  .brand-mark__ring--2 {
+    animation: none;
+  }
+}

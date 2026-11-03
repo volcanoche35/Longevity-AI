@@ -99,11 +99,42 @@ ok(!unk.recognizedNames.includes('Mucize Karışım X'))
 ok(unk.notice === NO_MATCH_MESSAGE)
 
 // ── 8. Alt-dize tuzağı: token düzeyi eşleşme ────────────────────────────
-ok(recognizeFamily('D Vitamini 1000 IU') === null)
-ok(recognizeFamily('K2 + D3') === null)
 ok(recognizeFamily('Demirhindi') === null)         // "demir" alt-dize değil
 ok(recognizeFamily('Bakır Çayı') === 'bakir')
 ok(recognizeFamilies('Çinko + Bakır').length === 2)
+
+// ── 8b. Yeni aileler tanınır ───────────────────────────────────────────
+ok(recognizeFamily('D Vitamini 1000 IU') === 'd3')
+ok(recognizeFamily('K2 MK-7') === 'k2')
+ok(recognizeFamily('Magnezyum Sitrat') === 'magnezyum')
+ok(recognizeFamily('B12') === 'b12')
+ok(recognizeFamily('Folik Asit') === 'folat')
+ok(recognizeFamily('Balık Yağı') === 'omega-3')
+ok(recognizeFamily('Koenzim Q10') === 'koenzim-q10')
+
+// ── 8c. Yeni çatışma kuralları (kind=conflict) ─────────────────────────
+const iz = reviewSupplements([s('Demir'), s('Çinko')])
+ok(iz.pairs.length === 1 && iz.pairs[0].ruleId === 'iron-zinc')
+ok(iz.pairs[0].kind === 'conflict')
+ok(iz.pairs[0].label === 'Kaynaklı olası etkileşim')
+
+const cm = reviewSupplements([s('Kalsiyum'), s('Magnezyum')])
+ok(cm.pairs.length === 1 && cm.pairs[0].ruleId === 'calcium-magnesium')
+ok(cm.pairs[0].kind === 'conflict')
+
+// ── 8d. Sinerji kuralları (kind=synergy) ───────────────────────────────
+const dm = reviewSupplements([s('D3'), s('Magnezyum')])
+ok(dm.pairs.length === 1 && dm.pairs[0].ruleId === 'd3-magnesium')
+ok(dm.pairs[0].kind === 'synergy')
+ok(dm.pairs[0].label === 'Önerilen birlikte kullanım')
+
+const dk2 = reviewSupplements([s('D3'), s('K2')])
+ok(dk2.pairs.length === 1 && dk2.pairs[0].ruleId === 'd3-k2')
+ok(dk2.pairs[0].kind === 'synergy')
+
+const bf = reviewSupplements([s('B12'), s('Folat')])
+ok(bf.pairs.length === 1 && bf.pairs[0].ruleId === 'b12-folat')
+ok(bf.pairs[0].kind === 'synergy')
 
 // ── 9. <2 kayıt: boş durum, hiçbir çift "kontrol edildi" değil ─────────
 for (const input of [[], [s('Demir', '25 mg')]]) {

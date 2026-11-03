@@ -93,6 +93,18 @@
 .ixp-med { margin-top: 14px; }
 .ixp-card--med { border-left: 3px solid var(--magenta, var(--magenta)); }
 
+/* Çatışma (varsayılan) vs sinerji kartları */
+.ixp-card { border-left: 3px solid var(--warn, #f3a257); }
+.ixp-card--synergy {
+  border-left: 3px solid var(--primary, var(--primary));
+}
+.ixp-card--synergy .ixp-label {
+  color: var(--primary);
+  border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+}
+.ixp-card--synergy .ixp-x { color: var(--primary); }
+
 .ixp-label {
   display: inline-block;
   font-size: 10px;

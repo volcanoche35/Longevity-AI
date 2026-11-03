@@ -69,11 +69,11 @@ export default function InteractionPanel({ supplements, medications }: Interacti
             <p className="ixp-notice">{review.notice}</p>
             <ul className="ixp-list">
               {review.pairs.map((pair, idx) => (
-                <li key={`${pair.ruleId}-${idx}`} className="ixp-card">
+                <li key={`${pair.ruleId}-${idx}`} className={`ixp-card ${pair.kind === 'synergy' ? 'ixp-card--synergy' : ''}`}>
                   <span className="ixp-label">{pair.label}</span>
                   <p className="ixp-pair">
                     <span>{pair.products[0]}</span>
-                    <span className="ixp-x" aria-hidden="true">+</span>
+                    <span className="ixp-x" aria-hidden="true">{pair.kind === 'synergy' ? '✦' : '+'}</span>
                     <span>{pair.products[1]}</span>
                   </p>
                   {(pair.dosages[0] || pair.dosages[1]) && (

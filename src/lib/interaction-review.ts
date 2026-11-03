@@ -28,10 +28,17 @@ export type InteractionFamily =
   | 'c-vitamini'
   | 'cinko'
   | 'bakir'
+  | 'd3'
+  | 'k2'
+  | 'magnezyum'
+  | 'b12'
+  | 'folat'
+  | 'omega-3'
+  | 'koenzim-q10'
 
 export interface InteractionSource {
   /** Ledger'daki kaynak kimliği — docs/interaction-sources.md ile eşleşir. */
-  id: 'ods-iron' | 'ods-copper'
+  id: 'ods-iron' | 'ods-copper' | 'ods-zinc' | 'ods-magnesium' | 'ods-vitamin-d' | 'ods-b12'
   label: string
   url: string
 }
@@ -47,13 +54,35 @@ export const SOURCES: Record<InteractionSource['id'], InteractionSource> = {
     label: 'NIH ODS — Copper Fact Sheet',
     url: 'https://ods.od.nih.gov/factsheets/Copper-HealthProfessional/',
   },
+  'ods-zinc': {
+    id: 'ods-zinc',
+    label: 'NIH ODS — Zinc Fact Sheet',
+    url: 'https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/',
+  },
+  'ods-magnesium': {
+    id: 'ods-magnesium',
+    label: 'NIH ODS — Magnesium Fact Sheet',
+    url: 'https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/',
+  },
+  'ods-vitamin-d': {
+    id: 'ods-vitamin-d',
+    label: 'NIH ODS — Vitamin D Fact Sheet',
+    url: 'https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/',
+  },
+  'ods-b12': {
+    id: 'ods-b12',
+    label: 'NIH ODS — Vitamin B12 Fact Sheet',
+    url: 'https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/',
+  },
 }
 
 export interface InteractionPair {
   /** Kural kimliği (stabil; testler buna bakar). */
   ruleId: InteractionRuleId
+  /** 'conflict' → ayrı alma uyarısı; 'synergy' → birlikte kullanım önerisi. */
+  kind: 'conflict' | 'synergy'
   /** Sabit etiket — "olası" der, tanı/kesinlik iddiası taşımaz. */
-  label: typeof PAIR_LABEL
+  label: string
   families: [InteractionFamily, InteractionFamily]
   /** Envanterdeki ürün adları, kullanıcının yazdığı gibi. */
   products: [string, string]
@@ -65,6 +94,8 @@ export interface InteractionPair {
 }
 
 export const PAIR_LABEL = 'Kaynaklı olası etkileşim' as const
+
+export const SYNERGY_LABEL = 'Önerilen birlikte kullanım' as const
 
 export const DRUG_NOTICE =
   'İlaç listesi incelenmiyor. Düzenli ilaç (ör. kan sulandırıcı, tansiyon, tiroid) kullanıyorsanız bu panel yeterli değildir; hekim veya eczacıya danışın.'
@@ -109,6 +140,13 @@ const FAMILY_PHRASES: Record<InteractionFamily, string[]> = {
   'c-vitamini': ['c vitamini', 'vitamin c', 'askorbik asit', 'ascorbic acid', 'askorbat', 'ascorbate'],
   cinko: ['cinko', 'zinc'],
   bakir: ['bakir', 'copper'],
+  d3: ['d vitamini', 'vitamin d', 'd3', 'kolekalsiferol', 'cholecalciferol', 'kalsiferol'],
+  k2: ['k2', 'menaquinon', 'menakinon', 'k vitamini', 'vitamin k', 'mk-7', 'mk7'],
+  magnezyum: ['magnezyum', 'magnesium'],
+  b12: ['b12', 'kobalamin', 'cobalamin', 'metilkobalamin', 'methylcobalamin'],
+  folat: ['folat', 'folate', 'folik asit', 'folic acid', 'b9', 'metilfolat', 'methylfolate'],
+  'omega-3': ['omega-3', 'omega 3', 'balık yağı', 'balik yagi', 'fish oil', 'epa', 'dha'],
+  'koenzim-q10': ['koenzim q10', 'coq10', 'ubikinon', 'ubikinol', 'ubiquinone', 'ubiquinol'],
 }
 
 /** Bir ifadenin token dizisi, ürün token'ları içinde bitişik olarak geçiyor mu? */
@@ -142,11 +180,21 @@ export function recognizeFamily(name: string): InteractionFamily | null {
 
 /* ── Kurallar ────────────────────────────────────────────────────────────── */
 
-export type InteractionRuleId = 'calcium-iron' | 'zinc-copper' | 'iron-vitamin-c'
+export type InteractionRuleId =
+  | 'calcium-iron'
+  | 'zinc-copper'
+  | 'iron-vitamin-c'
+  | 'iron-zinc'
+  | 'calcium-magnesium'
+  | 'd3-magnesium'
+  | 'd3-k2'
+  | 'b12-folat'
 
 export interface InteractionRule {
   id: InteractionRuleId
   pair: [InteractionFamily, InteractionFamily]
+  /** 'conflict' → ayrı alma uyarısı; 'synergy' → birlikte kullanım önerisi. */
+  kind: 'conflict' | 'synergy'
   /** İki aile aynı üründe bulunduğunda kendi kendisiyle eşleşmeyi engeller. */
   condition: string
   sourceIds: InteractionSource['id'][]
@@ -160,6 +208,7 @@ export const RULES: InteractionRule[] = [
   {
     id: 'calcium-iron',
     pair: ['kalsiyum', 'demir'],
+    kind: 'conflict',
     condition:
       'Kalsiyum, demir emilimini azaltabileceği için uzmanlar tek başına kalsiyum ve demir takviyelerinin gün içinde farklı saatlerde alınmasını öneriyor. Kaynak, etkinin kesin olarak kanıtlanmadığını ve tipik bir diyette bu tür emilim etkilerinin zayıfladığını da belirtiyor. Kaynak belirli bir saat aralığı veya doz eşiği vermiyor; burada da uydurulmuyor.',
     sourceIds: ['ods-iron'],
@@ -167,6 +216,7 @@ export const RULES: InteractionRule[] = [
   {
     id: 'zinc-copper',
     pair: ['cinko', 'bakir'],
+    kind: 'conflict',
     condition:
       'Koşullu bağlam: yüksek dozda ve uzun süreli çinko alımı bakır emilimini etkileyebilir; kaynak, orta-yüksek çinko alımında (~60 mg/gün, 10 haftaya kadar) bakır durumu belirteçlerinde düşüş bildirildiğini ve yetişkin üst sınırının 40 mg/gün olduğunu yazıyor. Bu, sizin mevcut kullanımınızın riskli olduğu veya bakır eksikliğiniz olduğu anlamına gelmez; doz ve süre etiketiyle birlikte hekim/eczacı değerlendirmesi gerekir.',
     sourceIds: ['ods-copper'],
@@ -174,9 +224,50 @@ export const RULES: InteractionRule[] = [
   {
     id: 'iron-vitamin-c',
     pair: ['demir', 'c-vitamini'],
+    kind: 'synergy',
     condition:
       'C vitamini (askorbik asit), hem olmayan demirin biyoyararlanımını artırabilir; kaynak demir biyoyararlanımını diyetle birlikte değerlendiriyor. Bu bir "güvenli kombinasyon" veya "birlikte alın" onayı değildir: demir ihtiyacı, dozu ve altta yatan durum ayrı değerlendirilir.',
     sourceIds: ['ods-iron'],
+  },
+  {
+    id: 'iron-zinc',
+    pair: ['demir', 'cinko'],
+    kind: 'conflict',
+    condition:
+      'Yüksek dozda demir ve çinko, bağırsakta ortak emilim yolunu paylaşabilir ve birbirinin emilimini azaltabilir. Kaynak bu rekabeti genel bir mutabakat düzeyinde belirtir; belirli bir doz eşiği veya saat aralığı vermez. Kesin bir öneri için hekim/eczacı değerlendirmesi gerekir.',
+    sourceIds: ['ods-zinc', 'ods-iron'],
+  },
+  {
+    id: 'calcium-magnesium',
+    pair: ['kalsiyum', 'magnezyum'],
+    kind: 'conflict',
+    condition:
+      'Çok yüksek dozda kalsiyum, magnezyum emilimini azaltabilir; kaynak, yüksek dozların birlikte alındığında etkileşebileceğini belirtir ancak belirli bir saat aralığı vermez. Tipik diyet dozlarında bu etki zayıftır.',
+    sourceIds: ['ods-magnesium'],
+  },
+  {
+    id: 'd3-magnesium',
+    pair: ['d3', 'magnezyum'],
+    kind: 'synergy',
+    condition:
+      'Magnezyum, D vitamininin vücutta aktif forma dönüştürülmesi için gerekli bir kofaktördür. Kaynak, magnezyumun D vitamini metabolizmasındaki rolünü belirtir; bu bir doz önerisi veya birlikte alım reçetesi değildir.',
+    sourceIds: ['ods-magnesium'],
+  },
+  {
+    id: 'd3-k2',
+    pair: ['d3', 'k2'],
+    kind: 'synergy',
+    condition:
+      'D vitamini kalsiyum emilimini artırır; K vitamini (K2) kalsiyumun kemik ve dişlere yönlenmesine katkı sağlayabilir. İkisi de yağda çözünen vitaminlerdir ve sıklıkla birlikte değerlendirilir. Bu bir doz reçetesi değildir; birlikte kullanım hekim/eczacı değerlendirmesiyle olmalıdır.',
+    sourceIds: ['ods-vitamin-d'],
+  },
+  {
+    id: 'b12-folat',
+    pair: ['b12', 'folat'],
+    kind: 'synergy',
+    condition:
+      'B12 ve folat, homosistein metabolizmasında birlikte çalışır; birinin eksikliği diğerinin işlevini etkileyebilir. Kaynak, B12 ve folat ilişkisini belirtir. Bu bir birlikte alım reçetesi değildir.',
+    sourceIds: ['ods-b12'],
   },
 ]
 
@@ -264,7 +355,8 @@ export function reviewSupplements(
           seen.add(key)
           found.push({
             ruleId: rule.id,
-            label: PAIR_LABEL,
+            kind: rule.kind,
+            label: rule.kind === 'synergy' ? SYNERGY_LABEL : PAIR_LABEL,
             families: [fa, fb],
             products: [items[i].name, items[j].name],
             dosages: [items[i].dosage ?? '', items[j].dosage ?? ''],
