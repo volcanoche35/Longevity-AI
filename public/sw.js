@@ -1,4 +1,4 @@
-const CACHE_NAME = 'biotrack-assistant-v12';
+const CACHE_NAME = 'biotrack-assistant-v13';
 const ASSETS = ['/dashboard', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', event => {
@@ -12,7 +12,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
   if (request.method !== 'GET' || url.origin !== self.location.origin || url.pathname.startsWith('/api/') || request.headers.get('RSC') || request.headers.get('Next-Router-Prefetch')) return;
   if (request.mode === 'navigate') {
-    // Network-first: never keep showing an obsolete profile after a deployment.
+    // Network-first: deploy sonrası asla bayat sayfa gösterme.
     event.respondWith(fetch(request).then(response => {
       if (response.ok) { const copy = response.clone(); event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(request, copy))); }
       return response;
@@ -21,8 +21,14 @@ self.addEventListener('fetch', event => {
   }
   const isStatic = url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/anatomy/') || ASSETS.includes(url.pathname);
   if (!isStatic) return;
-  event.respondWith(caches.match(request).then(cached => cached || fetch(request).then(response => {
-    if (response.ok) { const copy = response.clone(); event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(request, copy))); }
-    return response;
-  })));
+  // Stale-while-revalidate: cache'ten anında, arka planda tazele. Deploy sonrası bayat kalmaz.
+  event.respondWith(
+    caches.match(request).then(cached => {
+      const network = fetch(request).then(response => {
+        if (response.ok) { const copy = response.clone(); event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(request, copy))); }
+        return response;
+      }).catch(() => cached);
+      return cached || network;
+    })
+  );
 });
