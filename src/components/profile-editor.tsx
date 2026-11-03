@@ -82,7 +82,7 @@ export default function ProfileEditor({ welcome = false }: { welcome?: boolean }
       clearProfile()
     } catch {}
     if (remote && supabase) await supabase.auth.signOut({ scope: 'global' }).catch(() => {})
-    router.replace('/auth')
+    router.replace('/onboarding')
   }
   const deleteAccount = async () => {
     if (!window.confirm('Hesabını ve tüm verilerini kalıcı olarak silmek istediğine emin misin? Bu işlem geri alınamaz.')) return
@@ -101,7 +101,7 @@ export default function ProfileEditor({ welcome = false }: { welcome?: boolean }
       if (!res.ok || !data?.ok) throw new Error(data?.error || 'Hesap silinemedi.')
       await supabase.auth.signOut({ scope: 'global' }).catch(() => {})
       try { removeRaw(DAY_MARKS_KEY); clearWellness(); removeRaw(REMINDERS_KEY); clearLocalDemoData(); clearProfile() } catch {}
-      router.replace('/auth')
+      router.replace('/onboarding')
     } catch (e) { setError(e instanceof Error ? e.message : 'Hesap silinemedi.') }
   }
   const sexLabel = draft.sex === 'female' ? 'Kadın' : draft.sex === 'male' ? 'Erkek' : 'Belirtmek istemiyorum'
