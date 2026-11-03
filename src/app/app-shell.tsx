@@ -16,6 +16,7 @@ const TABS = [
   { href: '/tracking', icon: 'chart', label: 'Günlüğüm' },
   { href: '/chat', icon: 'chat', label: 'Asistan' },
   { href: '/profile', icon: 'profile', label: 'Profil' },
+  { href: '/settings', icon: 'gear', label: 'Ayarlar' },
 ]
 function NavIcon({ kind }: { kind: string }) {
   const shapes: Record<string, React.ReactNode> = {
@@ -25,6 +26,7 @@ function NavIcon({ kind }: { kind: string }) {
     chart: <><path d="M4 4v16h16"/><path d="m7 14 4-4 4 2 5-7"/></>,
     chat: <><path d="M20 11a8 8 0 0 1-8 8H7l-4 3v-7a8 8 0 1 1 17-4Z"/><path d="M8 10h8M8 14h5"/></>,
     profile: <><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></>,
+    gear: <><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"/></>,
   }
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{shapes[kind]}</svg>
 }
