@@ -61,7 +61,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
-    if (!loading && session && (pathname === '/onboarding' || pathname === '/')) {
+    if (!loading && session && (pathname === '/onboarding' || pathname === '/' || pathname === '/auth')) {
       router.replace('/dashboard')
     }
   }, [loading, session, pathname, router])
@@ -73,8 +73,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </div>
     )
   }
-  // Giriş yapmış kullanıcı onboarding/kök'e takılırsa ana ekrana yönlendir (useEffect ile).
-  if (session && (pathname === '/onboarding' || pathname === '/')) return null
+  // Giriş yapmış kullanıcı onboarding/kök/auth'e takılırsa ana ekrana yönlendir (useEffect ile).
+  if (session && (pathname === '/onboarding' || pathname === '/' || pathname === '/auth')) return null
   // Girişsiz: onboarding, auth ve kök dışındaki rotalar login'e döner.
   if (!session && remoteAuth && pathname !== '/auth' && pathname !== '/onboarding' && pathname !== '/') return <AuthPage />
 
