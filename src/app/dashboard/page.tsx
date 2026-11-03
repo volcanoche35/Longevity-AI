@@ -351,7 +351,7 @@ export default function DashboardPage() {
           <b>{g.name}</b>
           {focus && <em>{g.name === SLICES[sliceOfHour(hour)] ? 'şimdi' : 'sıradaki'}</em>}
           <span className="grp-sum">{label}</span>
-          <span className="grp-chev" aria-hidden="true">{open ? '▾' : '▸'}</span>
+          <span className={`grp-chev ${open ? 'is-open' : ''}`} aria-hidden="true" />
         </button>
         {open && <ul id={listId} className="dv-list">{g.rows.map(renderRow)}</ul>}
       </div>

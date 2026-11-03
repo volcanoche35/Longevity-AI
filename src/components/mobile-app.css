@@ -29,7 +29,9 @@
 .grp-head b { font-size: 14px; color: var(--text); letter-spacing: .02em; }
 .grp-head em { font-style: normal; font-size: 11px; color: var(--primary); }
 .grp-head .grp-sum { margin-left: auto; font-variant-numeric: tabular-nums; }
-.grp-head .grp-chev { width: 18px; text-align: center; color: var(--text-3); }
+.grp-head .grp-chev { width: 18px; height: 18px; display: grid; place-items: center; flex-shrink: 0; color: var(--text-3); }
+.grp-head .grp-chev::after { content: ''; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg) translate(-1px, 1px); transition: transform .15s ease; }
+.grp-head .grp-chev.is-open::after { transform: rotate(45deg) translate(-1px, -1px); }
 .grp-head:focus-visible, .row-more:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .dv-group--focus .grp-head b { color: var(--primary); font-size: 15px; }
 .dv-li { display: flex; align-items: center; }
