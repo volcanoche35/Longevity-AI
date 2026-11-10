@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -H 0.0.0.0 -p 3000",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "for f in scripts/test-*.cjs; do echo \"--- $f ---\"; node \"$f\" || exit 1; done"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",
